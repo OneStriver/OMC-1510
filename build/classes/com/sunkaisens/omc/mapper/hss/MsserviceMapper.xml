@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.hss.MsserviceMapper" >
+	
+	<insert id="insert" parameterType="msservice">
+		insert into 
+			MSService
+		values
+		(
+			#{imsi},
+			#{status},
+			#{directFwdNum},
+			#{fwdOnBusyNum},
+			#{fwdNoAnswerNum},
+			#{voiceMailNum},
+			#{fwdNANum},
+			#{wireTapAddr}
+		)
+	</insert>
+	
+	<delete id="deleteById" parameterType="string">
+		delete from MSService where IMSI = #{value}
+	</delete>
+	
+	<update id="update" parameterType="msservice">
+		update 
+			MSService 
+		set 
+			Status=#{status},
+			directFwdNum=#{directFwdNum},
+			fwdOnBusyNum=#{fwdOnBusyNum},
+			fwdNoAnswerNum=#{fwdNoAnswerNum},
+			voicemailNum=#{voiceMailNum},
+			fwdNANum=#{fwdNANum},
+			WireTapAddr=#{wireTapAddr}
+		where 
+			IMSI=#{imsi}
+	</update>
+	
+	<select id="selectById" parameterType="string" resultType="msservice">
+		select * from MSService where IMSI=#{value}
+	</select>
+	
+	<insert id="batchAdd" statementType="CALLABLE">
+		{
+			call hss.addMSService(#{count},#{imsi},#{WireTapAddr})
+		}
+	</insert>
+</mapper>

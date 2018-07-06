@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.hss.HlrpsMapper" >
+	<sql id="hssWhere">
+		1=1
+		<if test="hss!=null">
+			<if test="hss.imsi!=null">
+				and HLRps.IMSI like '%${hss.imsi}%'
+			</if>
+			<if test="hss.mdn!=null">
+				and HLRps.MDN like '%${hss.mdn}%'
+			</if>
+			<if test="hss.deviceType!=null">
+				and HLRps.DeviceType = #{hss.deviceType}
+			</if>
+			<if test="hss.msvocodec!=null">
+				and HLRps.MSvocodec = #{hss.msvocodec}
+			</if>
+			<if test="hss.status!=null">
+				and HLRps.status = #{hss.status}
+			</if>
+			<if test="hss.priority!=0">
+				<![CDATA[
+				and (((HLRps.MSprofile & 0x70000000)<<1)>>29) = #{hss.priority}
+				]]>
+			</if>
+		</if>
+	</sql>
+	
+	
+	<insert id="insert" parameterType="hlrps">
+		insert into HLRps
+		(
+			IMSI,MDN,ESN,MSprofile,MSprofile_extra,MSvocodec,
+			tstamp,status,DeviceType
+		)
+		values
+		(
+			#{imsi},#{mdn},#{esn},#{msprofile},#{msprofile_extra},#{msvocodec},
+			#{tstamp},0,#{deviceType}
+		)
+	</insert>
+	
+	<delete id="deleteById" parameterType="string">
+		delete from HLRps where IMSI = #{value}
+	</delete>
+	
+	<update id="update" parameterType="hlrps">
+		update 
+			HLRps 
+		set 
+			MDN=#{mdn},
+			ESN=#{esn},
+			MSprofile=#{msprofile},
+			MSprofile_extra=#{msprofile_extra},
+			MSvocodec=#{msvocodec},
+			tstamp=#{tstamp},
+			DeviceType=#{deviceType}
+		where 
+			IMSI=#{imsi}
+	</update>
+	
+	<select id="selectById" parameterType="string" resultType="hlrps">
+	    select * from HLRps where IMSI=#{value}
+	</select>
+	
+	<select id="select" resultType="hlrps" parameterType="com.sunkaisens.omc.vo.hss.HssBusinessVo">
+		select * from HLRps 
+		where <include refid="hssWhere"/>
+		limit #{jumpNum},#{limit}
+	</select>
+	
+	<select id="selectAll" resultType="hlrps" parameterType="com.sunkaisens.omc.vo.hss.HssBusinessVo">
+		select * from HLRps 
+		<!-- limit #{jumpNum},#{limit} -->
+	</select>
+	
+	<select id="selectCount" resultType="int" parameterType="com.sunkaisens.omc.vo.hss.HssBusinessVo">
+    	select count(*) from HLRps
+    	where <include refid="hssWhere"/>
+	</select>
+	
+	<insert id="batchAdd" statementType="CALLABLE">
+		{
+			call hss.HlrPsAdd(#{count},#{imsi},#{mdn},0x${esn},#{msprofile},#{deviceType},#{msvocodec},#{msprofile_extra})
+		}
+	</insert>
+	
+	<update id="batchUpdate" statementType="CALLABLE">
+		{
+			call hss.HlrPsUpdate(#{count},#{imsi},#{mdn},0x${esn},#{msprofile},#{deviceType},#{msvocodec},#{msprofile_extra})
+		}
+	</update>
+</mapper>

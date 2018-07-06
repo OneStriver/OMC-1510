@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.cscf.UeMapper" >
+	
+	<sql id="ueWhere">
+		<if test="ue!=null">
+			<where>
+				<if test="ue.ueName!=null">
+					and ueName like '%${ue.ueName}%'
+				</if>
+				<if test="ue.ueStatus!=null">
+					and ueStatus=#{ue.ueStatus}
+				</if>
+				<if test="ue.ueUpdateType!=null">
+					and ueUpdateType=#{ue.ueUpdateType}
+				</if>
+			</where>
+		</if>
+	</sql>
+	
+	<insert id="insert" parameterType="ue">
+		insert into scscf_ue 
+		(
+			ueUri,ueName,ueScscfDomain,ueScscfAddr,uePcscfDomain,
+			uePcscfAddr,ueAddr,ueStatus,ueUpdateType,ueUpdateTstamp,
+			ueHomeScscfDomain,ueHomeScscfAddr,uePassword
+		)
+		values
+		(
+			#{ueUri},#{ueName},#{ueScscfDomain},#{ueScscfAddr},#{uePcscfDomain},
+			#{uePcscfAddr},#{ueAddr},#{ueStatus},#{ueUpdateType},#{ueUpdateTstamp},
+			#{ueHomeScscfDomain},#{ueHomeScscfAddr},#{uePassword}
+		)
+	</insert>
+	
+	<delete id="deleteById" parameterType="string">
+		delete from scscf_ue where ueUri = #{value}
+	</delete>
+	
+	<update id="update" parameterType="ue">
+		update 
+			scscf_ue 
+		set 
+			ueUri=#{ueUri},
+			ueName=#{ueName},
+			uePassword=#{uePassword}
+		where 
+			ueName=#{ueName}
+	</update>
+	
+	<select id="selectById" parameterType="string" resultType="ue">
+		select * from scscf_ue where ueUri=#{value}
+	</select>
+	
+	<select id="selectByName" parameterType="string" resultType="ue">
+		select * from scscf_ue where ueName=#{value}
+	</select>
+	
+	<select id="select" parameterType="int" resultType="ue">
+		select * from scscf_ue
+		<include refid="ueWhere"/>
+		limit #{jumpNum} , #{limit}
+	</select>
+	
+	<select id="selectCount" resultType="int" parameterType="ue">
+		select count(*) from scscf_ue
+		<include refid="ueWhere"/>
+	</select>
+	
+	<delete id="deleteByName" parameterType="string">
+		delete from scscf_ue where ueName=#{value}
+	</delete>
+	
+	<insert id="batchAdd" statementType="CALLABLE">
+		{
+			call CSCF_DB.addUe(#{count},#{mdn},#{domain},#{uePassword})
+		}
+	</insert>
+	
+	<delete id="batchDelete" statementType="CALLABLE">
+		{
+			call CSCF_DB.deleteUe(#{count},#{mdn})
+		}
+	</delete>
+	
+</mapper>

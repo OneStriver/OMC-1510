@@ -1,0 +1,21 @@
+div[id^='mystatus']{
+	background:#f0f0f0;
+	height:60px;
+	color:#738da2;
+	font-size:12px;
+}
+
+div[id^='mystatus'] > div{
+	float:left;
+	height:15px;
+	margin-left:10px;
+}
+
+div[id^='mystatus'] > div >label{
+	color:#ababab;
+	font-size:10px;
+}
+
+div[id^='mystatus'] > div > span{
+	background-color:#f5d29b;
+}

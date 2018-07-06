@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.core.RFMapper" >
+
+	<insert id="insert" parameterType="bts">
+		insert into bts
+		values(#{carrierId},#{carrierType},#{cellId},#{carrierFreq},#{pn},#{btsId},#{zoneId},#{bandClass},
+		#{txGain},#{pilotChGain},#{syncChGain},#{pagingChGain},#{numOfPch},#{numOfQpch},
+		#{qpchRate},#{qpchCci},#{qpchPwrPage},#{qpchPwrCfg},#{numAchPerpch},#{cdmaChannelList})
+	</insert>
+	
+	<select id="selectAll" resultType="bts">
+		select * from bts
+	</select>
+	
+	<delete id="delete" parameterType="string">	
+		delete from bts where carrierId=#{carrierId}
+	</delete>
+	
+	<delete id="deleteAll">	
+		delete from bts
+	</delete>
+	
+	<update id="update" parameterType="bts">
+		update bts set carrierType=#{carrierType},cellId=#{cellId},carrierFreq=#{carrierFreq},pn=#{pn},btsId=#{btsId},
+		zoneId=#{zoneId},bandClass=#{bandClass},txGain=#{txGain},pilotChGain=#{pilotChGain},syncChGain=#{syncChGain},
+		pagingChGain=#{pagingChGain},numOfPch=#{numOfPch},numOfQpch=#{numOfQpch},qpchRate=#{qpchRate},qpchCci=#{qpchCci},
+		qpchPwrPage=#{qpchPwrPage},qpchPwrCfg=#{qpchPwrCfg},numAchPerpch=#{numAchPerpch},cdmaChannelList=#{cdmaChannelList}
+		where carrierId=#{carrierId}
+	</update>	
+</mapper>

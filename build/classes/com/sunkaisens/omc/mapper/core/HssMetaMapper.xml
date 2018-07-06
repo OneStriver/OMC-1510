@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.core.HssMetaMapper">
+
+	<select id="isEnable" resultType="boolean">
+		select enable from hssBusiness where name=#{value}
+	</select>
+
+	<update id="disableBusiness">
+		update hssBusiness set enable=0
+	</update>
+	
+	<update id="enableBusiness" >
+		update hssBusiness set enable=1 where id in
+		<foreach collection="array" item="v" open="(" close=")" separator=",">
+			#{v}
+		</foreach>
+	</update>
+
+	<update id="disableDeviceType">
+		update hssDeviceType set enable=0
+	</update>
+	
+	<update id="enableDeviceType">
+		update hssDeviceType set enable=1 where id in
+		<foreach collection="array" item="v" open="(" close=")" separator=",">
+			#{v}
+		</foreach>
+	</update>
+	
+	<update id="disableVoiceType">
+		update hssVoiceType set enable=0
+	</update>
+	
+	<update id="enableVoiceType">
+		update hssVoiceType set enable=1 where id in
+		<foreach collection="array" item="v" open="(" close=")" separator=",">
+			#{v}
+		</foreach>
+	</update>
+	
+	<update id="disableViewItem">
+		update hssViewItem set enable=0
+	</update>
+	
+	<update id="enableViewitem">
+		update hssViewItem set enable=1 where id in
+		<foreach collection="array" item="v" open="(" close=")" separator=",">
+			#{v}
+		</foreach>
+	</update>
+	<select id="getEnableDeviceType" resultType="hashmap">
+		select * from hssDeviceType where enable=true
+	</select>
+	
+	<select id="getDeviceTypeIdByName" resultType="Integer">
+		select * from hssDeviceType where name=#{name}
+	</select>
+	
+	<select id="getDeviceNameByDeviceTypeId" resultType="string">
+		select name from hssDeviceType where id=#{deviceTypeId}
+	</select>
+	
+	<select id="getAllDeviceType" resultType="hashmap">
+		select * from hssDeviceType
+	</select>
+	
+	<select id="getEnableVoiceType" resultType="hashmap">
+		select * from hssVoiceType where enable=true
+	</select>
+	
+	<select id="getEnableViewItem" resultType="hashmap">
+		select * from hssViewItem where enable=true
+	</select>
+
+	<select id="getAllVoiceType" resultType="hashmap">
+		select * from hssVoiceType
+	</select>
+	
+	<select id="getAllViewItem" resultType="hashmap">
+		select * from hssViewItem
+	</select>
+	
+	<select id="getTerminalType" resultType="hashmap">
+		select * from myomc.terminalType
+	</select>
+	
+	<select id="selectTerminalById" resultType="string">
+		select * from myomc.terminalType where terminalId=#{terminalId}
+	</select>
+	
+	<insert id="insertTerminalType">
+		insert into terminalType values(#{param1},#{param2})
+	</insert>
+	
+	<insert id="insertDeviceType">
+		insert into hssDeviceType values(#{param1},#{param2},1)
+	</insert>
+	
+	<insert id="insertVoiceType">
+		insert into hssVoiceType values(#{param1},#{param2},1)
+	</insert>
+	
+	<insert id="insertViewItem">
+		insert into hssViewItem values(#{param1},#{param2},1)
+	</insert>
+	
+	<select id="getEnableBasicBusiness" resultType="hashmap">
+		select * from hssBusiness where basic=1 and enable=1
+	</select>
+	
+	<select id="getNonBasicBusiness" resultType="hashmap">
+		select * from hssBusiness where basic=0
+	</select>
+	
+	<select id="getAllBusiness" resultType="hashmap">
+		select * from hssBusiness
+	</select>
+	
+	<select id="getConfigUserPriority" resultType="hashmap">
+		select * from configUserPriority where enable=1 and userType=0
+	</select>
+	
+	<select id="getConfigGroupPriority" resultType="hashmap">
+		select * from configUserPriority where enable=1 and userType=1  
+	</select>
+	
+	<insert id="insertBusiness">
+		insert into hssBusiness (name,i18n,basic,enable) values (#{param1},#{param2},#{param3},1)
+	</insert>
+</mapper>

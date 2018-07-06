@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.hss.GroupMemberMapper" >
+	<resultMap type="groupMember" id="groupMemberMap">
+		<id column="groupMember" property="mdn"/>
+		<id column="groupNum" property="groupId"/>
+		<result column="priority" property="priority"/>
+		<result column="role" property="role"/>
+		<result column="service" property="service"/>
+		<result column="serviceExtra" property="addtion"/>
+		<result column="tstamp" property="createTime"/>
+		<result column="lastUpdateTstamp" property="updateTime"/>
+	</resultMap>
+	<sql id="memberWhere">
+		<where>
+			<if test="member!=null">
+				<if test="member.mdn!=null">
+					and groupMember like '%${member.mdn}%'
+				</if>
+				<if test="member.groupId!=null">
+					and groupNum like '%${member.groupId}%'
+				</if>
+				<if test="member.priority!=null">
+					and priority = #{member.priority}
+				</if>
+				<if test="member.role!=null">
+					and role = #{member.role}
+				</if>
+			</if>
+		</where>
+	</sql>
+    <sql id="selectGroupMemberSql">
+        select * from csHLRGroupMember
+    </sql>
+	
+	<insert id="insert" parameterType="groupMember">
+		insert into csHLRGroupMember
+		values
+		(
+			#{groupId},
+			#{mdn},
+			#{priority},
+			#{role},
+			#{service},
+			#{addtion},
+			#{createTime},
+			#{updateTime}
+		)
+	</insert>
+	
+	<delete id="deleteById" parameterType="string">
+		delete from csHLRGroupMember where groupNum=#{groupId} and groupMember=#{mdn}
+	</delete>
+	
+	<update id="update" parameterType="groupMember">
+		update 
+			csHLRGroupMember 
+		set 
+			priority=#{priority},
+			role=#{role},
+			service=#{service},
+			serviceExtra=#{addtion},
+			lastUpdateTstamp=#{updateTime}
+		where 
+			groupNum=#{groupId} and groupMember=#{mdn}
+	</update>
+	
+	<select id="selectById" parameterType="string" resultMap="groupMemberMap">
+		select * from csHLRGroupMember where groupMember=#{mdn} and groupNum=#{groupId}
+	</select>
+	
+	<select id="select" resultMap="groupMemberMap">
+		<include refid="selectGroupMemberSql"/>
+		<include refid="memberWhere"/>
+		limit #{jumpNum},#{limit}
+	</select>
+	
+	<select id="selectCount" resultType="int" parameterType="groupMember">
+    	select count(*) from csHLRGroupMember
+    	<include refid="memberWhere"/>
+	</select>
+	
+	<delete id="deleteByMdn" parameterType="string">
+		delete from csHLRGroupMember where groupMember=#{value}
+	</delete>
+	
+	<select id="selectBelongGroup" parameterType="string" resultMap="groupMemberMap">
+		select * from csHLRGroupMember where groupMemBer=#{value}
+	</select>
+</mapper>

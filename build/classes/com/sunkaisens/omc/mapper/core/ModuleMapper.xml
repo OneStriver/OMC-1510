@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.core.ModuleMapper" >
+	<insert id="insert" parameterType="module">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into module(id,name,belong,description,version,exe,log) 
+		values(#{id},#{name},#{belong},#{description},#{version},#{exe},#{log})
+	</insert>
+
+	<select id="selectById" parameterType="int" resultType="module">
+		select * from module where id=#{value}
+	</select>
+	
+	<select id="selectAll" resultType="module">
+		select * from module
+	</select>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from module where id=#{value}
+	</delete>
+	
+	<update id="update" parameterType="module">
+		update module set 
+			name=#{name},
+			belong=#{belong},
+			description=#{description},
+			version=#{version},
+			exe=#{exe},
+			log=#{log}
+		where id=#{id}
+	</update>
+	
+	<select id="selectByName" parameterType="string" resultType="module">
+		select * from module where name=#{value}
+	</select>
+	
+	<select id="selectMaxId" resultType="int">
+		select max(id) from module
+	</select>
+	<select id="select" resultType="module">
+        select * from module
+        <if test="jumpNum!=null and limit!=null">
+			limit #{jumpNum} , #{limit}
+		</if> 
+		
+	</select>
+	<select id="selectCount" resultType="int" >
+    	select count(*) from module
+	</select>
+</mapper>

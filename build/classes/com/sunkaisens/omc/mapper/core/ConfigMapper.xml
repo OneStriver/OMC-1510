@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.core.ConfigMapper" >
+
+	<sql id="selectSql">
+		select 
+			m.*,
+			c.id c_id,c.name c_name,c.path c_path,c.description c_des,c.sole c_sole
+		from 
+			config c,module m 
+		where 
+			c.moduleId=m.id
+	</sql>
+
+	<resultMap type="config" id="configResultMap">
+		<id column="c_id" property="id"/>
+		<result column="c_name" property="name"/>
+		<result column="c_des" property="description"/>
+		<result column="c_path" property="path"/>
+		<result column="c_sole" property="sole"/>
+		<association property="module" javaType="module">
+			<id column="id" property="id"/>
+			<result column="name" property="name"/>
+			<result column="belong" property="belong"/>
+			<result column="description" property="description"/>
+			<result column="version" property="version"/>
+		</association>
+	</resultMap>
+
+	<insert id="insert" parameterType="config">
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into config(id,name,path,description,sole,moduleId) 
+		values(#{id},#{name},#{path},#{description},#{sole},#{module.id})
+	</insert>
+
+	<select id="selectById" parameterType="int" resultMap="configResultMap">
+			<include refid="selectSql"/>
+			and
+			c.id=#{value}
+	</select>
+	
+	<select id="selectAll" resultMap="configResultMap">
+		<include refid="selectSql"/>
+	</select>
+	
+	<select id="select" resultMap="configResultMap">
+		<include refid="selectSql"/>
+		limit #{jumpNum},#{limit}
+	</select>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from config where id=#{value}
+	</delete>
+	
+	<update id="update" parameterType="config">
+		update config set name=#{name},path=#{path},description=#{description},sole=#{sole},moduleId=#{module.id}
+		where id=#{id}
+	</update>
+	
+	<select id="selectByModuleId" resultMap="configResultMap">
+		<include refid="selectSql"/>
+		and moduleId=#{value}
+	</select>
+	
+	<select id="selectByModuleIdAndName" resultType="config">
+		select * from config where moduleId=#{moduleId} and name=#{name}
+	</select>
+	<select id="selectCount" resultType="int">
+		select count(*) from config
+	</select>
+</mapper>

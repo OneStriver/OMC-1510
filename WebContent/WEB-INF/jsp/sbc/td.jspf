@@ -1,0 +1,43 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<html>
+<body>
+<c:choose>
+	<c:when test="${child.formtype == 'textbox'}">
+		<c:set var="cformtype" value="textbox"/>
+		<c:set var="cvalidType" value="'length[${item.minLen},${item.maxLen}]'"/>
+	</c:when>
+	<c:when test="${child.formtype == 'hidden'}">
+		<c:set var="cformtype" value="textbox"/>
+	</c:when>
+	<c:when test="${child.formtype == 'numberbox'}">
+		<c:set var="cformtype" value="numberbox"/>
+		<c:set var="cvalidType" value="['minValue[${child.min==null?-99999:child.min}]','maxValue[${child.max==null?99999:child.max}]']"/>
+	</c:when>
+	<c:when test="${child.formtype == 'url'}">
+		<c:set var="cformtype" value="textbox"/>
+		<c:set var="cvalidType" value="'url'"/>
+	</c:when>
+	<c:when test="${child.formtype == 'email'}">
+		<c:set var="cformtype" value="textbox"/>
+		<c:set var="cvalidType" value="'email'"/>
+	</c:when>
+	<c:when test="${child.formtype == 'ip'}">
+		<c:set var="cformtype" value="textbox"/>
+		<c:set var="cvalidType" value="'ip'"/>
+	</c:when>
+	<c:when test="${child.formtype == 'combobox'}">
+		<c:set var="cformtype" value="combobox"/>
+	</c:when>
+	<c:when test="${child.formtype == 'radio'}">
+		<c:set var="cformtype" value="radio"/>
+	</c:when>
+	<c:when test="${child.formtype == 'grid'}">
+		<c:set var="cformtype" value="datagrid"/>
+	</c:when>
+	<c:when test="${child.formtype == 'hidden'}">
+		<c:set var="cformtype" value="textbox"/>
+	</c:when>
+</c:choose>
+ 		
+</body>
+</html>

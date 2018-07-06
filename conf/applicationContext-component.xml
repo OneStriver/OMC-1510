@@ -1,0 +1,72 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.1.xsd 
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.1.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.1.xsd ">
+
+	<context:component-scan base-package="com.sunkaisens.omc.component"/>
+	<context:component-scan base-package="com.sunkaisens.omc.thread.cncpMsg"/>
+	
+	<aop:aspectj-autoproxy/>
+  	
+  	<!-- 普通java类注入service -->
+  	<bean class="com.sunkaisens.omc.component.SpringContextUtil" />
+  
+	<bean id="oamDetectTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+				<property name="jobClass" value="com.sunkaisens.omc.job.DetectOamJob"/>
+			</bean>
+		</property>
+		<property name="repeatInterval" value="10000"/>
+	</bean>
+	<bean id="deleteLogAndAlarmTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+				<property name="jobClass" value="com.sunkaisens.omc.job.DeleteLogAndAlarmJob"/>
+				<property name="durability" value="true"/>
+				<property name="jobDataAsMap">
+					<map>
+						<entry key="logMapper" value-ref="logMapper"/>
+						<entry key="alarmMapper" value-ref="alarmMapper"/>
+					</map>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression" value="0 0 0 ? * SUN-SAT"/>
+	</bean>
+	<bean id="neStatusTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+				<property name="jobClass" value="com.sunkaisens.omc.job.DetectNeStatusJob"/>
+				<property name="jobDataAsMap">
+				<map>
+					<entry key="mapper" value-ref="entityMapper"/>
+					<entry key="sendCncpMsgFactory" value-ref="sendCncpMsgFactory"/>
+					<entry key="cncpTaskExecutor" value-ref="cncpTaskExecutor"/>
+				</map>
+			</property>
+			</bean>
+		</property>
+		<property name="repeatInterval" value="60000"/>
+	</bean>
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="oamDetectTrigger"/>
+				<ref bean="deleteLogAndAlarmTrigger"/>
+				<ref bean="neStatusTrigger"/>
+			</list>
+		</property>
+	</bean>
+	
+</beans>

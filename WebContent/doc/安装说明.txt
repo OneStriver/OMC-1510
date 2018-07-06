@@ -1,0 +1,9 @@
+1.安装环境需JDK7及以上，tomcat7及以上。
+2.若无jdk请安装jdk 【rpm -ivh jdk-7u65-linux-i586.rpm】 
+3.若无tomcat请安装tomcat,直接解压tomcat到任意目录如:将压缩包拷贝到/usr/share下【cd /usr/share】【tar -zxvf apache-tomcat-7.0.30.tar.gz】,重命名（个人习惯）【mv apache-tomcat-7.0.30 tomcat】
+4.将myomc.zip拷贝到tomcat安装目录下的webapps下，后进入此目录【cd /usr/share/tomcat/webapps】，解压myomc.zip【unzip myomc.zip】
+5.检查mysql数据库中是否存在名为myomc的库，若有将它删除(进入数据库执行drop database myomc) 
+6.omc程序默认使用root/sunkaisens进行数据库连接，若数据库用户名密码不符可修改/usr/share/tomcat/webapps/myomc/WEB-INF/classes/db.properties文件，将jdbc.username和jdbc.password修改为正确的值
+7.进入tomcat下bin目录【cd /usr/share/tomcat/bin】,启动tomcat【./startup.sh】
+8.打开浏览器访问http://IP:8080/myomc
+9.输入用户名admin密码password进入系统(超级用户)

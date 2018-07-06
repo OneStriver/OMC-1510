@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.hss.UserGroupPriorityMapper">
+
+	<select id="selectAll" resultType="UserGroupPriority">
+		select * from myomc.configUserPriority
+	</select> 
+	 
+	<update id="updateUserGroupConfig" parameterType="com.sunkaisens.omc.po.hss.UserGroupPriority">
+		update 
+			myomc.configUserPriority 
+		set 
+			level=#{level},
+			priority=#{priority},
+			enable=#{enable},
+			userType=#{userType}
+		where 
+			id=#{id}
+	</update>
+	
+	<insert id="insertUserGroupPriority">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into myomc.configUserPriority(level,priority,enable,userType) values(#{level},#{priority},#{enable},#{userType})
+	</insert>  
+	 
+</mapper>

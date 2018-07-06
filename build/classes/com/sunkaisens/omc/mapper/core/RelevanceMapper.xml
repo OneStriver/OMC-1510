@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.core.RelevanceMapper" >
+
+	<sql id="selectRelevanceSql">
+		select 
+			r.*,
+			co.id co_id,co.name co_name,
+			o.id o_id,o.text o_text,o.val o_val
+		from 
+			relevance r
+		left join
+			common co
+		on (r.commonId=co.id)
+		left join
+			options o
+		on (o.itemId=r.id)
+	</sql>
+	
+	<resultMap type="relevance" id="relevanceResultMap">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="val" property="value"/>
+		<result column="multiline" property="multiline"/>
+		<result column="description" property="description"/>
+		<result column="min" property="min"/>
+		<result column="max" property="max"/>
+		<result column="minLen" property="minLen"/>
+		<result column="maxLen" property="maxLen"/>
+		<result column="formtype" property="formtype"/>
+		<result column="required" property="required"/>
+		<result column="orderNum" property="orderNum"/>
+		<association property="common" javaType="common">
+			<id column="co_id" property="id"/>
+			<result column="co_name" property="name"/>
+		</association>
+		<collection property="optiones" ofType="options">
+			<id column="o_id" property="id"/>
+			<result column="o_text" property="text"/>
+			<result column="o_val" property="val"/>
+		</collection>
+	</resultMap>
+
+	<insert id="insert" parameterType="relevance">
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into 
+			relevance
+			(
+				name,
+				val,
+				formtype,
+				description,
+				multiline,
+				min,
+				max,
+				minLen,
+				maxLen,
+				required,
+				orderNum,
+				commonId
+			) 
+		values
+			(
+				#{name},
+				#{value},
+				#{formtype},
+				#{description},
+				#{multiline},
+				#{min},
+				#{max},
+				#{minLen},
+				#{maxLen},
+				#{required},
+				#{orderNum},
+				<choose>
+					<when test="common==null">null</when>
+					<when test="common.id==0">null</when>
+					<otherwise>#{common.id,jdbcType=INTEGER}</otherwise>
+				</choose>
+			)
+	</insert>
+
+	<select id="selectById" parameterType="int" resultMap="relevanceResultMap">
+		<include refid="selectRelevanceSql"/>
+		where r.id=#{value}
+	</select>
+	
+	<select id="selectAll" resultMap="relevanceResultMap">
+	select * from (<include refid="selectRelevanceSql"/>) as t
+	<if test="jumpNum!=null and limit!=null">
+			limit #{jumpNum} , #{limit}
+		</if>
+		<!-- <include refid="selectRelevanceSql"/>-->
+		<!-- <if test="sort!=null">
+			order by ${sort}<if test="order!=null"> ${order}</if>
+		</if> -->
+	</select>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from relevance where id=#{value}
+	</delete>
+	
+	<update id="update" parameterType="relevance">
+		update relevance set 
+			name=#{name},
+			val=#{value},
+			multiline=#{multiline},
+			formtype=#{formtype},
+			description=#{description},
+			min=#{min},
+			max=#{max},
+			minLen=#{minLen},
+			maxLen=#{maxLen},
+			required=#{required},
+			orderNum=#{orderNum},
+			commonId=
+			<choose>
+				<when test="common==null">null</when>
+				<when test="common.id==0">null</when>
+				<otherwise>#{common.id,jdbcType=INTEGER}</otherwise>
+			</choose>
+		where id=#{id}
+	</update>
+	
+	<select id="getItemByCommonId" parameterType="int" resultMap="relevanceResultMap">
+		<include refid="selectRelevanceSql"/>
+		where co.id=#{value}
+		order by r.orderNum asc,r.multiline asc
+	</select>
+	
+	<select id="selectRelevanceByCommonId" parameterType="int" resultMap="relevanceResultMap">
+		<include refid="selectRelevanceSql"/>
+		where co.id=#{value}
+		order by r.orderNum asc,r.multiline asc
+	</select>
+	
+	<select id="selectByNameAndCommonId" resultType="relevance">
+		<if test="commonId==null">
+			select * from relevance where name=#{name} and commonId is #{commonId}
+		</if>
+		<if test="commonId!=null">
+			select * from relevance where name=#{name} and commonId=#{commonId}
+		</if>
+	</select>
+	<select id="selectCount" resultType="int">
+		select count(*) from (<include refid="selectRelevanceSql"/>) as t
+	</select>
+</mapper>

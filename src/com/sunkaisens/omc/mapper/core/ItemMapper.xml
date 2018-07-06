@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.core.ItemMapper" >
+	<sql id="selectItemSql_select">
+		select 
+			i.*,
+			p.id p_id,p.name p_name,p.val p_value,p.description p_des,p.formtype p_formtype,p.min p_min,p.max p_max,p.minLen p_minLen,p.maxLen p_maxLen,p.multiline p_multiline,p.required p_required,p.orderNum p_orderNum,
+			c.id c_id,c.name c_name,c.path c_path,c.description c_des,c.sole c_sole,c.moduleId c_moduleId,
+			r.id r_id,r.name r_name,r.val r_value,r.description r_des,r.formtype r_formtype,r.min r_min,r.max r_max,r.minLen r_minLen,r.maxLen r_maxLen,r.multiline r_multiline,r.required r_required,r.orderNum r_orderNum,
+			o.id o_id,o.text o_text,o.val o_val,
+			po.id po_id,po.text po_text,po.val po_val
+	</sql>
+	<sql id="selectItemSql_from">
+		from 
+			(
+			select * from item 
+			<if test="configId!=null">
+			<where>configId=#{configId}</where>
+			</if>
+			<if test="jumpNum!=null and limit!=null">
+			limit #{jumpNum} , #{limit}
+			</if>
+			)i
+	</sql>
+	<sql id="selectItemSql_join">
+		left join
+			item p
+		on (i.id=p.parentId)
+		left join 
+			config c
+		on (i.configId=c.id)
+		left join 
+			relevance r
+		on (i.relevanceId=r.id)
+		left join
+			options o
+		on (o.itemId=i.id)
+		left join
+			options po
+		on (po.itemId=p.id)
+	</sql>
+	<sql id="selectItemSql">
+		<include refid="selectItemSql_select"/>
+		<include refid="selectItemSql_from"/>
+		<include refid="selectItemSql_join"/>
+	</sql>
+
+	<resultMap type="item" id="itemResultMap">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="val" property="value"/>
+		<result column="multiline" property="multiline"/>
+		<result column="description" property="description"/>
+		<result column="min" property="min"/>
+		<result column="max" property="max"/>
+		<result column="minLen" property="minLen"/>
+		<result column="maxLen" property="maxLen"/>
+		<result column="formtype" property="formtype"/>
+		<result column="required" property="required"/>
+		<result column="orderNum" property="orderNum"/>
+		<association property="parent" javaType="item">
+			<id column="parentId" property="id"/>
+		</association>
+		<association property="config" javaType="config">
+			<id column="c_id" property="id"/>
+			<result column="c_name" property="name"/>
+			<result column="c_des" property="description"/>
+			<result column="c_path" property="path"/>
+			<result column="c_sole" property="sole"/>
+			<association property="module"  javaType="module" fetchType="eager"
+				 select="com.sunkaisens.omc.mapper.core.ModuleMapper.selectById" column="c_moduleId">
+			</association>
+		</association>
+		<association property="relevance" javaType="relevance">
+			<id column="r_id" property="id"/>
+			<result column="r_name" property="name"/>
+			<result column="r_value" property="value"/>
+			<result column="r_multiline" property="multiline"/>
+			<result column="r_des" property="description"/>
+			<result column="r_min" property="min"/>
+			<result column="r_max" property="max"/>
+			<result column="r_minLen" property="minLen"/>
+			<result column="r_maxLen" property="maxLen"/>
+			<result column="r_formtype" property="formtype"/>
+			<result column="r_required" property="required"/>
+			<result column="r_orderNum" property="orderNum"/>
+		</association>
+		<collection property="children" ofType="item">
+			<id column="p_id" property="id"/>
+			<result column="p_name" property="name"/>
+			<result column="p_val" property="value"/>
+			<result column="p_multiline" property="multiline"/>
+			<result column="p_des" property="description"/>
+			<result column="p_min" property="min"/>
+			<result column="p_max" property="max"/>
+			<result column="p_minLen" property="minLen"/>
+			<result column="p_maxLen" property="maxLen"/>
+			<result column="p_formtype" property="formtype"/>
+			<result column="p_required" property="required"/>
+			<result column="p_orderNum" property="orderNum"/>
+			<collection property="optiones" ofType="options">
+				<id column="po_id" property="id"/>
+				<result column="po_text" property="text"/>
+				<result column="po_val" property="val"/>
+			</collection>
+		</collection>
+		<collection property="optiones" ofType="options">
+			<id column="o_id" property="id"/>
+			<result column="o_text" property="text"/>
+			<result column="o_val" property="val"/>
+		</collection>
+	</resultMap>
+
+	<insert id="insert" parameterType="item">
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into 
+			item
+			(name,val,formtype,description,multiline,min,max,minLen,maxLen,required,orderNum,parentId,configId,relevanceId) 
+		values
+			(
+				#{name},#{value},#{formtype},#{description},#{multiline},#{min},#{max},#{minLen},#{maxLen},#{required},#{orderNum},
+				<if test="parent!=null">#{parent.id}</if>
+				<if test="parent==null">null</if>,
+				<if test="config!=null">#{config.id}</if>
+				<if test="config==null">null</if>,
+				<if test="relevance!=null">#{relevance.id}</if>
+				<if test="relevance==null">null</if>
+			)
+	</insert>
+
+	<select id="selectById" parameterType="int" resultMap="itemResultMap">
+		<include refid="selectItemSql_select"/>
+		from 
+			(
+			select * from item where id=#{value}
+			)i
+		<include refid="selectItemSql_join"/>
+	</select>
+	
+	<select id="selectAll" resultMap="itemResultMap">
+		<include refid="selectItemSql"/>
+	</select>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from item where id=#{value}
+	</delete>
+	
+	<update id="update" parameterType="item">
+		update item set 
+			name=#{name},
+			val=#{value},
+			multiline=#{multiline},
+			formtype=#{formtype},
+			description=#{description},
+			min=#{min},
+			max=#{max},
+			minLen=#{minLen},
+			maxLen=#{maxLen},
+			required=#{required},
+			orderNum=#{orderNum},
+			parentId=
+			<if test="parent==null">null</if>
+			<if test="parent!=null">#{parent.id}</if>,
+			configId=
+			<if test="config==null">null</if>
+			<if test="config!=null">#{config.id}</if>,
+			relevanceId=
+			<choose>
+				<when test="relevance==null">null</when>
+				<when test="relevance.id==0">null</when>
+				<otherwise>#{relevance.id,jdbcType=INTEGER}</otherwise>
+			</choose>
+		where id=#{id}
+	</update>
+	
+	<select id="select" parameterType="int" resultMap="itemResultMap">
+		<include refid="selectItemSql"/>
+		order by <if test="sort!=null">i.${sort} ${order},</if>i.id asc
+	</select>
+	
+	<select id="selectCount" resultType="int">
+	    select count(*) from item
+	    <if test="value!=null">
+			where configId=#{value}
+		</if>
+	</select>
+	
+	<delete id="deleteByConfigId" parameterType="int">
+		delete from item where configId=#{value}
+	</delete>
+	
+	<select id="getItemByRelevanceId" parameterType="int" resultMap="itemResultMap">
+		<include refid="selectItemSql_select"/>
+		from item i
+		<include refid="selectItemSql_join"/>
+		where r.id=#{value}
+	</select>
+	
+	<select id="selectByConfigId" parameterType="int" resultMap="itemResultMap">
+		<include refid="selectItemSql_select"/>
+		from 
+			(
+			select * from item 
+			<if test="value!=null">
+			<where>configId=#{value} and parentId is null</where>
+			</if>
+			)i
+		<include refid="selectItemSql_join"/>
+		order by i.orderNum asc,i.multiline asc,i.id asc
+	</select>
+	
+	<select id="select1Level" parameterType="int" resultMap="itemResultMap">
+		<include refid="selectItemSql_select"/>
+		from 
+			(
+			select * from item 
+			<if test="value!=null">
+			<where>configId=#{value} and parentId is null</where>
+			</if>
+			)i
+		<include refid="selectItemSql_join"/>
+		order by i.orderNum asc,i.multiline asc,i.id asc
+	</select>
+	
+	<!-- <select id="selectBy" resultMap="itemResultMap">
+		<include refid="selectItemSql"/>
+		where 
+			c.name=#{confName} and 
+			i.name=#{name} and 
+			c.moduleId=#{moduleId}
+	</select> -->
+	
+</mapper>

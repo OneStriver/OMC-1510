@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.hss.EPCSubscriptionDataMapper" >
+	
+	<insert id="insert" parameterType="epcsubscriptiondata">
+		insert into 
+			EPCSubscriptionData
+		values
+		(
+			#{imsi},#{apn},#{erabId},
+			#{qci},
+			#{aggregateMaxULBitRate},
+			#{aggregateMaxDLBitRate},
+			#{guaranteedULBitRate},
+			#{guaranteedDLBitRate},
+			#{maxULBitRate},
+			#{maxDLBitRate},
+			#{arPriority}
+		)
+	</insert>
+	
+	<delete id="deleteById" parameterType="string">
+		delete from EPCSubscriptionData where IMSI = #{value}
+	</delete>
+	
+	<update id="update" parameterType="epcsubscriptiondata">
+		update 
+			EPCSubscriptionData 
+		set 
+			APN=#{apn},
+			ErabId=#{erabId},
+			QCI=#{qci},
+			AggregateMaxDLBitrate=#{aggregateMaxDLBitRate},
+			AggregateMaxULBitrate=#{aggregateMaxULBitRate},
+			GuaranteedULBitRate=#{guaranteedULBitRate},
+			GuaranteedDLBitRate=#{guaranteedDLBitRate},
+			MaxULBitRate=#{maxULBitRate},
+			MaxDLBitRate=#{maxDLBitRate},
+			ARPriority=#{arPriority}
+		where 
+			IMSI=#{imsi}
+	</update>
+	
+	<select id="selectById" parameterType="string" resultType="epcsubscriptiondata">
+		select * from EPCSubscriptionData where IMSI=#{value}
+	</select>
+	
+	<insert id="batchAdd" statementType="CALLABLE">
+		{
+			call hss.addEpc(#{count},#{imsi})
+		}
+	</insert>
+	
+</mapper>

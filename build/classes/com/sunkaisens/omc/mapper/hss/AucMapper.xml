@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.hss.AucMapper" >
+	
+	<insert id="insert" parameterType="auc">
+		insert into AUC
+		(
+			IMSI,K,OP,OPc,AMF,SQN,RAND,tstamp,START,STOP
+		)
+		values
+		(
+			#{imsi},#{k},#{op},#{opc},#{amf},#{sqn},#{rand},#{tstamp},#{start},#{stop}
+		)
+	</insert>
+	
+	<delete id="deleteById" parameterType="string">
+		delete from AUC where IMSI = #{value}
+	</delete>
+	
+	<update id="update" parameterType="auc">
+		update 
+			AUC 
+		set 
+			K=#{k},
+			OP=#{op},
+			OPc=#{opc},
+			AMF=#{amf},
+			SQN=#{sqn},
+			RAND=#{rand},
+			tstamp=#{tstamp},
+			START=#{start},
+			STOP=#{stop}
+		where 
+			IMSI=#{imsi}
+	</update>
+	
+	<select id="selectById" parameterType="string" resultType="auc">
+		select * from AUC where IMSI=#{value}
+	</select>
+	
+	<insert id="batchAdd" statementType="CALLABLE">
+		{
+			call hss.addAuc(#{count},#{imsi})
+		}
+	</insert>
+	
+</mapper>

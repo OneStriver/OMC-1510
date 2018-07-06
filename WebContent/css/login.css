@@ -1,0 +1,31 @@
+@charset "utf-8";
+*{font-size:9pt;border:0;margin:0;padding:0;}
+body{font-family:'微软雅黑'; margin:0 auto;min-width:980px;}
+ul{display:block;margin:0;padding:0;list-style:none;}
+li{display:block;margin:0;padding:0;list-style: none;}
+img{border:0;}
+dl,dt,dd,span{margin:0;padding:0;display:block;}
+/*
+a,a:focus{text-decoration:none;color:#000;outline:none;blr:expression(this.onFocus=this.blur());}
+a:hover{color:#00a4ac;text-decoration:none;}
+position:relative;top:30px;left:290px
+.loginform ul{position:relative;top:20px}
+position:relative;top:60px;left:400px;
+*/
+html,body{height:100%}
+
+/*login*/
+.loginbody{height:100%;position:relative;}
+.loginbox{width:692px; height:336px; background:url(../images/loginImg/logininfo.png) no-repeat; position:absolute;top:50%;left:50%;margin-top:-168px;margin-left:-346px;}
+.loginbox ul{margin-top:88px; margin-left:285px;}
+.loginbox ul li{margin-bottom:25px;}
+.loginuser{width:344px; height:48px; background:url(../images/loginImg/loginuser.png) no-repeat; border:none; line-height:48px; padding-left:44px; font-size:14px; font-weight:bold; color:#90a2bc;}
+.loginUserInput{width:298px;height:44px;outline:none;margin-top:2px;margin-bottom:2px;font-size:14px; font-weight:bold; background-color:#ecf5fa;}
+
+.loginpwd{width:344px; height:48px; background:url(../images/loginImg/loginpassword.png) no-repeat; border:none;line-height:48px; padding-left:44px; font-size:14px; font-weight:bold; color:#90a2bc;}
+.loginPwdInput{width:298px;height:44px;outline:none;margin-top:2px;margin-bottom:2px;font-size:14px; font-weight:bold; background-color:#ecf5fa;}
+
+.loginbtn{width:111px;height:35px; background:url(../images/loginImg/buttonbg.png) repeat-x; font-size:14px; font-weight:bold; color:#fff;cursor:pointer; line-height:35px;}
+
+
+ #msg{color:red;font-weight:bold}

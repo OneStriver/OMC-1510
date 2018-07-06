@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.core.UserMapper" >
+	
+	<sql id="query_user">
+		select 
+			user.*,
+			role.id roleId,
+			role.name roleName,
+			role.description roleDescription,
+			privilege.id privilegeId,
+			privilege.name privilegeName,
+			privilege.description privilegeDescription,
+			privilege.url,
+			privilege.icon,
+			privilege.leaf			
+		from 
+			user 
+		left join
+			(
+			role,
+			user_role
+			)
+		on
+			(
+			user.id=user_role.userId and 
+			user_role.roleId=role.id
+			)
+		left join
+			(
+			privilege,
+			role_privilege
+			)
+		on 
+			(
+			role.id=role_privilege.roleId and
+			role_privilege.privilegeId=privilege.id
+			)
+	</sql>
+
+	<resultMap type="user" id="UserResultMap">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="password" property="password"/>
+		
+		<collection property="roles" ofType="role">
+		 	<id column="roleId" property="id"/>
+		 	<result column="roleName" property="name"/>
+		 	<result column="roleDescription" property="description"/>
+		 	
+		 	<collection property="privileges" ofType="privilege">
+		 		<id column="privilegeId" property="id"/>
+			 	<result column="privilegeName" property="name"/>
+			 	<result column="privilegeDescription" property="description"/>
+			 	<result column="url" property="url"/>
+			 	<result column="icon" property="icon"/>
+			 	<result column="leaf" property="leaf"/>
+		 	</collection>
+		</collection>
+	</resultMap>
+
+
+	<insert id="insert" parameterType="user">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into user(name,password) values(#{name},#{password})
+	</insert>
+	
+	<insert id="insertUserRoles" parameterType="user" >
+		insert into user_role (userId,roleId) values 
+		<foreach collection="roles" item="role" open="" close="" separator=",">
+			(#{id},#{role.id})
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from user where id = #{value}
+	</delete>
+	
+	<delete id="deleteUserRoles" parameterType="int">
+		delete from user_role where userId = #{id}
+	</delete>
+	
+	<update id="update" parameterType="user">
+		update user set name=#{name},password=#{password} where id=#{id}
+	</update>
+	
+	<select id="selectById" parameterType="int" resultMap="UserResultMap">
+		<include refid="query_user"></include>
+		<where>
+			user.id=#{value}
+		</where>
+	</select>
+	
+	<select id="selectByNamePassword" resultMap="UserResultMap">
+		<include refid="query_user"></include>
+		<where>
+			binary user.name=#{name} and 
+			binary user.password=#{password}
+		</where>
+	</select>
+	
+	<select id="selectAll" resultMap="UserResultMap">
+		<include refid="query_user"></include>
+	</select>
+	
+	<select id="selectCount" resultType="int">
+		select count(*) from user
+	</select>
+</mapper>

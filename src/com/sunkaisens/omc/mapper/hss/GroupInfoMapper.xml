@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.hss.GroupInfoMapper" >
+	
+	<insert id="insert" parameterType="groupInfo">
+		insert into GroupInfo
+		values
+		(
+			#{imsi},
+			#{group1},#{group2},#{group3},#{group4},
+			#{group5},#{group6},#{group7},#{group8},
+			#{group9},#{group10},#{group11},#{group12},
+			#{group13},#{group14},#{group15},#{group16}
+		)
+	</insert>
+	
+	<delete id="deleteById" parameterType="string">
+		delete from GroupInfo where IMSI = #{value}
+	</delete>
+	
+	<update id="update" parameterType="groupInfo">
+		update 
+			GroupInfo 
+		set 
+			GROUP1=#{group1},
+			GROUP2=#{group2},
+			GROUP3=#{group3},
+			GROUP4=#{group4},
+			GROUP5=#{group5},
+			GROUP6=#{group6},
+			GROUP7=#{group7},
+			GROUP8=#{group8},
+			GROUP9=#{group9},
+			GROUP10=#{group10},
+			GROUP11=#{group11},
+			GROUP12=#{group12},
+			GROUP13=#{group13},
+			GROUP14=#{group14},
+			GROUP15=#{group15},
+			GROUP16=#{group16}
+		where 
+			IMSI=#{imsi}
+	</update>
+	
+	<select id="selectById" parameterType="string" resultType="groupInfo">
+		select * from GroupInfo where IMSI=#{value}
+	</select>
+	
+</mapper>

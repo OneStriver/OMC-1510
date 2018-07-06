@@ -1,0 +1,146 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.1.xsd 
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.1.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.1.xsd ">
+
+	<context:property-placeholder location="classpath:db.properties" />
+	
+	<bean id="coreDataSource" class="com.atomikos.jdbc.nonxa.AtomikosNonXADataSourceBean"
+		init-method="init" destroy-method="close">
+		<property name="uniqueResourceName" value="db_core" />
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}"/>
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	<bean id="cscfDataSource" class="com.atomikos.jdbc.nonxa.AtomikosNonXADataSourceBean"
+		init-method="init" destroy-method="close">
+		<property name="uniqueResourceName" value="db_cscf" />
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.cscf.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+
+	<bean id="coreSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name ="dataSource" ref="coreDataSource" />
+		<property name ="configLocation" value="classpath:SqlMapConfig.xml"/>
+		<!--  加入mapper扫描器 就不需要这条配置了 否则报错 -->
+		<!-- <property name ="mapperLocations" value="classpath*:com/sunkaisens/omc/mapper/core/*.xml"/> -->
+	</bean>
+	
+	<bean id="cscfSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name ="dataSource" ref="cscfDataSource" />
+		<property name ="configLocation" value="classpath:SqlMapConfig.xml" />
+	</bean>
+	
+	<!--  mapper扫描器 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!--扫描包路径，如果需要扫描多个包，中间使用半角逗号隔开 -->
+		<property name="basePackage" value="com.sunkaisens.omc.mapper.core"/>
+		<property name="sqlSessionFactoryBeanName" value="coreSqlSessionFactory" />
+	</bean> 
+    
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+        <property name="basePackage" value="com.sunkaisens.omc.mapper.cscf"/>  
+        <property name="sqlSessionFactoryBeanName" value="cscfSqlSessionFactory" />  
+	</bean>
+	
+	<bean id="hssDataSource" class="com.atomikos.jdbc.nonxa.AtomikosNonXADataSourceBean"
+		init-method="init" destroy-method="close">
+		<property name="uniqueResourceName" value="db_hss" />
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.hss.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	<!-- HSS分库部分 -->
+	<bean id="hssDataSource1" class="com.atomikos.jdbc.nonxa.AtomikosNonXADataSourceBean"
+		init-method="init" destroy-method="close">
+		<property name="uniqueResourceName" value="db_hss1" />
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.hss1.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	<bean id="hssDataSource2" class="com.atomikos.jdbc.nonxa.AtomikosNonXADataSourceBean"
+		init-method="init" destroy-method="close">
+		<property name="uniqueResourceName" value="db_hss2" />
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.hss2.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	<bean id="hssDataSource3" class="com.atomikos.jdbc.nonxa.AtomikosNonXADataSourceBean"
+		init-method="init" destroy-method="close">
+		<property name="uniqueResourceName" value="db_hss3" />
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.hss3.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	<bean id="hssDataSource4" class="com.atomikos.jdbc.nonxa.AtomikosNonXADataSourceBean"
+		init-method="init" destroy-method="close">
+		<property name="uniqueResourceName" value="db_hss4" />
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.hss4.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	<bean id="hssSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name ="dataSource" ref="hssDataSource" />
+		<property name ="configLocation" value="classpath:SqlMapConfig.xml" />
+	</bean>
+	<bean id="hssSqlSessionFactory1" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name ="dataSource" ref="hssDataSource1" />
+		<property name ="configLocation" value="classpath:SqlMapConfig.xml" />
+	</bean>
+	<bean id="hssSqlSessionFactory2" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name ="dataSource" ref="hssDataSource2" />
+		<property name ="configLocation" value="classpath:SqlMapConfig.xml" />
+	</bean>
+	<bean id="hssSqlSessionFactory3" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name ="dataSource" ref="hssDataSource3" />
+		<property name ="configLocation" value="classpath:SqlMapConfig.xml" />
+	</bean>
+	<bean id="hssSqlSessionFactory4" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name ="dataSource" ref="hssDataSource4" />
+		<property name ="configLocation" value="classpath:SqlMapConfig.xml" />
+	</bean>
+	
+	<bean id="sqlSessionFactories" abstract="true">
+		<property name="sqlSessionFactories">
+			<list>
+				<ref bean ="hssSqlSessionFactory"/>
+				<ref bean ="hssSqlSessionFactory1"/>
+    	 		<ref bean ="hssSqlSessionFactory2"/>
+    	 		<ref bean ="hssSqlSessionFactory3"/>
+    	 		<ref bean ="hssSqlSessionFactory4"/>
+			</list>
+		</property>
+		<property name="hssDataSourceCount" value="4"/>
+	</bean>
+	<bean id="hlrMapper" class="com.sunkaisens.omc.mapper.hss.impl.HlrMapperImpl" parent="sqlSessionFactories"/>
+	<bean id="aucMapper" class="com.sunkaisens.omc.mapper.hss.impl.AucMapperImpl" parent="sqlSessionFactories"/>
+	<bean id="ePCSubscriptionDataMapper" class="com.sunkaisens.omc.mapper.hss.impl.EPCSubscriptionDataMapperImpl" parent="sqlSessionFactories"/>
+	<bean id="ePCSubscriptionTFTMapper" class="com.sunkaisens.omc.mapper.hss.impl.EPCSubscriptionTFTMapperImpl" parent="sqlSessionFactories"/>
+	<bean id="groupInfoMapper" class="com.sunkaisens.omc.mapper.hss.impl.GroupInfoMapperImpl" parent="sqlSessionFactories"/>
+	<bean id="hlrpsMapper" class="com.sunkaisens.omc.mapper.hss.impl.HlrpsMapperImpl" parent="sqlSessionFactories"/>
+	<bean id="msserviceMapper" class="com.sunkaisens.omc.mapper.hss.impl.MsserviceMapperImpl" parent="sqlSessionFactories"/>
+	<bean id="hssGroupMapper" class="com.sunkaisens.omc.mapper.hss.impl.HssGroupMapperImpl" parent="sqlSessionFactories"/>
+	<bean id="terminalInfoMapper" class="com.sunkaisens.omc.mapper.hss.impl.TerminalInfoMapperImpl" parent="sqlSessionFactories"/>
+	<bean id="groupMemberMapper" class="com.sunkaisens.omc.mapper.hss.impl.GroupMemberMapperImpl" parent="sqlSessionFactories"/>
+</beans>

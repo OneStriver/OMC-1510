@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.core.EntityMapper" >
+	
+	<sql id="selectEntitySql">
+		select 
+			s.*,
+			m.id m_id,m.name m_name,m.belong m_belong,m.description m_desc,m.version m_version,m.log m_log,
+			c.id c_id,c.name c_name,c.cardNum c_cardNum,c.slotId c_slotId,c.ip c_ip
+		from 
+			entity s
+		left join 
+			module m
+		on (s.moduleId=m.id)
+		left join 
+			card c
+		on (s.cardId=c.id)
+	</sql>
+
+	<resultMap type="entity" id="entityResultMap">
+		<id column="id" property="id"/>
+		<id column="name" property="name"/>
+		<id column="instId" property="instId"/>
+		<id column="status" property="status"/>
+		<id column="description" property="description"/>
+		<id column="type" property="type"/>
+		<association property="card" javaType="card">
+			<id column="c_id" property="id"/>
+			<result column="c_name" property="name"/>
+			<result column="c_cardNum" property="cardNum"/>
+			<result column="c_slotId" property="slotId"/>
+			<result column="c_ip" property="ip"/>
+		</association>
+		<association property="module" javaType="module">
+			<id column="m_id" property="id"/>
+			<id column="m_name" property="name"/>
+			<id column="m_belong" property="belong"/>
+			<id column="m_desc" property="description"/>
+			<id column="m_version" property="version"/>
+			<id column="m_log" property="log"/>
+		</association>
+	</resultMap>
+
+	<insert id="insert" parameterType="entity">
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into 
+			entity
+			(name,instId,status,description,type,moduleId,cardId) 
+		values
+			(
+				#{name},#{instId},#{status},#{description},#{type},
+				<if test="module!=null">#{module.id}</if>
+				<if test="module==null">null</if>,
+				<if test="card!=null">#{card.id}</if>
+				<if test="card==null">null</if>
+			)
+	</insert>
+
+	<select id="selectById" parameterType="int" resultMap="entityResultMap">
+		<include refid="selectEntitySql"/>
+		where s.id=#{value}
+	</select>
+	
+	<select id="selectAll" resultMap="entityResultMap">
+		<include refid="selectEntitySql"/>
+		order by <if test="sort!=null">${sort} ${order},</if>id asc
+	</select>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from entity where id=#{value}
+	</delete>
+	
+	<update id="update" parameterType="entity">
+		update entity set 
+			name=#{name},
+			instId=#{instId},
+			status=#{status},
+			type=#{type},
+			description=#{description},
+			moduleId=
+			<if test="module==null">null</if>
+			<if test="module!=null">#{module.id}</if>,
+			cardId=
+			<if test="card==null">null</if>
+			<if test="card!=null">#{card.id}</if>
+		where id=#{id}
+	</update>
+	
+	<select id="select" parameterType="int" resultMap="entityResultMap">
+		<include refid="selectEntitySql"/>
+		limit #{jumpNum} , #{limit}
+	</select>
+	
+	<select id="selectCount" resultType="int">
+	    select count(*) from entity
+	</select>
+	
+	<select id="selectMaxIstdIdByModuleId" resultType="int">
+		select max(instId) from entity where moduleId=#{value}
+	</select>
+	
+	<select id="selectByModuleAndInstId" resultMap="entityResultMap">
+		<include refid="selectEntitySql"/>
+		where m.id=#{moduleId} and s.instId=#{instId}
+	</select>
+	
+	<select id="selectByModuleId" resultType="entity" parameterType="int">
+		select * from entity where moduleId=#{value}
+	</select>
+	
+</mapper>

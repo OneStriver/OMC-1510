@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.core.IpDnsMapper" >
+
+	<insert id="insert" parameterType="ipDns">
+		insert into ipDns values(#{cardNum},#{eth},#{ip},#{dnsStr})
+	</insert>
+	
+	<select id="selectByEthAndCardNum" resultType="ipDns">
+		select * from ipDns where cardNum=#{cardNum} and eth=#{eth}
+	</select>
+	
+	<update id="update" parameterType="ipDns">
+		update ipDns set ip=#{ip} , dnsStr=#{dnsStr} where cardNum=#{cardNum} and eth=#{eth}
+	</update>
+	
+	<select id="exist" resultType="ipDns">
+		select * from ipDns where cardNum!=#{cardNum} or eth!=#{eth}
+	</select>
+	
+	<delete id="deleteByEthAndCardNum">
+		delete from ipDns where cardNum=#{cardNum} and eth=#{eth}
+	</delete>
+</mapper>

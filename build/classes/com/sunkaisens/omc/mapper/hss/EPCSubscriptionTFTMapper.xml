@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.hss.EPCSubscriptionTFTMapper" >
+	
+	<insert id="insert" parameterType="epcsubscriptiontft">
+		insert into EPCSubscriptionTFT
+		(
+			IMSI,
+			SrcIP,DstIP,SrcPortStart,SrcPortEnd,
+			DstPortStart,DstPortEnd,DiffServStart,DiffServEnd,
+			PktLenMin,PktLenMax
+		)
+		values
+		(
+			#{imsi},
+			#{srcIp},#{dstIp},#{srcPortStart},#{srcPortEnd},
+			#{dstPortStart},#{dstPortEnd},#{diffServStart},#{diffServEnd},
+			#{pktLenMin},#{pktLenMax}
+		)
+	</insert>
+	
+	<delete id="deleteById" parameterType="string">
+		delete from EPCSubscriptionTFT where IMSI = #{value}
+	</delete>
+	
+	<update id="update" parameterType="epcsubscriptiontft">
+		update 
+			EPCSubscriptionTFT 
+		set 
+			SrcIP=#{srcIp},
+			DstIP=#{dstIp},
+			SrcPortStart=#{srcPortStart},
+			SrcPortEnd=#{srcPortEnd},
+			DstPortStart=#{dstPortStart},
+			DstPortEnd=#{dstPortEnd},
+			DiffServStart=#{diffServStart},
+			DiffServEnd=#{diffServEnd},
+			PktLenMin=#{pktLenMin},
+			PktLenMax=#{pktLenMax}
+		where 
+			IMSI=#{imsi}
+	</update>
+	
+	<select id="selectById" parameterType="string" resultType="epcsubscriptiontft">
+		select * from EPCSubscriptionTFT where IMSI=#{value}
+	</select>
+	
+	<insert id="batchAdd" statementType="CALLABLE">
+		{
+			call hss.addTft(#{count},#{imsi})
+		}
+	</insert>
+	
+</mapper>

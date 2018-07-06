@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.hss.HlrMapper">
+	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
+	<sql id="hssWhere">
+		1=1
+		<if test="hss!=null">
+			<if test="hss.imsi!=null">
+				and HLR.IMSI like '%${hss.imsi}%'
+			</if>
+			<if test="hss.mdn!=null">
+				and HLR.MDN like '%${hss.mdn}%'
+			</if>
+			<if test="hss.deviceType!=null">
+				and HLR.DeviceType = #{hss.deviceType}
+			</if>
+			<if test="hss.msvocodec!=null">
+				and HLR.MSvocodec = #{hss.msvocodec}
+			</if>
+			<if test="hss.status!=null">
+				and HLR.status = #{hss.status}
+			</if>
+			<if test="hss.priority!=0">
+				<![CDATA[
+				and (((HLR.MSprofile & 0xF0000000)<<1)>>29) = #{hss.priority}
+				]]>
+			</if>
+		</if>
+	</sql>
+    <sql id="selectHssSql">
+        select 
+			HLR.*,AUC.*,MSService.*,GroupInfo.*,EPCSubscriptionTFT.*,TerminalInfo.*,EPCSubscriptionData.*,
+				case 
+					when HLRps.IMSI then 1
+					else 0 end  region
+		from
+			HLR
+		left join 
+			AUC
+		on
+			(HLR.IMSI=AUC.IMSI)
+		left join
+			MSService
+		on 
+			(HLR.IMSI=MSService.IMSI)
+		left join
+			GroupInfo
+		on
+			(HLR.IMSI=GroupInfo.IMSI)
+		left join
+			EPCSubscriptionTFT
+		on
+			(HLR.IMSI=EPCSubscriptionTFT.IMSI)
+		left join
+			HLRps
+		on
+			(HLRps.IMSI=HLR.IMSI)
+		left join
+			TerminalInfo
+		on
+			(TerminalInfo.IMSI=HLR.IMSI)
+		left join
+			EPCSubscriptionData
+		on
+			(EPCSubscriptionData.IMSI=HLR.IMSI)
+    </sql>
+    
+    <sql id="countsql">
+    	select IMSI,MDN,ESN,TMSI,RncLoc,GeoLoc,MSprofile,MSprofile_extra
+    </sql>
+    
+	<insert id="insert" parameterType="hlr">
+		insert into HLR
+		(
+			IMSI,MDN,ESN,MSprofile,MSprofile_extra,MSvocodec,
+			tstamp,status,DeviceType
+		)
+		values
+		(
+			#{imsi},#{mdn},#{esn},#{msprofile},#{msprofile_extra},#{msvocodec},
+			#{tstamp},0,#{deviceType}
+		)
+	</insert>
+	
+	<delete id="deleteById" parameterType="string">
+		delete from HLR where IMSI = #{value}
+	</delete>
+	
+	<update id="update" parameterType="hlr">
+		update 
+			HLR 
+		set 
+			MDN=#{mdn},
+			ESN=#{esn},
+			MSprofile=#{msprofile},
+			MSprofile_extra=#{msprofile_extra},
+			MSvocodec=#{msvocodec},
+			tstamp=#{tstamp},
+			DeviceType=#{deviceType}
+		where 
+			IMSI=#{imsi}
+	</update>
+	
+	<select id="selectHssById" parameterType="string" resultType="com.sunkaisens.omc.vo.hss.HssBusinessVo">
+	    <include refid="selectHssSql"/>
+		where HLR.IMSI=#{value}
+	</select>
+	
+	<select id="selectCount" resultType="int" parameterType="com.sunkaisens.omc.vo.hss.HssBusinessVo">
+    	select count(*) from HLR
+    	where <include refid="hssWhere"/>
+	</select>
+	
+	<select id="select" resultType="hlr" parameterType="com.sunkaisens.omc.vo.hss.HssBusinessVo">
+		select * from HLR 
+		<where>
+			<include refid="hssWhere"/>
+		</where>
+		<!-- order by tstamp asc --> 
+		limit #{jumpNum},#{limit}
+	</select>
+	
+	<select id="selectAll" resultType="hlr" parameterType="com.sunkaisens.omc.vo.hss.HssBusinessVo">
+		select * from HLR 
+		<!-- limit #{jumpNum},#{limit} -->
+	</select>
+	
+	<select id="selectById" parameterType="string" resultType="hlr">
+	    select * from HLR where IMSI=#{value}
+	</select>
+	
+	<select id="selectByMdn" parameterType="string" resultType="hlr">
+		select * from HLR where MDN=#{value}
+	</select>
+	
+	<select id="selectByEsn" parameterType="string" resultType="hlr">
+		select * from HLR where ESN=#{value}
+	</select>
+
+	<update id="setIsolation" parameterType="string">
+		set global tx_isolation=#{value}
+	</update>
+	
+	<insert id="batchAdd" statementType="CALLABLE">
+		{
+			call hss.addHlr(#{count},#{imsi},#{mdn},0x${esn},#{msprofile},#{deviceType},#{msvocodec},#{msprofile_extra})
+		}
+	</insert>
+	
+	<update id="batchUpdate" statementType="CALLABLE">
+		{
+			call hss.updateHlr(#{count},#{imsi},#{mdn},0x${esn},#{msprofile},#{deviceType},#{msvocodec},#{msprofile_extra})
+		}
+	</update>
+	
+	<!-- 批量修改操作 -->
+	<update id="updateHss" parameterType="hlr">
+		update 
+			HLR 
+		set 
+			MSvocodec=#{msvocodec},
+			MSprofile=#{msprofile}
+		where 
+			IMSI=#{imsi}
+	</update>
+	
+	<!-- 查询所有的Imsi -->
+	<select id="selectAllImsi" resultType="String">
+		select imsi from HLR
+	</select>
+</mapper>

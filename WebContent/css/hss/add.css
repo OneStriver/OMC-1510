@@ -1,0 +1,12 @@
+#auc input{
+	width:35px;
+}
+#auc label{
+	width:50px;
+}
+
+#groupInfo label{
+	display:block;
+	float:left;
+	width:100px;
+}

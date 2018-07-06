@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.hss.HssGroupMapper" >
+	<resultMap type="hssGroup" id="hssGroupMap">
+		<id column="groupNum" property="id"/>
+		<result column="groupTmsi" property="tmsi"/>
+		<result column="groupCallType" property="callType"/>
+		<result column="groupCallBear" property="busiType"/>
+		<result column="priority" property="priority"/>
+		<result column="servloc" property="location"/>
+		<result column="status" property="status"/>
+		<result column="tstamp" property="createTime"/>
+		<result column="lastUpdateTstamp" property="updateTime"/>
+	</resultMap>
+	
+	<sql id="groupWhere">
+		<where>
+			<if test="group!=null">
+				<if test="group.id!=null and group.id!=''">
+					and groupNum like '%${group.id}%'
+				</if>
+				<if test="group.callType!=null">
+					and groupCallType = #{group.callType}
+				</if>
+				<if test="group.busiType!=null">
+					and groupCallBear = #{group.busiType}
+				</if>
+			</if>
+		</where>
+	</sql>
+    <sql id="selectHssGroupSql">
+        select * from csHLRGroupInfo
+    </sql>
+    
+	<insert id="insert" parameterType="hssGroup">
+		insert into csHLRGroupInfo
+		(
+			groupNum,groupTmsi,groupCallType,groupCallBear,
+			priority,<!-- servloc, -->status,tstamp,lastUpdateTstamp
+		)
+		values
+		(
+			#{id},#{tmsi},#{callType},#{busiType},#{priority},<!-- #{location}, -->
+			#{status},#{createTime},#{updateTime}
+		)
+	</insert>
+	
+	<delete id="deleteById" parameterType="string">
+		delete from csHLRGroupInfo where groupNum = #{value}
+	</delete>
+	
+	<update id="update" parameterType="hssGroup">
+		update 
+			csHLRGroupInfo 
+		set 
+			groupTmsi=#{tmsi},
+			groupCallType=#{callType},
+			groupCallBear=#{busiType},
+			priority=#{priority},
+			<!-- servloc=#{location}, -->
+			status=#{status},
+			lastUpdateTstamp=#{updateTime}
+		where 
+			groupNum=#{id}
+	</update>
+	
+	<select id="select" resultMap="hssGroupMap">
+		<include refid="selectHssGroupSql"/>
+		<include refid="groupWhere"/>
+		limit #{jumpNum},#{limit}
+	</select>
+	
+	<select id="selectCount" resultType="int" parameterType="hssGroup">
+    	select count(*) from csHLRGroupInfo
+    	<include refid="groupWhere"/>
+	</select>
+	
+	<select id="selectById" parameterType="string" resultMap="hssGroupMap">
+	    select * from csHLRGroupInfo where groupNum=#{value}
+	</select>
+	
+	<select id="getGroupNumber" resultType="hashmap">
+	    select groupNum from csHLRGroupInfo 
+	</select>
+</mapper>

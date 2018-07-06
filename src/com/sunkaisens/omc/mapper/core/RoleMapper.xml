@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sunkaisens.omc.mapper.core.RoleMapper" >
+	
+	<sql id="query_role">
+		select 
+			<!-- user.*, -->
+			role.id roleId,
+			role.name roleName,
+			role.description roleDescription,
+			privilege.id privilegeId,
+			privilege.name privilegeName,
+			privilege.description privilegeDescription,
+			privilege.url,
+			privilege.icon,
+			privilege.leaf			
+		from 
+			role
+		left join(privilege,
+			role_privilege)
+		on(
+			role.id=role_privilege.roleId and
+			role_privilege.privilegeId=privilege.id)
+	</sql>
+
+	<resultMap type="role" id="RoleResultMap">
+		<id column="roleId" property="id"/>
+		<result column="roleName" property="name"/>
+		<result column="roleDescription" property="description"/>
+		
+		<collection property="privileges" ofType="privilege">
+		 	<id column="privilegeId" property="id"/>
+		 	<result column="privilegeName" property="name"/>
+		 	<result column="privilegeDescription" property="description"/>
+		</collection>
+	</resultMap>
+
+
+	<insert id="insert" parameterType="role">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into role(name,description) values(#{name},#{description})
+	</insert>
+	
+	<insert id="insertRolePrivileges" parameterType="role">
+		insert into role_privilege (roleId,privilegeId) values 
+		<foreach collection="privileges" item="privilege" open="" close="" separator=",">
+			(#{id},#{privilege.id})
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from role where id = #{value}
+	</delete>
+	
+	<delete id="deleteRoleUsers" parameterType="int">
+		delete from user_role where roleId = #{id}
+	</delete>
+	
+	<delete id="deleteRolePrivileges" parameterType="int">
+		delete from role_privilege where roleId = #{id}
+	</delete>
+	
+	<update id="update" parameterType="role">
+		update role set name=#{name},description=#{description} where id=#{id}
+	</update>
+	
+	<select id="selectById" parameterType="int" resultMap="RoleResultMap">
+		<include refid="query_role"></include>
+		<where>
+			role.id=#{value}
+		</where>
+	</select>
+	
+	<select id="selectAll" resultType="role">
+		select * from role
+	</select>
+	
+	<select id="selectByName" parameterType="string" resultType="role">
+		select * from role where name=#{value}
+	</select>
+	
+</mapper>
