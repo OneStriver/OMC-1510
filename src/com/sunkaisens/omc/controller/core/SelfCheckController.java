@@ -11,26 +11,17 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sunkaisens.omc.service.core.SelfCheckService;
 
 /**
- * 
- * 
- * 
- * 自检 SelfCheck   Controller
- *
- *
+ * 自检 SelfCheck Controller
  */
-@Controller@RequestMapping("/selfCheck")
+@Controller
+@RequestMapping("/selfCheck")
 public class SelfCheckController{
-	//注入SelfCheckService
+	
 	@Resource
 	private SelfCheckService service;
+	
 	/**
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 调用实时自检，并返回selfCheck/rt视图
-	 * @return
-	 * @throws Exception
 	 */
 	@RequestMapping("rtCheck")
 	public ModelAndView rtCheck() throws Exception{
@@ -39,14 +30,9 @@ public class SelfCheckController{
 		mav.addObject("status", arr);
 		return mav;
 	}
+	
 	/**
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 调用开机自检，并返回selfCheck/startup视图
-	 * @return
-	 * @throws Exception
 	 */
 	@RequestMapping("startupCheck")
 	public ModelAndView start2upCheck() throws Exception{

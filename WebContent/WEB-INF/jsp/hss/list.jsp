@@ -518,11 +518,13 @@
 	
 	<!-- 导入Excel开始 -->
 	<div id="importExcel" class="easyui-window"
-        	data-options="width:400,title:'<spring:message code="UserImport"/>',iconCls:'icon-save',modal:true,closed:true,resizable:false,minimizable:false,maximizable:false">
+        	data-options="width:400,title:'<spring:message code="UserImport"/>',iconCls:'icon-save',modal:true,closed:true,collapsible:false,resizable:false,minimizable:false,maximizable:false">
       	<form id="hssExcel" action="${pageContext.request.contextPath}/hss/importExcel.action" method="post" enctype="multipart/form-data">
       		<br/>
 			<input class="easyui-filebox" name="file" data-options="onChange:function(){
-				$(this).filebox('setValue',$(this).filebox('getValue').substring(12));
+				var inputFileName = $(this).filebox('getValue');
+				var fileName = inputFileName.substring(inputFileName.lastIndexOf('\\')+1,(inputFileName.length));
+				$(this).filebox('setValue',fileName);
 			},validType:'excelFile',width:330,buttonText:'选择Excel文件',required:true,prompt:'选择要导入的Excel文件'"/>
 			<!-- 隐藏标志位 -->
 			<input type="text" id="hid" name="hid" hidden="true">
@@ -533,7 +535,7 @@
 			</div>
 			<br/>
 			<div style="text-align:center;padding:5px;clear:both;">
-			<a href="#" class="easyui-linkbutton" onclick="importExcel()"><spring:message code="ImportUser"/></a>
+				<a href="#" class="easyui-linkbutton" onclick="importExcel()"><spring:message code="ImportUser"/></a>
 			</div>
       	</form>
     </div>
@@ -543,7 +545,9 @@
       	<form id="hssXml" action="${pageContext.request.contextPath}/hss/importXml.action" method="post" enctype="multipart/form-data">
       		<br/>
 			<input class="easyui-filebox" name="file" data-options="onChange:function(){
-				$(this).filebox('setValue',$(this).filebox('getValue').substring(12));
+				var inputFileName = $(this).filebox('getValue');
+				var fileName = inputFileName.substring(inputFileName.lastIndexOf('\\')+1,(inputFileName.length));
+				$(this).filebox('setValue',fileName);
 			},validType:'xmlFile',width:380,buttonText:'选择Xml文件',required:true,prompt:'选择要导入的Xml文件'"/>
 			<br/><br/>
 			<div style="text-align:center;padding:5px;clear:both;">
@@ -557,7 +561,9 @@
       	<form id="hssF" action="${pageContext.request.contextPath}/hss/import.action" method="post" enctype="multipart/form-data">
       		<br/>
 			<input class="easyui-filebox" name="file" data-options="onChange:function(){
-				$(this).filebox('setValue',$(this).filebox('getValue').substring(12));
+				var inputFileName = $(this).filebox('getValue');
+				var fileName = inputFileName.substring(inputFileName.lastIndexOf('\\')+1,(inputFileName.length));
+				$(this).filebox('setValue',fileName);
 			},validType:'sqlFile',width:380,buttonText:'<spring:message code="SelectSqlFile"/>',required:true,prompt:'<spring:message code="PleaseSelectSqlFile"/>'"/>
 			<br/><br/>
 			<div style="text-align:center;padding:5px;clear:both;">

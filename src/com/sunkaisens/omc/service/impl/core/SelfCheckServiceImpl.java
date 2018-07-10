@@ -62,7 +62,7 @@ public class SelfCheckServiceImpl implements SelfCheckService {
 	}
 	
 	@Override
-	public List<Object> startupStatus()throws Exception {
+	public List<Object> startupStatus() throws Exception {
 		List<Object> arr=new ArrayList<Object>();
 		File dir=new File(OmcServerContext.getInstance().getFtpDir()+File.separator+"oam.stat");
 		List<Card> cards = cardMapper.selectAll();

@@ -18,6 +18,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.sunkaisens.omc.exception.CustomException;
 import com.sunkaisens.omc.service.core.OutService;
 import com.sunkaisens.omc.util.ByteUtil;
 import com.sunkaisens.omc.vo.core.Fxo;
@@ -82,14 +83,17 @@ public class OutServiceImpl implements OutService {
 		return isup;
 	}
 	
+	/**
+	 * 读取Sip配置文件使用
+	 */
 	@Override
-	public Sip readSipConf(String sipDir) throws IOException{
+	public Sip readSipConf(String sipDir) throws Exception{
 		Sip sip=new Sip();
 		Properties pSip=new Properties();
 		try(	
-			InputStream is=new FileInputStream(sipDir+File.separator+"sipgw.config");
-//				InputStream is=new FileInputStream("D://sipgw.config");
-				){
+//			InputStream is=new FileInputStream(sipDir+File.separator+"sipgw.config");
+			InputStream is=new FileInputStream("D://outConfig/sipgw.config");
+		){
 			pSip.load(is);
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -99,23 +103,60 @@ public class OutServiceImpl implements OutService {
 		sip.setLocalSipPort(pSip.getProperty("LocalSipPort"));
 		sip.setRemoteSipIP(pSip.getProperty("RemoteSipIP"));
 		sip.setRemoteSipPort(pSip.getProperty("RemoteSipPort"));
-		sip.setRoutingNum(pSip.getProperty("RoutingNum"));
+		String routing = pSip.getProperty("RoutingNum");
+		List<String> routingNumList = new ArrayList<>();
+		if(routing.equals("0")){
+			sip.setFlag("0");
+		}else{			
+			String[] routingNum = pSip.getProperty("RoutingNum").split("\\|");
+			for(int i =1;i<routingNum.length;i++){
+				routingNumList.add(routingNum[i]);
+			}	
+			sip.setFlag(String.valueOf(routingNumList.size()));
+		}
+		sip.setRoutingNum(routingNumList);
 		sip.setVoiceEncoding(pSip.getProperty("VoiceEncoding"));
 		return sip;
 	}
 	
+	/**
+	 * 更新SIP操作
+	 */
 	@Override
-	public void updateSip(String sipDir, Sip sip) throws IOException {
+	public void updateSip(String sipDir, Sip sip) throws Exception {
 		MyProperties pSip=new MyProperties(":");
-		File is=new File(sipDir+File.separator+"sipgw.config");
-//		File is=new File("D://sipgw.config");
+//		File is=new File(sipDir+File.separator+"sipgw.config");
+		File is=new File("D://outConfig/sipgw.config");
 		pSip.load(is);
 		pSip.setProperty("HeartBeat", sip.getHeartBeat());
 		pSip.setProperty("LocalSipIP", sip.getLocalSipIP());
+		pSip.setProperty("LocalSipBearChIP", sip.getLocalSipIP());		
 		pSip.setProperty("LocalSipPort", sip.getLocalSipPort());
 		pSip.setProperty("RemoteSipIP", sip.getRemoteSipIP());
 		pSip.setProperty("RemoteSipPort", sip.getRemoteSipPort());
-		pSip.setProperty("RoutingNum", sip.getRoutingNum());
+		if(sip.getFlag().equals("0")){
+			pSip.setProperty("RoutingNum","0");
+		}else{
+			List<String> routingList = sip.getRoutingNum();
+			List<String> routingNumList = new ArrayList<>();
+			if(routingList==null){
+				throw new CustomException("请添加SIP配置的局限号段！");
+			}
+			for(String routing:routingList){
+				if(!routing.equals("")){
+					routingNumList.add(routing);
+				}				
+			}
+			StringBuffer sb = new StringBuffer(routingNumList.size()+"|");
+			for(int i=0;i<routingNumList.size();i++){
+				String routingNumStr = routingNumList.get(i);
+				if(!routingNumStr.equals("")){
+					sb.append(routingNumStr+"|");
+				}
+			}
+			sb.deleteCharAt(sb.length()-1);
+			pSip.setProperty("RoutingNum", sb.toString());
+		}		
 		pSip.setProperty("VoiceEncoding", sip.getVoiceEncoding());
 		
 		pSip.store();

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
-<title>域名配置</title>
+<title>域名管理</title>
 <%@ include file="/WEB-INF/jsp/public/common.jspf"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/public/grid.js?<%=new Date().getTime()%>"></script>
 

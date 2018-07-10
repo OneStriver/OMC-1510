@@ -1,38 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
-<title>静态网卡</title>
+<title>动态库管理</title>
 <%@ include file="/WEB-INF/jsp/public/common.jspf"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/public/grid.js?<%=new Date().getTime()%>"></script>
-<script type="text/javascript">
-function submitForm(){
-	$('#ff').form('submit',{
-		success:function(data){
-			submitSuccess(data);
-			$.messager.progress('close');
-		},
-		onSubmit:function(){
-			var ok = $(this).form('enableValidation').form('validate');
-			if(ok) $.messager.progress({msg:'正在上传请稍等'});
-			return ok;
-		}
-	});
-}
-
-function authsubmitForm(){
-	$('#authff').form('submit',{
-		success:function(data){
-			submitSuccess(data);
-			$.messager.progress('close');
-		},
-		onSubmit:function(){
-			var ok = $(this).form('enableValidation').form('validate');
-			if(ok) $.messager.progress({msg:'正在上传请稍等'});
-			return ok;
-		}
-	});
-}
-</script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/so/so.js"></script>
 </head>
 <body>
 	<table id="dg" title="<spring:message code="StaticLibraryList"></spring:message>" class="easyui-datagrid" data-options="
@@ -63,32 +35,36 @@ function authsubmitForm(){
 	</table>
 	<div id="tb" style="height:auto">
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" 
-			onclick="$('#w').window('open')"><spring:message code="AddLibraryFile"/></a>
+			onclick="$('#dynamicLibraryWindow').window('open')"><spring:message code="AddLibraryFile"/></a>
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" 
-			onclick="$('#authw').window('open')">添加加密库</a>
+			onclick="$('#addEncryptLibraryWindow').window('open')">添加加密库</a>
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" 
 			onclick="removeit('${pageContext.request.contextPath}/so/delete.action')"><spring:message code="DeleteLibraryFile"/></a>
 	</div>
 	
-	<div id="w" class="easyui-window" title="<spring:message code="LibraryFileUpload"/>" data-options="modal:true,closed:true,iconCls:'icon-save'" style="text-align:center;width:300px;height:200px;padding:10px;">
-		<form id="ff" method="post" enctype="multipart/form-data" action="${pageContext.request.contextPath}/so/upload.action">
+	<div id="dynamicLibraryWindow" class="easyui-window" title="<spring:message code="LibraryFileUpload"/>" data-options="modal:true,closed:true,collapsible:false,minimizable:false,maximizable:false,iconCls:'icon-save'" style="text-align:center;width:300px;height:200px;padding:10px;">
+		<form id="dynamicLibraryForm" method="post" enctype="multipart/form-data" action="${pageContext.request.contextPath}/so/upload.action">
 			<label><spring:message code="soFormat"/></label><br/><br/>
 			<input class="easyui-filebox" name="file" data-options="onChange:function(){
-				$(this).filebox('setValue',$(this).filebox('getValue').substring(12));
+				var inputFileName = $(this).filebox('getValue');
+				var fileName = inputFileName.substring(inputFileName.lastIndexOf('\\')+1,(inputFileName.length));
+				$(this).filebox('setValue',fileName);
 			},buttonText:'<spring:message code="SelectTheNEPackage"/>',required:true,prompt:'<spring:message code="SelectZIPPackage"/>'" style="width:100%"/>
 			<br/><br/>
-			<a href="#" class="easyui-linkbutton" onclick="submitForm()"><spring:message code="Upload"/></a>
+			<a href="#" class="easyui-linkbutton" onclick="dynamicLibrarySubmitForm()"><spring:message code="Upload"/></a>
 		</form>
 	</div>
 	
-	<div id="authw" class="easyui-window" title="上传授权库" data-options="modal:true,closed:true,iconCls:'icon-save'" style="text-align:center;width:300px;height:200px;padding:10px;">
-		<form id="authff" method="post" enctype="multipart/form-data" action="${pageContext.request.contextPath}/so/authUpload.action">
+	<div id="addEncryptLibraryWindow" class="easyui-window" title="上传授权库" data-options="modal:true,closed:true,collapsible:false,minimizable:false,maximizable:false,iconCls:'icon-save'" style="text-align:center;width:300px;height:200px;padding:10px;">
+		<form id="addEncryptLibraryForm" method="post" enctype="multipart/form-data" action="${pageContext.request.contextPath}/so/authUpload.action">
 			<label><spring:message code="soFormat"/></label><br/><br/>
 			<input class="easyui-filebox" name="file" data-options="onChange:function(){
-				$(this).filebox('setValue',$(this).filebox('getValue').substring(12));
+				var inputFileName = $(this).filebox('getValue');
+				var fileName = inputFileName.substring(inputFileName.lastIndexOf('\\')+1,(inputFileName.length));
+				$(this).filebox('setValue',fileName);
 			},buttonText:'<spring:message code="SelectTheNEPackage"/>',required:true,prompt:'<spring:message code="SelectZIPPackage"/>'" style="width:100%"/>
 			<br/><br/>
-			<a href="#" class="easyui-linkbutton" onclick="authsubmitForm()"><spring:message code="Upload"/></a>
+			<a href="#" class="easyui-linkbutton" onclick="addEncryptLibrarySubmitForm()"><spring:message code="Upload"/></a>
 		</form>
 	</div>
 </body>

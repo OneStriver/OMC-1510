@@ -141,7 +141,7 @@ public class OutController {
 	
 	//===========================SIP出局======================
 	@RequestMapping("sip")
-	public ModelAndView sip() throws IOException{
+	public ModelAndView sip() throws Exception{
 		Module module=moduleService.getByName("sipt");
 		List<Entity> ens=entityService.find(module.getId());
 		if(ens.size()>0){
@@ -150,12 +150,18 @@ public class OutController {
 		}
 		ModelAndView mav=new ModelAndView("out/sip");
 		Sip sip=service.readSipConf(sipDir);
-		mav.addObject(sip);
+		List<String> routingNumCount = sip.getRoutingNum();
+		if(routingNumCount.size()==0){
+			mav.addObject("boxCount",0);
+		}else{
+			mav.addObject("boxCount",Integer.valueOf(routingNumCount.size()));
+		}
+		mav.addObject("sip",sip);
 		return mav;
 	}
 	
 	@RequestMapping("sip/update")
-	public @ResponseBody JSONObject updateSip(Sip sip) throws IOException{
+	public @ResponseBody JSONObject updateSip(Sip sip) throws Exception{
 		JSONObject json=new JSONObject();
 		service.updateSip(sipDir,sip);
 

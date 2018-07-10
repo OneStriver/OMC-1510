@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
-<title>主机地址</title>
+<title>主机地址管理</title>
 <%@ include file="/WEB-INF/jsp/public/common.jspf"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/hostaddr/list.js?<%=new Date().getTime()%>"></script>
 </head>
@@ -14,10 +14,10 @@
 			fit:true,
 			striped:true,
 			border:false,
-			pageList: [10,20,30,40,50,60],
 			loadFilter:loadFilter,
-			pageNumber:${pageBean.page},
 			pagination:true,
+			pageList: [10,20,30,40,50,60],
+			pageNumber:${pageBean.page},
 			toolbar: '#tb',
 			onClickCell:onClickCell,
 			pageSize: ${pageBean.pageSize}">
@@ -38,7 +38,8 @@
 					formatter:function(value,row,rowIndex){
 						return '<b>'+value+'</b>';
 					}"><spring:message code="HostName"/></th>
-			<!-- <th data-options="field:'cardNum',hidden:true,editor:{
+			<!-- 
+			<th data-options="field:'cardNum',hidden:true,editor:{
 					type:'combobox',
 					options:{
 						url:'${pageContext.request.contextPath}/card/listjsonarr.action',
@@ -48,7 +49,8 @@
 						panelHeight:'auto',
 						required:true
 					}
-				}"><spring:message code="CardNumber"/></th> -->
+				}"><spring:message code="CardNumber"/></th> 
+			-->
 			<th data-options="field:'修改',
 				formatter:function(value,row,rowIndex){
 					return '<a href=# ><spring:message code="Edit"/></a>';
@@ -66,7 +68,7 @@
 	    </omc:permit>
 	</div>
 	
-	<div id="addHostAddrWindow" class="easyui-window" data-options="width:250,iconCls:'icon-save',modal:true,closed:true">
+	<div id="addHostAddrWindow" class="easyui-window" data-options="width:250,iconCls:'icon-save',modal:true,closed:true,collapsible:false,minimizable:false,maximizable:false">
         <form id="addHostAddrForm" method="post">
       		<br/>
       		<span>

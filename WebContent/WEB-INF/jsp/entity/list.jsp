@@ -2,10 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
-<title>软件列表</title>
+<title>执行网元管理</title>
 <%@ include file="/WEB-INF/jsp/public/common.jspf"%>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/public/grid.js?<%=new Date().getTime()%>"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/entity/entity.js?<%=new Date().getTime()%>"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/public/grid.js?<%=new Date().getTime()%>"></script>
 </head>
 <body>
 	<table id="dg" class="easyui-datagrid" title="<spring:message code="SoftwareList"/>"
@@ -16,10 +16,11 @@
 			border:false,
 			width:800,
 			rownumbers:true,
-			fit:true,striped:true,
-			pageList: [10,20,30,40,50,100,500],
-			pageNumber:${pageBean.page},
+			fit:true,
+			striped:true,
 			pagination:true,
+			pageList: [10,30,50,80,100],
+			pageNumber:${pageBean.page},
 			toolbar: '#tb',
 			loadFilter:loadFilter,
 			onClickCell:onClickCell,
@@ -54,9 +55,12 @@
 	</tbody>
 	</table>
 	<div id="tb" style="height:auto">
-		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="$('#aw').window('open')"><spring:message code="Add"/></a>
-		<omc:permit url="entity/delete"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit(
-				'${pageContext.request.contextPath}/entity/delete.action')"><spring:message code="Delete"/></a></omc:permit>
+		<omc:permit url="entity/save">
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="$('#addEntityWindow').window('open')"><spring:message code="Add"/></a>
+		</omc:permit>
+		<omc:permit url="entity/delete">
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" 
+				onclick="removeit('${pageContext.request.contextPath}/entity/delete.action')"><spring:message code="Delete"/></a></omc:permit>
 		<omc:permit url="entity/listLog">
 			<a class="easyui-splitbutton" data-options="menu:'#logdownload',iconCls:'icon-undo',plain:true">
 				<span onclick="exportAllLog()">导出全部日志</span>
@@ -65,21 +69,28 @@
 			    <div onclick="exportSelectedLog()">导出选中日志</div>
 			</div>　
 		</omc:permit>
-		<%-- <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept(
-			'${pageContext.request.contextPath}/entity/update.action',
-				'${pageContext.request.contextPath}/entity/save.action')">保存</a> --%>
-		<omc:permit url="entity/start"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="start()">启动</a></omc:permit>
-		<omc:permit url="entity/restart"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="restart()">重启</a></omc:permit>
-		<omc:permit url="entity/stop"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true" onclick="stop()">停止</a></omc:permit>
-		<omc:permit url="entity/startup"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-lock',plain:true" onclick="startup()">开机自启</a></omc:permit>
-		<omc:permit url="entity/shutdown"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true" onclick="shutdown()">禁止开机启动</a></omc:permit>
+		<omc:permit url="entity/start">
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="start()">启动</a>
+		</omc:permit>
+		<omc:permit url="entity/restart">
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="restart()">重启</a>
+		</omc:permit>
+		<omc:permit url="entity/stop">
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true" onclick="stop()">停止</a>
+		</omc:permit>
+		<omc:permit url="entity/startup">
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-lock',plain:true" onclick="startup()">开机自启</a>
+		</omc:permit>
+		<omc:permit url="entity/shutdown">
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true" onclick="shutdown()">禁止开机启动</a>
+		</omc:permit>
 	</div>
 	
 	<!-- 添加网元 -->
-	<div id="aw" class="easyui-window" title="<spring:message code="AddSoftware"/>" 
+	<div id="addEntityWindow" class="easyui-window" title="<spring:message code="AddSoftware"/>" 
 		data-options="collapsible:false,minimizable:false,maximizable:false,modal:true,closed:true,iconCls:'icon-save'" 
 		style="height:150px;padding:10px;">
-		<form id="af" class="easyui-form" method="post" data-options="novalidate:false,ajax:false" action="${pageContext.request.contextPath}/entity/addUI.action">
+		<form id="addEntityForm" class="easyui-form" method="post" data-options="novalidate:false,ajax:false" action="${pageContext.request.contextPath}/entity/addUI.action">
 			<table>
 	    		<tr>
 	    			<td><spring:message code="SoftwareName"/>:</td>
@@ -127,9 +138,9 @@
 	<div id="view" class="easyui-window" title="<spring:message code="ConfigFile"/>" data-options="modal:true,closed:true,iconCls:'icon-save'"></div>
 	
 	<!-- 更新软件 -->
-	<div id="updateEntityW" class="easyui-window" title="<spring:message code="UpgradeExecutableFile"/>" data-options="modal:true,closed:true,iconCls:'icon-edit'" 
+	<div id="updateEntityWindow" class="easyui-window" title="<spring:message code="UpgradeExecutableFile"/>" data-options="modal:true,closed:true,iconCls:'icon-edit'" 
 			style="text-align:center;width:300px;height:200px;padding:10px;">
-		<form id="ef" method="post" enctype="multipart/form-data" action="${pageContext.request.contextPath}/entity/updateEntity.action">
+		<form id="updateEntityForm" method="post" enctype="multipart/form-data" action="${pageContext.request.contextPath}/entity/updateEntity.action">
 			<input type="hidden" name="id"/>
 			<input type="hidden" name="instId"/>
 			<input type="hidden" name="moduleId"/>
@@ -139,14 +150,15 @@
 			<a href="#" class="easyui-linkbutton" onclick="updateEntity()"><spring:message code="UploadExecutableFile"/></a>
 		</form>
 	</div>
+	
 	<!-- 文件管理器 -->
-	<div id="filesW" class="easyui-window" 
+	<div id="entityFilesWindow" class="easyui-window" 
 		data-options="modal:true,width:800,height:400,title:'<spring:message code="FileManager"/>',
 			maximized:true,minimizable:false,draggable:true,closed:true,iconCls:'icon-ok'">
 		<iframe style="width:100%;height:100%;border:0;scrolling:auto" id="content"></iframe>
 	</div>
 	<!-- 右键菜单 -->
-	<div id="mm" class="easyui-menu" data-options="onClick:menuHandler" style="width:120px;">
+	<div id="entityRightMenu" class="easyui-menu" data-options="onClick:menuHandler" style="width:120px;">
 		<omc:permit url="entity/delete"><div data-options="name:'delete',iconCls:'icon-ok'">删    除</div></omc:permit>
 		<omc:permit url="entity/updateUI"><div data-options="name:'update',iconCls:'icon-ok'">修改配置文件</div></omc:permit>
 		<omc:permit url="entity/start"><div data-options="name:'start',iconCls:'icon-ok'">启    动</div></omc:permit>

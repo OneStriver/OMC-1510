@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
-<title>主机名称及DNS配置</title>
+<title>主机名称及DNS管理</title>
 <%@ include file="/WEB-INF/jsp/public/common.jspf"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/public/grid.js?<%=new Date().getTime()%>"></script>
 <script type="text/javascript">
@@ -20,7 +20,6 @@
 			pageList: [10,20,30,40,50,60],
 			pageNumber:${pageBean.page},
 			pagination:true,
-			toolbar: '#tb',
 			onClickCell:onClickCell,
 			pageSize: ${pageBean.pageSize}">
 		<thead>
@@ -36,10 +35,5 @@
 		</tr>
 		</thead>
 	</table>
-	<div id="tb" style="height:auto">
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" 
-			onclick="accept('${pageContext.request.contextPath}/dns/update.action',
-				'${pageContext.request.contextPath}/dns/save.action')"><spring:message code="Save"></spring:message></a>
-	</div>
 </body>
 </html>

@@ -4,9 +4,6 @@
 <html>
 <head>
 <title>OMC操控台</title>
-<!-- 
-<fmt:setBundle basename="CustomValidationMessages" var="applicationBundle"/>
- -->
 <%@ include file="/WEB-INF/jsp/public/common.jspf"%>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css?<%=new Date().getTime()%>">	
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/main.js?<%=new Date().getTime()%>"></script>
@@ -45,7 +42,7 @@
 	    </div>  
 		<!-- 左侧导航菜单 -->	    
 	    <div data-options="region:'west',width:220" title="<spring:message code="navigation"/>:">
-			<ul id="tt1" class="easyui-tree" data-options="animate:true,dnd:true"></ul>
+			<ul id="tt1" class="easyui-tree" data-options="animate:true"></ul>
 	    </div>  
 	    <!-- 主显示区域选项卡界面 -->
 	    <div data-options="region:'center'" id="center">

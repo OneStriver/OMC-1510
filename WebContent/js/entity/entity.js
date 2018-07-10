@@ -34,12 +34,6 @@ function accept(updateUrl,insertUrl){
 	}
 }
 
-function submitForm(){
-	var validated=$('#af').form('enableValidation').form('validate');
-	if(validated)
-		$('#af').submit();
-}
-
 function usubmitForm(){
 	$('#uf').form('submit',{
 		success:function(data){
@@ -52,26 +46,9 @@ function usubmitForm(){
 		}
 	});
 }
+
 function clearForm(){
 	$('#af').form('clear');
-}
-
-function update(row){
-	$('#uf').form('load',row);
-	$('#uw').window('open');
-}
-
-function updateEntity(){
-	$('#ef').form('submit',{
-		success:function(data){
-			submitSuccess(data);
-			$('#updateEntityW').window('close');
-			$('#dg').datagrid('reload');
-		},
-		onSubmit:function(){
-			return $(this).form('enableValidation').form('validate');
-		}
-	});
 }
 
 function onClickCell(index, field, value){
@@ -79,6 +56,31 @@ function onClickCell(index, field, value){
 	var row=$('#dg').datagrid('selectRow',index).datagrid('getSelected');
 	if(!row.name) return;
 	update(row);
+}
+
+function update(row){
+	$('#uf').form('load',row);
+	$('#uw').window('open');
+}
+
+function submitForm(){
+	var validated=$('#addEntityForm').form('enableValidation').form('validate');
+	if(validated){
+		$('#addEntityForm').submit();
+	}
+}
+
+function updateEntity(){
+	$('#updateEntityForm').form('submit',{
+		success:function(data){
+			submitSuccess(data);
+			$('#updateEntityWindow').window('close');
+			$('#dg').datagrid('reload');
+		},
+		onSubmit:function(){
+			return $(this).form('enableValidation').form('validate');
+		}
+	});
 }
 
 function onBeforeClose(){
@@ -93,7 +95,6 @@ function onBeforeClose(){
 	);
 	return false;
 }
-
 
 function batchGo(url,title,txt){
 	onBeforeClose.suspend=false;
@@ -162,24 +163,24 @@ function menuHandler(item){
 						});
 				}
 		});
-	}else if(item.name == 'update'){//update
+	}else if(item.name == 'update'){
 		window.location=contextPath+"/entity/updateUI.action?id="+row.id;
 	}else if(item.name == 'start'){
-		$.messager.progress({msg:'正在启动请稍等'});
+		$.messager.progress({msg:'正在启动请稍等...'});
 		$.post(contextPath+"/entity/start.action",{id:row.id},
 			function(data){
 				$.messager.progress('close');
 				submitSuccess(data);
 			});
 	}else if(item.name == 'stop'){
-		$.messager.progress({msg:'正在停止请稍等'});
+		$.messager.progress({msg:'正在停止请稍等...'});
 		$.post(contextPath+"/entity/stop.action",{id:row.id},
 			function(data){
 				$.messager.progress('close');
 				submitSuccess(data);
 			});
 	}else if(item.name == 'restart'){
-		$.messager.progress({msg:'正在重启请稍等'});
+		$.messager.progress({msg:'正在重启请稍等...'});
 		$.post(contextPath+"/entity/restart.action",{id:row.id},
 			function(data){
 				$.messager.progress('close');
@@ -189,24 +190,24 @@ function menuHandler(item){
 		$('input[name=id]').val(row.id);
 		$('input[name=instId]').val(row.instId);
 		$('input[name=moduleId]').val(row.module.id);
-		$('#updateEntityW').window('open');
+		$('#updateEntityWindow').window('open');
 	}else if(item.name == 'openFileManager'){
 		var href=contextPath+'/entity/comein.action?id='+row.id+'&instId='+row.instId;
 		$('#content').prop('src',href);
-		$('#filesW').window('open');
+		$('#entityFilesWindow').window('open');
 	}else if(item.name == 'openLogFile'){
 		var href=contextPath+'/entity/listLog.action?id='+row.id+'&instId='+row.instId;
 		$('#content').prop('src',href);
-		$('#filesW').window('open');
+		$('#entityFilesWindow').window('open');
 	}else if(item.name == 'startup'){
-		$.messager.progress({msg:'正在设置请稍等'});
+		$.messager.progress({msg:'正在设置请稍等...'});
 		$.post(contextPath+"/entity/startup.action",{id:row.id},
 			function(data){
 				$.messager.progress('close');
 				submitSuccess(data);
 			});
 	}else if(item.name == 'shutdown'){
-		$.messager.progress({msg:'正在设置请稍等'});
+		$.messager.progress({msg:'正在设置请稍等...'});
 		$.post(contextPath+"/entity/shutdown.action",{id:row.id},
 			function(data){
 				$.messager.progress('close');
@@ -220,6 +221,7 @@ function menuHandler(item){
 		}); 
 	}
 }
+
 var row;
 function onRowContextMenu(e, index, crow){
 	e.preventDefault();
@@ -227,7 +229,7 @@ function onRowContextMenu(e, index, crow){
 	row=crow;
 	$('#dg').datagrid('unselectAll');
 	$('#dg').datagrid('selectRow',index);
-	$('#mm').menu('show',{left:e.pageX-5,top:e.pageY-5});
+	$('#entityRightMenu').menu('show',{left:e.pageX-5,top:e.pageY-5});
 }
 
 function exportAllLog(){
@@ -254,8 +256,5 @@ function exportSelectedLog(){
 		
 	});
 	location=contextPath+'/entity/logdownload.action?'+param;
-	
 }
-
-
 

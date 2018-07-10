@@ -10,7 +10,41 @@
 			<div class="easyui-panel" data-options="title:'[${o.cardName}]系统服务'">
 				<c:forEach items="${o.service}" var="service">
 					<c:if test="${service.serv!='network' and service.serv!='mysqld'}">
-						${service.serv}:${service.status}&nbsp;&nbsp;
+						<c:if test="${service.serv=='sshd'}">
+							SSH服务:
+							<c:if test="${service.status=='running'}">运行中&nbsp;&nbsp;</c:if>
+							<c:if test="${service.status=='stopped'}">已停止&nbsp;&nbsp;</c:if>
+							<c:if test="${service.status=='master'}">主用&nbsp;&nbsp;</c:if>
+							<c:if test="${service.status=='backup'}">备用&nbsp;&nbsp;</c:if>
+							<c:if test="${service.status=='unrecognized'}">未识别&nbsp;&nbsp;</c:if>
+						</c:if>
+						<c:if test="${service.serv=='iptables'}">
+							IPV4防火墙:
+							<c:if test="${service.status=='running'}">运行中&nbsp;&nbsp;</c:if>
+							<c:if test="${service.status=='stopped'}">已停止&nbsp;&nbsp;</c:if>
+							<c:if test="${service.status=='master'}">主用&nbsp;&nbsp;</c:if>
+							<c:if test="${service.status=='backup'}">备用&nbsp;&nbsp;</c:if>
+							<c:if test="${service.status=='unrecognized'}">未识别&nbsp;&nbsp;</c:if>
+						</c:if>
+						<c:if test="${service.serv=='ip6tables'}">
+							IPV6防火墙:
+							<c:if test="${service.status=='running'}">运行中&nbsp;&nbsp;</c:if>
+							<c:if test="${service.status=='stopped'}">已停止&nbsp;&nbsp;</c:if>
+							<c:if test="${service.status=='master'}">主用&nbsp;&nbsp;</c:if>
+							<c:if test="${service.status=='backup'}">备用&nbsp;&nbsp;</c:if>
+							<c:if test="${service.status=='unrecognized'}">未识别&nbsp;&nbsp;</c:if>
+						</c:if>
+						<c:if test="${service.serv=='ip_forward'}">
+							IP转发:
+							<c:if test="${service.status=='on'}">开启&nbsp;&nbsp;</c:if>
+							<c:if test="${service.status=='off'}">关闭&nbsp;&nbsp;</c:if>
+						</c:if>
+						<c:if test="${service.serv=='selinux'}">
+							SELinux:
+							<c:if test="${service.status=='enforcing'}">强制&nbsp;&nbsp;</c:if>
+							<c:if test="${service.status=='permissive'}">保留&nbsp;&nbsp;</c:if>
+							<c:if test="${service.status=='disabled'}">禁用&nbsp;&nbsp;</c:if>
+						</c:if>
 					</c:if>
 				</c:forEach>
 			</div>
@@ -67,13 +101,29 @@
 			</table>
 			<table class="easyui-datagrid" data-options="title:'[${o.cardName}]网络接口',fitColumns:true">   
 			    <thead><tr>   
-		            <th data-options="field:'interface',width:'13%'">接口</th>   
-		            <th data-options="field:'up',width:'15%'">启用</th>   
-		            <th data-options="field:'running',width:'13%'">正在运行</th>
-		            <th data-options="field:'inet_addr',width:'13%'">IP地址</th>
-		            <th data-options="field:'mask',width:'13%'">掩码</th>
-		            <th data-options="field:'bcast',width:'13%'">广播地址</th>
-		            <th data-options="field:'inet6_addr',width:'20%'">IPv6</th>
+		            <th data-options="field:'interface',width:100">接口</th>   
+		            <th data-options="field:'up',width:100,
+					formatter:function(value,row,rowIndex){
+						if(value=='yes'){
+							return '是';
+						}
+						if(value=='no'){
+							return '否';
+						}
+					}">启用</th>   
+		            <th data-options="field:'running',width:100,
+					formatter:function(value,row,rowIndex){
+						if(value=='yes'){
+							return '是';
+						}
+						if(value=='no'){
+							return '否';
+						}
+					}">正在运行</th>
+		            <th data-options="field:'inet_addr',width:200">IP地址</th>
+		            <th data-options="field:'mask',width:200">掩码</th>
+		            <th data-options="field:'bcast',width:200">广播地址</th>
+		            <th data-options="field:'inet6_addr',width:200">IPv6</th>
 			    </tr></thead>   
 			    <tbody>
 				    <c:forEach items="${o['net-if']}" var="ifc">

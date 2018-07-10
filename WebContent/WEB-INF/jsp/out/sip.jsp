@@ -4,28 +4,8 @@
 <head>
 <title>sip</title>
 <%@ include file="/WEB-INF/jsp/public/common.jspf"%>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/sip/sip.js"></script>
 <script type="text/javascript">
-function submit(){
-	$('#ff').form('submit',{
-		success:function(data){
-			$.messager.progress('close');
-			if(submitSuccess(data)){
-				$('#w').window(close);
-			}
-		},
-		onSubmit:function(){
-			var isOk=$(this).form('enableValidation').form('validate');
-			if(isOk) $.messager.progress({msg:'正在保存请稍等'});
-			return isOk;
-		}
-	});
-}
-
-$(function(){
-	$('td:even').css({'text-align':'right'});
-	$('.easyui-combobox').combobox({width:130});
-});
-
 </script>
 </head>
 <body>
@@ -33,30 +13,25 @@ $(function(){
 		<form id="ff" action="${pageContext.request.contextPath}/out/sip/update.action" method="post">
 			<table>
 				<tr>
-					<td>本地SIP地址：</td>
-					<td><input class="easyui-textbox" name="localSipIP" value="${sip.localSipIP}" data-options="validType:'ipdot3',required:true"></td>	
+					<td>本地SIP地址:</td>
+					<td><input class="easyui-textbox" id="sipLocalSipIP" name="localSipIP" value="${sip.localSipIP}" data-options="validType:'ipABC',required:true"></td>	
 				</tr>
 				<tr>			
-					<td>本地SIP端口：</td>
-					<td><input class="easyui-textbox" name="localSipPort" value="${sip.localSipPort}" data-options="required:true"></td>
-				</tr>
-				<tr>	
-					<td>本地出局前缀：</td>
-					<td><input class="easyui-textbox" name="routingNum" value="${sip.routingNum}" data-options="required:true"></td>
-					<td>例如：1|502 1为局号段个数，后面为出局前缀，当个数大于1时，后面使用多个|分割，例如3个号段，3|502|187|112</td>				
+					<td>本地SIP端口:</td>
+					<td><input class="easyui-textbox" id="sipLocalSipPort" name="localSipPort" value="${sip.localSipPort}" data-options="validType:'sipPort',required:true"></td>
 				</tr>
 				<tr>
-					<td>远端SIP地址：</td>
-					<td><input class="easyui-textbox" name="remoteSipIP" value="${sip.remoteSipIP}" data-options="validType:'ipdot3',required:true"></td>
+					<td>远端SIP地址:</td>
+					<td><input class="easyui-textbox" id="sipRemoteSipIP" name="remoteSipIP" value="${sip.remoteSipIP}" data-options="validType:'ipABC',required:true"></td>
 				</tr>
 				<tr>	
-					<td>远端SIP端口：</td>
-					<td><input class="easyui-textbox" name="remoteSipPort" value="${sip.remoteSipPort}" data-options="required:true"></td>				
+					<td>远端SIP端口:</td>
+					<td><input class="easyui-textbox" id="sipRemoteSipPort" name="remoteSipPort" value="${sip.remoteSipPort}" data-options="validType:'sipPort',required:true"></td>				
 				</tr>
 				<tr>
-					<td>默认语音编码	：</td>
+					<td>默认语音编码:</td>
 					<td>
-						<select class="easyui-combobox" name="voiceEncoding" data-options="required:true,panelHeight:'auto'">   
+						<select class="easyui-combobox" name="voiceEncoding" data-options="editable:false,required:true,panelHeight:'auto',width:80">   
 						    <option value="G729" <c:if test="${sip.voiceEncoding=='G729'}">selected</c:if>>G729</option>
 						    <option value="PCMA" <c:if test="${sip.voiceEncoding=='PCMA'}">selected</c:if>>PCMA</option>
 						    <option value="PCMU" <c:if test="${sip.voiceEncoding=='PCMU'}">selected</c:if>>PCMU</option>
@@ -65,13 +40,32 @@ $(function(){
 					</td>
 				</tr>
 				<tr>	
-					<td>Options支持：</td>
+					<td>Options支持:</td>
 					<td>
-						<select class="easyui-combobox" name="heartBeat" data-options="required:true,panelHeight:'auto'">   
-						    <option value="YES" <c:if test="${sip.heartBeat=='YES'}">selected</c:if>>YES</option>
-						    <option value="NO" <c:if test="${sip.heartBeat=='NO'}">selected</c:if>>NO</option>
+						<select class="easyui-combobox" name="heartBeat" data-options="editable:false,required:true,panelHeight:'auto',width:50">   
+						    <option value="YES" <c:if test="${sip.heartBeat=='YES'}">selected</c:if>>是</option>
+						    <option value="NO" <c:if test="${sip.heartBeat=='NO'}">selected</c:if>>否</option>
 						</select>
 					</td>	
+				</tr>
+			</table>
+				
+			<table>
+				<tr>	
+					<td>本地出局前缀:</td>
+					<td>
+						<label for="routing"><input id="cb"  type="checkbox" onclick="defaultRouting()" <c:if test="${sip.flag==0}">checked="checked"</c:if>/>默认网关</label>
+						<span hidden="true"><input class="easyui-textbox" value="${sip.flag}" id="flag" name="flag"></span>
+					</td>	
+					<td id="add">
+						<span style="display:none;">
+						<input class="easyui-numberbox" value="${boxCount}" id="sipRoutNumCount" name="sipRoutNumCount" data-options="precision:0,width:50,<c:if test="${sip.flag==0}">disabled:true</c:if>">
+						</span>
+						<c:forEach items="${sip.routingNum}" var="r" varStatus="status">
+							<input class="easyui-numberbox" value="${r}" id="routingNum_${status.count}" name="routingNum" data-options="validType:'sipRoutingNum',precision:0,width:80,required:true">
+						</c:forEach>
+					</td>
+					<td><a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',width:30,height:22"  onclick="add()"></a></td>	
 				</tr>
 				<tr>
 					<td></td>

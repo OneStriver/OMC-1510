@@ -1,5 +1,6 @@
 package com.sunkaisens.omc.service.impl.core;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import javax.annotation.Resource;
@@ -74,19 +76,21 @@ public class ModuleServiceImpl implements ModuleService {
 	@Override
 	public void saveUploadModule(String fileName, File file,Integer moduleId)
 			throws CustomException, IOException {
-		if(moduleId!=null&&moduleMapper.selectById(moduleId)!=null){
+		if(moduleId!=null && moduleMapper.selectById(moduleId)!=null){
 			throw new CustomException("此网元ID已存在！");
 		}
-		if (!fileName.toLowerCase().endsWith(".zip"))
+		if (!fileName.toLowerCase().endsWith(".zip")){
 			throw new CustomException("请以.zip命名！");
-		if (!FileUtil.isZip(file))
+		}
+		if (!FileUtil.isZip(file)){
 			throw new CustomException("此文件不是ZIP格式！");
+		}
 		String moduleName = fileName.substring(0, fileName.lastIndexOf("."));
-		if (null!=moduleMapper.selectByName(moduleName))
+		if (null!=moduleMapper.selectByName(moduleName)){
 			throw new CustomException("网元【"+moduleName+"】已存在,请勿重复上传！");
+		}
 		//获取上下文
 		ServletContext sc = ServletContextUtil.getServletContext();
-		
 		//配置文件配置路径
 		InputStream is=getClass().getResourceAsStream("/omc.properties");
 		Properties p=new Properties();
@@ -94,47 +98,64 @@ public class ModuleServiceImpl implements ModuleService {
 		String omcPath=p.getProperty("omcDir");
 		String path = sc.getRealPath(omcPath);
 		File destination = new File(path, moduleName);
-		FileUtils.deleteDirectory(destination);
+		try {
+			FileUtils.deleteDirectory(destination);
+		} catch (Exception e) {
+			throw new CustomException("请检查包的冗余性！");
+		}
 		destination.mkdirs();
-
-		ZipFiles.unzipFile(file, destination);
+		try {
+			ZipFiles.unzipFile(file, destination);
+		} catch (Exception e) {
+			throw new CustomException("上传资源包文件内容有问题,请检查上传资源包文件的内容！");
+		}
 		// MANIFEST.MF
 		File manifest = new File(destination, "manifest.mf");
-		if (!manifest.exists())
+		if (!manifest.exists()){
 			throw new CustomException("此压缩包缺少清单文件");
+		}
 		parseManifest(moduleId,moduleName,manifest,destination,path);
 	}
 
 	private void parseManifest(Integer moduleId,String moduleName, File manifest,
-			File destination, String modulePath) throws IOException,
-			CustomException {
-//		try (InputStream is = new FileInputStream(manifest)) {
+			File destination, String modulePath) throws IOException,CustomException {
 		try (InputStreamReader read = new InputStreamReader(new FileInputStream(manifest), "UTF-8")) {
 			File thisDir = new File(modulePath + File.separator + moduleName);
-			Properties m = new Properties();
-			m.load(read);
-			String belong = m.getProperty("belong", "0");
-			if (!Pattern.matches("^\\d$", belong))
+			
+			Properties property = new Properties();
+			property.load(read);
+			String belong = property.getProperty("belong", "0");
+			if (!Pattern.matches("^\\d$", belong)){
 				throw new CustomException("清单文件belong 0=其他,1=核心网,2=业务 其余非法");
-			String required=m.getProperty("required");
-			String description = m.getProperty("description");
-			if(StringUtils.isEmpty(description)) description=moduleName;
-			String version = m.getProperty("version");
-			String confstr = m.getProperty("config");
-			String exe=m.getProperty("exe");
-			String log=m.getProperty("log");
-			if (StringUtils.isEmpty(log))
-				throw new CustomException("清单文件中必须有log属性,描述日志目录");
-			if (StringUtils.isEmpty(exe))
-				throw new CustomException("清单文件中必须有exe属性,描述启动命令");
-			if(!new File(thisDir,log).exists())
+			}
+			String required=property.getProperty("required","");
+			String description = property.getProperty("description");
+			if(StringUtils.isEmpty(description)){
+				description=moduleName;
+			} 
+			String version = property.getProperty("version","");
+			String confstr = property.getProperty("config","");
+			String exe=property.getProperty("exe","");
+			String log=property.getProperty("log","");
+			
+			if (StringUtils.isEmpty(log)){
+				throw new CustomException("清单文件中log属性名称不正确! OR 清单文件中必须有log属性,描述日志目录");
+			}
+			if (StringUtils.isEmpty(exe)){
+				throw new CustomException("清单文件中exe属性名称不正确! OR 清单文件中必须有exe属性,描述启动命令");
+			}
+			if (StringUtils.isEmpty(confstr)){
+				throw new CustomException("清单文件中config属性名称不正确! OR 清单文件中必须有config属性以【,】分隔的配置文件路径！");
+			}
+			if (StringUtils.isEmpty(version)){
+				throw new CustomException("清单文件中version属性名称不正确! OR 清单文件中必须有版本号！");
+			}
+			if (StringUtils.isEmpty(required)){
+				throw new CustomException("清单文件中required属性名称不正确! OR 清单文件中必须有required属性,以【,】分隔指定zip包中必须有的文件(夹)！");
+			}
+			if(!new File(thisDir,log).exists()){
 				throw new CustomException("日志目录【"+log+"】不存在！");
-			if (StringUtils.isEmpty(confstr))
-				throw new CustomException("清单文件中必须有config属性以【,】分隔的配置文件路径！");
-			if (StringUtils.isEmpty(version))
-				throw new CustomException("清单文件中必须有版本号！");
-			if (StringUtils.isEmpty(required))
-				throw new CustomException("清单文件中必须有required属性,以【,】分隔指定zip包中必须有的文件(夹)！");
+			}
 			
 			String[] requireds=required.split(",");
 			for(String filename:requireds){
@@ -146,8 +167,12 @@ public class ModuleServiceImpl implements ModuleService {
 				if(filename.equalsIgnoreCase("manifest.mf")){
 					continue;
 				}else if(!Arrays.asList(requireds).contains(filename)){
-					FileUtils.deleteDirectory(destination);
-					throw new CustomException("资源【"+filename+"】在required属性中木有记录！");
+					try {
+						FileUtils.deleteDirectory(destination);
+					} catch (Exception e) {
+						throw new CustomException("请检查包的冗余性！");
+					}
+					throw new CustomException("资源【"+filename+"】在required属性中没有记录！");
 				}
 			}
 			if(moduleId==null){
@@ -155,8 +180,7 @@ public class ModuleServiceImpl implements ModuleService {
 				if(maxId==null||maxId<256) maxId=255;
 				moduleId=maxId+1;
 			}
-			Module module = new Module(moduleId,moduleName, new Integer(belong),
-					description, version,exe,log,null);
+			Module module = new Module(moduleId,moduleName, new Integer(belong),description, version,exe,log,null);
 			moduleMapper.insert(module);
 			module.setId(moduleId);
 			String[] conf = confstr.split(",");
@@ -165,7 +189,11 @@ public class ModuleServiceImpl implements ModuleService {
 				confName=confName.trim();
 				File confF = new File(thisDir, confName);
 				if(!confF.exists()){ 
-					FileUtils.deleteDirectory(destination);
+					try {
+						FileUtils.deleteDirectory(destination);
+					} catch (Exception e) {
+						throw new CustomException("上传文件名不能包含中文！");
+					}
 					throw new CustomException("配置文件【"+confName+"】不存在！");
 				}
 				Config config = new Config(confName, null, null, false,module);
@@ -231,8 +259,32 @@ public class ModuleServiceImpl implements ModuleService {
 			try(FileOutputStream outputStream=new FileOutputStream(f)){
 				StreamUtils.copy(zis, outputStream);
 			}
+			readZipFile(f);
 			saveUploadModule(fileName, f,null);
 		}
+	}
+	
+	public void readZipFile(File file) { 
+		try(ZipFile zf = new ZipFile(file);
+			InputStream in = new BufferedInputStream(new FileInputStream(file)); 
+			ZipInputStream zin = new ZipInputStream(in);
+			) {
+			ZipEntry ze; 
+			while ((ze = zin.getNextEntry()) != null) { 
+				if (ze.isDirectory()) {
+					System.err.println("文件名:" + ze.getName());
+				} else { 
+					System.err.println("文件名:" + ze.getName() + ",大小:"+ ze.getSize() + "Bytes."); 
+					
+				}
+				if(ze.getName().toLowerCase().endsWith(".zip")){
+					throw new CustomException("单个网元ZIP包中不能包含ZIP包！OR 不能上传批量的网元ZIP包！");
+				}
+			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override

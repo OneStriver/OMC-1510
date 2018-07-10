@@ -6,9 +6,7 @@
 <%@ include file="/WEB-INF/jsp/public/common.jspf"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/public/grid.js?<%=new Date().getTime()%>"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/card/card.js"></script>
-<script type="text/javascript">
 
-</script>
 </head>
 <body>
 	<table id="dg" class="easyui-datagrid" title="<spring:message code="CardList"/>" style="width:800px;height:auto"
@@ -47,24 +45,24 @@
 	
 	<div id="tb" style="height:auto">
 		<omc:permit url="card/addCard">
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()" >添加</a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()" >添加</a>
 		</omc:permit>
 		<omc:permit url="card/deleteCard">
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit(
-				'${pageContext.request.contextPath}/card/delete.action')">删除</a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit(
+					'${pageContext.request.contextPath}/card/delete.action')">删除</a>
 		</omc:permit>
 		<omc:permit url="card/reboot">
-		<a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="reboot()">重启全部板卡</a>
+			<a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="reboot()">重启全部板卡</a>
 		</omc:permit>
 		<omc:permit url="cardResetLf/reset">
-		<a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="reSet()">恢复出厂配置</a>
+			<a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="reSet()">恢复出厂配置</a>
 		</omc:permit>
 	</div>
 	
 	<!-- 添加窗口  -->	
-	<div id="cardAddWindow" class="easyui-window" title="添加板卡" data-options="minimizable:false,maximizable:false,
+	<div id="addCardWindow" class="easyui-window" title="添加板卡" data-options="minimizable:false,maximizable:false,
         	collapsible:false,modal:true,closed:true,iconCls:'icon-add',width:430" style="padding:10px;">
-		<form id="ff" class="easyui-form" method="post" action="${pageContext.request.contextPath}/card/save.action">
+		<form id="addCardForm" class="easyui-form" method="post" action="${pageContext.request.contextPath}/card/save.action">
 	    	<table>
 	    		<tr>
 	    			<td><spring:message code="CardName"/>:</td>

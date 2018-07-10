@@ -36,7 +36,7 @@ function seriNum(){
 					}
 					return message;
 				},
-				timeout:10000,
+				timeout:3000,
 				style:{
 					right:'',
 					bottom:''
@@ -65,31 +65,10 @@ function reSet(){
 	}); 
 }
 	
-function reboot2(){
-	$.post(contextPath+'/card/reboot.action',function(data){
-		$.messager.show({
-			msg:$.parseJSON(data).msg,
-			title:'操作提示',showType:'fade',timeout:1000,style:{right:'',bottom:''}
-		});
-	});
-}
-	
 function downLoad(i){
 	console.log(i.id);
 	var url =contextPath+"/serialNumber/downLoad.action?name="+i.id;
-//	location = url
-//	document.URL=url
-//	location.href = url;
 	open(url,null,"height=200,width=400,status=yes,toolbar=no,menubar=no,location=no"); 
-//	var url = contextPath+"/serialNumber/downLoad.action";
-//	$.ajax({
-//		type:'post',
-//		data:{name:i.id},
-//		url:url,
-//		success:function(data){
-//			
-//		}
-//	});
 }
 	
 $('#dg').datagrid({
@@ -99,15 +78,15 @@ $('#dg').datagrid({
 })
 
 function append(){
-	$('#cardAddWindow').window('open');
+	$('#addCardWindow').window('open');
 }
 
 function submitCardForm(){
-	$('#ff').form('submit',{
+	$('#addCardForm').form('submit',{
 		success:function(data){
 			$.messager.progress('close');
-			console.log("data:"+data);
 			submitCardSuccess(data);
+			$('#cardAddWindow').window('close');
 		},
 		onSubmit:function(){
 			var isOk = $(this).form('enableValidation').form('validate');
@@ -121,10 +100,6 @@ function submitCardForm(){
 			}
 		}
 	});
-}
-
-function clearForm() {
-	$('#ff').form('clear');
 }
 
 function removeit(url) {
@@ -169,7 +144,7 @@ function submitCardSuccess(data){
 			title:'操作提示',
 			msg:json.msg,
 			showType:'fade',
-			timeout:1000,
+			timeout:3000,
 			style:{
 				right:'',bottom:''
 			}
@@ -177,42 +152,9 @@ function submitCardSuccess(data){
 		if($('#dg')){
 			$('#dg').datagrid('reload');
 		}
-		$('#cardAddWindow').window('close');
-		//清空填写的记录
-		clearForm();
 		return true;
 	}else{
 		$.messager.alert('出错提示',data,'error');
 		return false;
 	}
 }
-
-var zhInputFlag = false;
-$(function(){
-	$('#addCardName').textbox({
-		events: $.extend({},$.fn.textbox.defaults.events,{
-			keypress:function(event){
-				return true;
-			},
-			compositionstart:function(event){
-		       console.log("中文输入:开始");
-		       zhInputFlag = true;
-		    },
-		    compositionend:function(event){
-			   	console.log("中文输入:结束");
-		    	zhInputFlag = false;
-		    },
-		    input:function(event){
-		    	this.value = replacePunctuationMethod(this.value);
-		    }
-		})
-	});
-	
-});
-
-// 禁止中英文下面的标点符号
-function replacePunctuationMethod(inputValue){
-	inputValue=inputValue.replace(/[\uff0c|\u3002|\u3001|\uff1b|\u003d|\u2018|\u2019|\u3010|\u3011||\u2018|\u002c|\u002e|\u002f|\u003b|\u005b|\u005d|\u005c|']/g,'');
-	return inputValue;
-}
-

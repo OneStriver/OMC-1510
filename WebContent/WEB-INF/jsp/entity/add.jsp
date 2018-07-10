@@ -78,7 +78,6 @@ function submitForm(){
 
 function goBackBefore(){
 	window.location=contextPath+"/entity/listUI.action";
-	//window.history.back();
 }
 
 </script>
@@ -181,11 +180,9 @@ function goBackBefore(){
 <div id="setFooter" style="text-align:center;">
 	<c:if test="${module.configs.size()!=0}">
 		<a href="#" class="easyui-linkbutton" style="margin-right:10px;" onclick="submitForm()">提交</a>
-		<!-- <a href="#" class="easyui-linkbutton" onclick="clearForm()">清空配置</a> -->
 	</c:if>
 	<c:if test="${module.configs.size()==0}">
 		<a href="#" class="easyui-linkbutton" onclick="goBackBefore()">返回</a>
-		<!-- <a href="#" onclick="window.history.back();">返回</a> -->
 	</c:if>
 </div>
 </body>

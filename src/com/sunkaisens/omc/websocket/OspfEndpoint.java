@@ -16,11 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import com.sunkaisens.omc.context.core.OmcServerContext;
 import com.sunkaisens.omc.util.TelnetUtil;
+
 /**
- * 
- * 
  * WebSokect服务端点
- *
  */
 @ServerEndpoint(value = "/ws/ospf")
 public class OspfEndpoint {
@@ -28,9 +26,8 @@ public class OspfEndpoint {
 	private static final Map<String, Session> sessionMap = new ConcurrentHashMap<>();
 	private TelnetUtil telnet;
 //	private String ospfPassword;
+	
 	/**
-	 * 
-	 * 
 	 * 无参数构造器，并对属性值进行初始化
 	 */
 	public OspfEndpoint() {
@@ -45,12 +42,9 @@ public class OspfEndpoint {
 		telnet = new TelnetUtil(ip, port, user, hostPassword);
 		telnet.setCharset(charset);
 	}
+	
 	/**
-	 * 
-	 * 
-	 * 
 	 * 打开连接时触发此方法
-	 * @param session
 	 */
 	@OnOpen
 	public void openConnection(final Session session) {
@@ -90,12 +84,9 @@ public class OspfEndpoint {
 		reader.setDaemon(true);
 		reader.start();
 	}
+	
 	 /**
-     * 
-     * 
-     * 
      * 关闭连接时触发此方法
-     * @param session
      */
 	@OnClose
 	public void onClose(Session session) {
@@ -110,13 +101,9 @@ public class OspfEndpoint {
 		log.debug("输入命令："+message);
 		telnet.write(message);
 	}
+	
 	 /**
-     * 
-     * 
-     * 
      * 连接出错时触发此方法
-     * @param session
-     * @param t
      */
 	@OnError
 	public void error(Session session, Throwable t) {

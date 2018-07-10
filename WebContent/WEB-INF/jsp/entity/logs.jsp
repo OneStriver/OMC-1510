@@ -133,7 +133,7 @@ $(function(){
 			iconCls:'icon-reload',
 			handler:refreshPanel
 		}]">
-正在加载请稍等
+正在加载请稍等...
 </div>
 </body>
 </html>
