@@ -57,7 +57,7 @@ public class SetUpResponseMsg extends CncpBaseMsg {
 	}
 
 	/**
-	 * 设置响应消息
+	 * 设置响应消息(将上报的bytes[]数组转换成对象)
 	 */
 	public SetUpResponseMsg readFromSetUpResponseMsg(byte[] bytes, SetUpResponseMsg setUpMsg) {
 		//上报消息的源地址

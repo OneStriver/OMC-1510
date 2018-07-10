@@ -61,7 +61,7 @@ public class SetUpMsg extends CncpBaseMsg {
 	}
 
 	/**
-	 * 设置消息
+	 * 设置消息(将对象的属性值封装到bytes[]数组中)
 	 */
 	public byte[] writeToSetUpMsg(byte[] bytes, SetUpMsg setUpMsg) {
 		// 设置消息的源地址

@@ -17,37 +17,37 @@ function onLoadSuccess(){
 }
 
 function onClickCell(index, field, value){
-	if(field!='编辑') return;
+	if(field!='修改') return;
 	var row=$('#dg').datagrid('getRows')[index];
 	update(row);
 }
 
 function append(){
-	$('#ff').form('clear');
-	$('#host').parent().show();
+	$('#addHostAddrForm').form('clear');
+	$('#addHostAddrHost').parent().show();
 	var attr={
 		title:'添加主机地址'
 	};
-	$('#ff').prop('action',contextPath+'/hostaddr/save.action');
-	$('#w').window(attr).window('open');
+	$('#addHostAddrForm').prop('action',contextPath+'/hostaddr/save.action');
+	$('#addHostAddrWindow').window(attr).window('open');
 }
 
 function update(row){
-	$('#host').parent().hide();
-	$('#ff').form('load',row);
+	$('#addHostAddrHost').parent().hide();
+	$('#addHostAddrForm').form('load',row);
 	var attr={
 		title:'修改主机地址'
 	};
-	$('#ff').prop('action',contextPath+'/hostaddr/update.action');
-	$('#w').window(attr).window('open');
+	$('#addHostAddrForm').prop('action',contextPath+'/hostaddr/update.action');
+	$('#addHostAddrWindow').window(attr).window('open');
 }
 
 function submitForm(){
-	$('#ff').form('submit',{
+	$('#addHostAddrForm').form('submit',{
 		success:function(data){
 			$.messager.progress('close');
-			if(submitSuccess(data)){
-				$('#w').window(close);
+			if(submitHostAddrSuccess(data)){
+				$('#addHostAddrWindow').window(close);
 			}
 		},
 		onSubmit:function(){
@@ -86,11 +86,36 @@ function removeit(url){
 				if(ids.length>0){
 					$.ajax({type:'post',traditional:true,data:{ids:ids,hostNames:hostNames},
 						url:url,
-						success:submitSuccess
+						success:submitHostAddrSuccess
 					});
 				}
 			
 			}
 		}
 	);
+}
+
+function submitHostAddrSuccess(data){
+	var json=$.parseJSON(data);
+	if(json&&json.error) {
+		$.messager.alert('出错提示',json.error,'error');
+		return false;
+	}else if(json.msg){
+		$.messager.show({
+			title:'操作提示',
+			msg:json.msg,
+			showType:'fade',
+			timeout:3000,
+			style:{
+				right:'',bottom:''
+			}
+		});
+		if($('#dg')){
+			$('#dg').datagrid('reload');
+		} 
+		return true;
+	}else{
+		alert('未预料消息:'+data);
+		return false;
+	}
 }

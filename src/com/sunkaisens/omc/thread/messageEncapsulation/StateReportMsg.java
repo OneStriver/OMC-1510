@@ -63,7 +63,7 @@ public class StateReportMsg extends CncpBaseMsg {
 	}
 
 	/**
-	 * 状态上报
+	 * 网元状态上报(将数组中的数据封装到对象中)
 	 */
 	public StateReportMsg readFromSignalTrackReport(byte[] bytes, StateReportMsg stateReportMsg) {
 		// 上报消息的源地址

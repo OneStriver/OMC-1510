@@ -27,9 +27,8 @@ public class CardController {
 	private static int OAM_ERROR_HOST_NEXIST = 0x14;
 	private static int OAM_ERROR_EXIST = 0x17;
 	private static int OAM_ERROR_IN_USE = 0x18;
-	//注入CardService
 	@Resource
-	private CardService service;
+	private CardService cardService;
 	
 	/**
 	 * 从数据库获取板卡列表信息
@@ -37,7 +36,7 @@ public class CardController {
 	@RequestMapping({"list"})
 	public @ResponseBody PageBean list(@RequestParam(defaultValue="1") Integer page,
 			@RequestParam(value="rows",defaultValue="50") Integer pageSize){
-		PageBean pageBean=service.getPageBean(page,pageSize);
+		PageBean pageBean=cardService.getPageBean(page,pageSize);
 		return pageBean;
 	}
 	
@@ -46,7 +45,7 @@ public class CardController {
 	 */
 	@RequestMapping(value="listjsonarr",produces="text/html;charset=UTF-8")
 	public @ResponseBody String listJsonArr(){
-		List<Card> cards=service.findAll();
+		List<Card> cards=cardService.findAll();
 		return JSONArray.fromObject(cards).toString();
 	}
 	
@@ -65,7 +64,7 @@ public class CardController {
 	 */
 	@RequestMapping(value="save")
 	public @ResponseBody String save(Card card){
-		int result = service.save(card);
+		int result = cardService.save(card);
 		JSONObject json=new JSONObject();
 		if(result == OAM_ERROR_SUCCESS){
 			json.element("msg", "操作成功");
@@ -81,7 +80,7 @@ public class CardController {
 	 */
 	@RequestMapping(value="delete")
 	public @ResponseBody String delete(Integer[] ids){
-		List<Integer> list = service.deleteByIds(ids);
+		List<Integer> list = cardService.deleteByIds(ids);
 		JSONObject json=new JSONObject();
 		if(list.contains(OAM_ERROR_SUCCESS)){
 			json.element("msg", "操作成功");
@@ -97,7 +96,7 @@ public class CardController {
 	 */
 	@RequestMapping(value="update")
 	public @ResponseBody String update(Card card){
-		service.update(card);
+		cardService.update(card);
 		JSONObject json=new JSONObject();
 		json.element("msg", "修改完毕");
 		return json.toString();
@@ -108,7 +107,7 @@ public class CardController {
 	 */
 	@RequestMapping(value="reboot")
 	public @ResponseBody String reboot(){
-		service.rebootAll();
+		cardService.rebootAll();
 		JSONObject json=new JSONObject();
 		json.element("msg", "设备已重启，请稍后刷新浏览器");
 		return json.toString();

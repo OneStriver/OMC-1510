@@ -3,22 +3,22 @@
 <%@ include file="/WEB-INF/jsp/public/common.jspf"%>
 <html>
 <head>
-<title>会议组列表</title>
+<title>会议组管理</title>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/hssGroup/list2.js?<%=new Date().getTime()%>"></script>
 </head>
 <body>
 	<table id="dg" title="<spring:message code="meetingGroupList"/>" class="easyui-datagrid" data-options="
-				url:'${pageContext.request.contextPath}/meetingGroup/list.action',
-				width:800,
-				border:false,
-				rownumbers:true,
-				fit:true,striped:true,
-				pageList: [10,20,30,40,50],
-				pageNumber:${pageBean.page},
-				singleSelect:false,
-				pagination:true,
-				toolbar: '#tb',onClickCell:onClickCell,
-				pageSize: ${pageBean.pageSize}">
+		url:'${pageContext.request.contextPath}/meetingGroup/list.action',
+		width:800,
+		border:false,
+		rownumbers:true,
+		fit:true,striped:true,
+		pageList: [10,20,30,40,50],
+		pageNumber:${pageBean.page},
+		singleSelect:false,
+		pagination:true,
+		toolbar: '#tb',onClickCell:onClickCell,
+		pageSize: ${pageBean.pageSize}">
 		<thead>
 		<tr>
 			<th data-options="field:'ck',checkbox:true"></th>
@@ -63,12 +63,16 @@
 	</thead>
 	</table>
 	<div id="tb" style="height:auto">
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()"><spring:message code="Add"/></a>
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()"><spring:message code="Delete"/></a>
+		<omc:permit url="meetingGroup/add">
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()"><spring:message code="Add"/></a>
+		</omc:permit>
+		<omc:permit url="meetingGroup/delete">
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()"><spring:message code="Delete"/></a>
+		</omc:permit>
 		<input id="ss" class="easyui-searchbox" style="width:250px" 
-			data-options="searcher:qq,prompt:'<spring:message code="PleaseEnterTheNumber"/>',menu:'#mm'"/>
+			data-options="searcher:qq,prompt:'<spring:message code="PleaseEnterTheNumber"/>',menu:'#meetingGroupMenu'"/>
 	</div>
-	<div id="mm" style="width:120px"> 
+	<div id="meetingGroupMenu" style="width:120px"> 
 		<div data-options="name:'id'"><spring:message code="GroupNumber"/></div>
 	</div>
 	

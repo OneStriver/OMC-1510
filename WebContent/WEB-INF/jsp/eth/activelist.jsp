@@ -7,7 +7,7 @@
 <script type="text/javascript">
 
 //===============方法开始==========================
-function submitFormwUpdate(){
+function activeEthUpdateSubmitForm(){
 	var rows = $('#dg').datagrid('getRows');
 	var boo = true;
 	$(rows).each(function(i){
@@ -28,10 +28,10 @@ function submitFormwUpdate(){
 	if(boo){
 		$.messager.confirm('提示', '修改网卡可能导致网络中断和系统服务中断,确认修改吗?', function(r) {
 			if (r) {
-				$('#ffUpdate').form('submit',{
+				$('#activeEthUpdateForm').form('submit',{
 					success:function(data){
-						submitSuccess(data);
-						$('#wUpdate').window('close');
+						submitActiveEthSuccess(data);
+						$('#activeEthUpdateWindow').window('close');
 					},
 					onSubmit:function(){
 						return $(this).form('enableValidation').form('validate');
@@ -43,15 +43,8 @@ function submitFormwUpdate(){
 	
 }
 
-function clearFormwUpdate(){
-	var name=$("#ffUpdate input[name=name]");
-	var val=name.val();
-	$('#ffUpdate').form('clear');
-	$('#ffUpdate').form('load',{name:val});
-}
-
 function appendActiveEth(){
-	$('#wAdd').window('open');
+	$('#activeEthAddWindow').window('open');
 }
 
 function activate(url,msg){
@@ -60,18 +53,16 @@ function activate(url,msg){
 		$.messager.alert('提示','请勾选一条记录!');
 		return ;
 	}
-	
 	if(row.name=='bond0'||row.type=='Unspec'){
         $.messager.alert('提示','该类型的网卡不能执行此操作!');
            return ;
     }
-	
 	$.messager.confirm(LOCALE.Confirm,msg?msg:'确认激活吗?',
 		function(yes){    
 			if(yes){
 				if(!row) return;
 				$.post(url,row,function(data){
-					submitSuccess(data);
+					submitActiveEthSuccess(data);
 				});
 			}
 		}
@@ -85,16 +76,10 @@ function deactivate(url){
          $.messager.alert('提示','该类型的网卡不能执行此操作');
          return ;
 	}
-	
 	activate(url,'确认去激活吗？');
 }
 
-function etid(row){
-	$('#ffUpdate').form('load',row);
-	$('#wUpdate').window('open');
-}
-
-function submitForm(){
+function activeEthAddSubmitForm(){
 	var rows = $('#dg').datagrid('getRows');
 	var addName = $('#addActiveEthName').textbox('getValue');//ethx:y
 	var addName2 = addName.substring(0,4);//ethx
@@ -121,10 +106,10 @@ function submitForm(){
 			if(boo3){
 				$.messager.confirm(LOCALE.Confirm, '确认添加网卡？', function(yes) {
 					if (yes) {
-						$('#ff').form('submit',{
+						$('#activeEthAddForm').form('submit',{
 							success:function(data){
-								submitSuccess(data);
-								$('#wAdd').window('close');
+								submitActiveEthSuccess(data);
+								$('#activeEthAddWindow').window('close');
 							},
 							onSubmit:function(){
 								return $(this).form('enableValidation').form('validate');
@@ -144,7 +129,6 @@ function submitForm(){
 	}
 }
 function clearForm(){
-	//$('#ff').form('clear');
 	$("#addActiveEthName").textbox('clear');
 	$("#addActiveEthIp").textbox('clear');
 	$("#addActiveEthMask").textbox('clear');
@@ -152,12 +136,17 @@ function clearForm(){
 }
 
 function onClickCell(rowIndex,field,value){
-	if(field!='edit') return;
+	if(field!='修改') return;
 	var row=$('#dg').datagrid('selectRow',rowIndex).datagrid('getSelected');
 	if(row.name=='bond0'||row.type=='Unspec'){
        return ;
     }
-	etid(row);
+	editActiveEth(row);
+}
+
+function editActiveEth(row){
+	$('#activeEthUpdateForm').form('load',row);
+	$('#activeEthUpdateWindow').window('open');
 }
 
 function onLoadSuccess(){
@@ -169,21 +158,44 @@ function reload(){
 	$('#dg').datagrid('reload'); 
 }
 $(function(){
-	$('#ff').form({
-		success:submitSuccess
+	$('#activeEthAddForm').form({
+		success:submitActiveEthSuccess
 	});
-	$('#ffUpdate').form({
-		success:submitSuccess
+	$('#activeEthUpdateForm').form({
+		success:submitActiveEthSuccess
 	});
-	
 	$('#updateActiveEthName').textbox('textbox').css('background','#ccc');
 });
+
+function submitActiveEthSuccess(data){
+	var json=$.parseJSON(data);
+	if(json&&json.error) {
+		$.messager.alert('出错提示',json.error,'error');
+		return false;
+	}else if(json.msg){
+		$.messager.show({
+			title:'操作提示',
+			msg:json.msg,
+			showType:'fade',
+			timeout:2000,
+			style:{
+				right:'',bottom:''
+			}
+		});
+		if($('#dg')){
+			$('#dg').datagrid('reload');
+		} 
+		return true;
+	}else{
+		alert('未预料消息:'+data);
+		return false;
+	}
+}
 //===============方法结束==========================
 	
 </script>
 </head>
 <body>
-
 	<table id="dg" title="<spring:message code="ActiveNetworkCardList"/>" class="easyui-datagrid" data-options="
 			url:'${pageContext.request.contextPath}/eth/listActivate.action',
 			rownumbers:true,
@@ -227,12 +239,13 @@ $(function(){
 			}"><spring:message code="Status"/></th>
 			<th data-options="field:'broadcast',editor:'textbox'"><spring:message code="BroadcastAddress"/></th>
 			<th data-options="field:'destination',editor:'textbox'"><spring:message code="RemoteAddress"/></th>
-			<th data-options="field:'speed',editor:'textbox',formatter:function(value,row,index){
+			<th data-options="field:'speed',editor:'textbox',
+						formatter:function(value,row,index){
                            if(row.type=='Unspec'){
                                   return '';
                             }
                             return value;
-                         }"><spring:message code="Rate"/></th>
+                        }"><spring:message code="Rate"/></th>
 			<!-- 
 			<th data-options="field:'duplex',editor:'textbox'"><spring:message code="Full/Half-duplex"/></th> 
 			-->
@@ -249,7 +262,7 @@ $(function(){
 			}">自动协速</th>
 			<th data-options="field:'cardNum'"><spring:message code="CardNumber"/></th>
 			<omc:permit url="eth/activateUpdate">
-				<th data-options="field:'edit',
+				<th data-options="field:'修改',
 					formatter:function(value,row,rowIndex){
 						if(row.name =='bond0'||row.type=='Unspec'){
 							return '';
@@ -265,42 +278,38 @@ $(function(){
 	
 	<div id="tb" style="height:auto">
 	    <omc:permit url="eth/activateAdd">
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" 
-			onclick="appendActiveEth()"><spring:message code="AddInterface"/></a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" 
+				onclick="appendActiveEth()"><spring:message code="AddInterface"/></a>
 		</omc:permit>
-		<%-- 
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" 
-			onclick="removeit('${pageContext.request.contextPath}/eth/delete.action')">删除接口</a> 
-		--%>
 		<omc:permit url="eth/active">
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" 
-			onclick="activate('${pageContext.request.contextPath}/eth/activate.action')"><spring:message code="Activate"/></a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" 
+				onclick="activate('${pageContext.request.contextPath}/eth/activate.action')"><spring:message code="Activate"/></a>
 		</omc:permit>
 		<omc:permit url="eth/goActive">
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" 
-			onclick="deactivate('${pageContext.request.contextPath}/eth/deactivate.action')"><spring:message code="Deactivate"/></a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" 
+				onclick="deactivate('${pageContext.request.contextPath}/eth/deactivate.action')"><spring:message code="Deactivate"/></a>
 		</omc:permit>
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" 
 			onclick="reload()">刷新</a>
 	</div>
 	
 	<!-- 添加窗口  -->	
-	<div id="wAdd" class="easyui-window" title="<spring:message code="AddActiveInterface"/>" data-options="minimizable:false,maximizable:false,
+	<div id="activeEthAddWindow" class="easyui-window" title="<spring:message code="AddActiveInterface"/>" data-options="minimizable:false,maximizable:false,
         	collapsible:false,modal:true,closed:true,iconCls:'icon-add',width:415" style="padding:10px;">
 		<!--  data-options="novalidate:true" -->
-		<form id="ff" class="easyui-form" method="post" action="${pageContext.request.contextPath}/eth/activateAdd.action">
+		<form id="activeEthAddForm" class="easyui-form" method="post" action="${pageContext.request.contextPath}/eth/activateAdd.action">
 	    	<table>
 	    		<tr>
 	    			<td><spring:message code="Name"></spring:message>:</td>
-	    			<td><input class="easyui-textbox" name="name" id="addActiveEthName" data-options="validType:'activeEth',required:true"/></td>
+	    			<td><input class="easyui-textbox" id="addActiveEthName" name="name" data-options="validType:'activeEth',required:true"/></td>
 	    			<td>IP:</td>
-	    			<td><input class="easyui-textbox" name="ip" id="addActiveEthIp" data-options="validType:'ipABC',required:true"/></td>
+	    			<td><input class="easyui-textbox" id="addActiveEthIp" name="ip" data-options="validType:'ipABC',required:true"/></td>
 	    		</tr>
 	    		<tr>
 	    			<td><spring:message code="Mask"></spring:message>:</td>
-	    			<td><input class="easyui-textbox" name="mask" id="addActiveEthMask" data-options="validType:'Mask',required:true"/></td>
+	    			<td><input class="easyui-textbox" id="addActiveEthMask" name="mask" data-options="validType:'Mask',required:true"/></td>
 	    			<td>MTU:</td>
-	    			<td><input class="easyui-numberbox" name="mtu" id="addActiveEthMtu" data-options="validType:'MTU',required:true"/></td>
+	    			<td><input class="easyui-numberbox" id="addActiveEthMtu" name="mtu" data-options="validType:'MTU',required:true"/></td>
 	    		</tr>
 	    		<tr>
 	    			<td><spring:message code="Card"></spring:message>:</td>
@@ -319,17 +328,14 @@ $(function(){
 	    	</table>
 	    </form>
 	    <div style="text-align:center;padding:5px">
-	    	<a href="#" class="easyui-linkbutton" onclick="submitForm()"><spring:message code="SaveNetworkCard"/></a>
-	    	<!-- 
-	    	<a href="#" class="easyui-linkbutton" onclick="clearForm()"><spring:message code="ClearRecord"/></a>
-	    	 -->
+	    	<a href="#" class="easyui-linkbutton" onclick="activeEthAddSubmitForm()"><spring:message code="SaveNetworkCard"/></a>
 	    </div>
 	</div>
 	
 	<!-- 修改窗口 -->
-	<div id="wUpdate" class="easyui-window" title="<spring:message code="UpdateActiveInterface"/>" data-options="minimizable:false,maximizable:false,
+	<div id="activeEthUpdateWindow" class="easyui-window" title="<spring:message code="UpdateActiveInterface"/>" data-options="minimizable:false,maximizable:false,
         	collapsible:false,modal:true,closed:true,iconCls:'icon-add',width:415" style="padding:10px;">
-		<form id="ffUpdate" class="easyui-form" method="post" data-options="novalidate:true" action="${pageContext.request.contextPath}/eth/activateUpdate.action">
+		<form id="activeEthUpdateForm" class="easyui-form" method="post" data-options="novalidate:true" action="${pageContext.request.contextPath}/eth/activateUpdate.action">
 	    	<table>
 	    		<tr>
 	    			<td><spring:message code="Name"/>:</td>
@@ -362,10 +368,7 @@ $(function(){
 	    	</table>
 	    </form>
 	    <div style="text-align:center;padding:5px">
-	    	<a href="#" class="easyui-linkbutton" onclick="submitFormwUpdate()"><spring:message code="SaveNetworkCard"/></a>
-	    	<!-- 
-	    	<a href="#" class="easyui-linkbutton" onclick="clearFormwUpdate()"><spring:message code="ClearRecord"/></a>
-	    	 -->
+	    	<a href="#" class="easyui-linkbutton" onclick="activeEthUpdateSubmitForm()"><spring:message code="SaveNetworkCard"/></a>
 	    </div>
 	</div>
 	

@@ -77,7 +77,7 @@ public class QueryResponseMsg extends CncpBaseMsg {
 	}
 
 	/**
-	 * 设置响应消息
+	 * 设置响应消息(将数组中的数据封装到对象中)
 	 */
 	public QueryResponseMsg readFromSetUpResponseMsg(byte[] bytes, QueryResponseMsg queryResponseMsg) {
 		// 上报消息的源地址

@@ -124,8 +124,12 @@
 	
 	<!-- 表格顶部按钮信息 -->
 	<div id="tableHead" style="height:auto">
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()"><spring:message code="Add"/></a>
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()"><spring:message code="Delete"/></a>
+		<omc:permit url="hss/add">
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()"><spring:message code="Add"/></a>
+		</omc:permit>
+		<omc:permit url="hss/delete">
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()"><spring:message code="Delete"/></a>
+		</omc:permit>
 		<select class="easyui-combobox" name="deviceType"
 			data-options="editable:false,onChange:dChange,width:110,panelHeight:'80'">
 			<option value="" selected="selected"><spring:message code="AllDeviceType"/></option>
@@ -160,21 +164,24 @@
 		</select>
 		<input id="ss" class="easyui-searchbox" style="width:200px" 
 			data-options="validType:'integer',searcher:qq,prompt:'<spring:message code="PleaseEnterTheNumber"/>',menu:'#searchMenu'"/>
-		<!-- data-options="onClick:function(){$('#batchW').window('open');}" -->
-		<a href="#" class="easyui-linkbutton" onclick="batchAppend()" ><spring:message code="ImportByNo"/></a>
-		<a href="#" class="easyui-linkbutton" data-options="onClick:exportHss"><spring:message code="ExportSql"/></a>
-		<a href="#" class="easyui-linkbutton" data-options="onClick:function(){$('#importHss').window('open');}"><spring:message code="ImportSql"/></a>
-		<span hidden="true">
-		<omc:permit url="hss/importExcel">
-		<a href="#" class="easyui-linkbutton" data-options="onClick:function(){$('#importExcel').window('open');}">导入Excel</a>
+		<omc:permit url="hss/batchAdd">
+			<a href="#" class="easyui-linkbutton" onclick="batchAppend()" ><spring:message code="ImportByNo"/></a>
 		</omc:permit>
-		</span>
+		<omc:permit url="hss/importSql">
+			<a href="#" class="easyui-linkbutton" data-options="onClick:function(){$('#importHss').window('open');}"><spring:message code="ImportSql"/></a>
+		</omc:permit>
+		<omc:permit url="hss/exportSql">
+			<a href="#" class="easyui-linkbutton" data-options="onClick:exportHss"><spring:message code="ExportSql"/></a>
+		</omc:permit>
+		<omc:permit url="hss/importExcel">
+			<a href="#" class="easyui-linkbutton" data-options="onClick:function(){$('#importExcel').window('open');}">导入Excel</a>
+		</omc:permit>
 		<span hidden="true">
 		<omc:permit url="hss/importXml">
-		<a href="#" class="easyui-linkbutton" data-options="onClick:function(){$('#importXml').window('open');}">导入AUC-XML</a>
+			<a href="#" class="easyui-linkbutton" data-options="onClick:function(){$('#importXml').window('open');}">导入AUC-XML</a>
 		</omc:permit> 
 		</span>
-		<omc:permit url="hss/batchHssUpdate">
+		<omc:permit url="hss/batchUpdate">
 		<a id="batchHssUpdateButton" href="#" class="easyui-linkbutton">批量修改</a>
 		</omc:permit>
 	</div>

@@ -6,20 +6,17 @@
 <%@ include file="/WEB-INF/jsp/public/common.jspf"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/public/grid.js?<%=new Date().getTime()%>"></script>
 <script type="text/javascript">
-function submitForm(){
-	$('#af').form('submit',{
+function imdAddSubmitForm(){
+	$('#imsAddForm').form('submit',{
 		success:function(data){
-			submitSuccess(data);
-			$('#aw').window('close');
-			$('#af').form('clear');
+			imsSubmitSuccess(data);
+			$('#imsAddWindow').window('close');
+			$('#imsAddForm').form('clear');
 		},
 		onSubmit:function(){
 			return $(this).form('enableValidation').form('validate');
 		}
 	});
-}
-function clearForm(){
-	$('#af').form('clear');
 }
 
 function removeit(){
@@ -47,11 +44,11 @@ function removeit(){
 	);
 }
 
-function usubmitForm(){
-	$('#uf').form('submit',{
+function imsUpdateSubmitForm(){
+	$('#imsUpdateForm').form('submit',{
 		success:function(data){
-			submitSuccess(data);
-			$('#uw').window('close');
+			imsSubmitSuccess(data);
+			$('#imsUpdateWindow').window('close');
 		},
 		onSubmit:function(){
 			return $(this).form('enableValidation').form('validate');
@@ -59,13 +56,38 @@ function usubmitForm(){
 	});
 }
 
+function imsSubmitSuccess(data){
+	var json=$.parseJSON(data);
+	if(json&&json.error) {
+		$.messager.alert('出错提示',json.error,'error');
+		return false;
+	}else if(json.msg){
+		$.messager.show({
+			title:'操作提示',
+			msg:json.msg,
+			showType:'fade',
+			timeout:2000,
+			style:{
+				right:'',bottom:''
+			}
+		});
+		if($('#dg')){
+			$('#dg').datagrid('reload');
+		} 
+		return true;
+	}else{
+		alert('未预料消息:'+data);
+		return false;
+	}
+}
+
 function onClickCell(index, field, value){
 	if(field!='修改') return;
 	var row=$('#dg').datagrid('selectRow',index).datagrid('getSelected');
 	var domain=row.ueUri.substring(row.ueUri.indexOf('@')+1);
-	$('#uf').form('load',row);
+	$('#imsUpdateForm').form('load',row);
 	$('#domain').textbox('setText',domain);
-	$('#uw').window('open');
+	$('#imsUpdateWindow').window('open');
 }
 
 function qq(value,name){
@@ -83,8 +105,8 @@ function sChange(newValue, oldValue){
 	var params={};
 	jQuery.extend(params, options.queryParams);
 	params.ueStatus=newValue;
-	var ueName=$('#ss').searchbox('getName');
-	var ueValue=$('#ss').searchbox('getValue');
+	var ueName=$('#imsSearch').searchbox('getName');
+	var ueValue=$('#imsSearch').searchbox('getValue');
 	params[ueName]=ueValue;
 	$('#dg').datagrid({
 		queryParams:params
@@ -96,8 +118,8 @@ function tChange(newValue, oldValue){
 	var params={};
 	jQuery.extend(params, options.queryParams);
 	params.ueUpdateType=newValue;
-	var ueName=$('#ss').searchbox('getName');
-	var ueValue=$('#ss').searchbox('getValue');
+	var ueName=$('#imsSearch').searchbox('getName');
+	var ueValue=$('#imsSearch').searchbox('getValue');
 	params[ueName]=ueValue;
 	$('#dg').datagrid({
 		queryParams:params
@@ -157,8 +179,12 @@ function mingwen(checkbox){
 	</thead>
 	</table>
 	<div id="tb" style="height:auto">
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="$('#aw').window('open')"><spring:message code="Add"></spring:message></a>
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()"><spring:message code="Delete"></spring:message></a>
+		<omc:permit url="ims/add">
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="$('#aw').window('open')"><spring:message code="Add"></spring:message></a>
+		</omc:permit>
+		<omc:permit url="ims/delete">
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()"><spring:message code="Delete"></spring:message></a>
+		</omc:permit>
 		<select class="easyui-combobox" name="ueStatus" 
 			data-options="editable:false,width:110,onChange:sChange,panelHeight:'auto'">
 			<option value="" selected="selected"><spring:message code="RegistrationStatus"></spring:message></option>
@@ -172,17 +198,17 @@ function mingwen(checkbox){
 			<option value="1"><spring:message code="CallDomainUser"></spring:message></option>
 			<option value="2"><spring:message code="SynchroDomainUser"></spring:message></option>
 		</select>
-		<input id="ss" class="easyui-searchbox" style="width:200px" 
-			data-options="searcher:qq,prompt:'<spring:message code="PleaseEnterTheNumber"></spring:message>',menu:'#mm'"/>
+		<input id="imsSearch" class="easyui-searchbox" style="width:200px" 
+			data-options="searcher:qq,prompt:'<spring:message code="PleaseEnterTheNumber"></spring:message>',menu:'#imsMenu'"/>
 	</div>
-	<div id="mm" style="width:110px"> 
+	<div id="imsMenu" style="width:110px"> 
 		<div data-options="name:'ueName'"><spring:message code="MDN"></spring:message></div> 
 	</div> 
 	
 	<!-- 添加窗口 -->
-	<div id="aw" class="easyui-window" title="<spring:message code="CreateUser"></spring:message>" style="width:350px;padding:10px;"
+	<div id="imsAddWindow" class="easyui-window" title="<spring:message code="CreateUser"></spring:message>" style="width:350px;padding:10px;"
 			data-options="modal:true,closed:true,iconCls:'icon-add',minimizable:false,maximizable:false,collapsible:false">
-		<form id="af" class="easyui-form" method="post" data-options="novalidate:false" action="${pageContext.request.contextPath}/ims/save.action">
+		<form id="imsAddForm" class="easyui-form" method="post" data-options="novalidate:false" action="${pageContext.request.contextPath}/ims/save.action">
 	    	<label><spring:message code="MDN"></spring:message>:</label>
 	    	<input class="easyui-numberbox" name="ueName" data-options="validType:'phone',required:true,width:130"/>
 	    	<br/><br/>
@@ -193,14 +219,14 @@ function mingwen(checkbox){
 	    	<input class="easyui-textbox" name="uePassword" data-options="required:true,type:'password',width:100"/>
 	    </form>
 	    <div style="text-align:center;padding:5px">
-	    	<a href="#" class="easyui-linkbutton" onclick="submitForm()"><spring:message code="save"></spring:message></a>
+	    	<a href="#" class="easyui-linkbutton" onclick="imdAddSubmitForm()"><spring:message code="save"></spring:message></a>
 	    </div>
 	 </div>
 	 
 	 <!-- 更新窗口 -->
-	 <div id="uw" class="easyui-window" title="<spring:message code="UpdateUser"></spring:message>" style="width:300px;padding:10px;"
+	 <div id="imsUpdateWindow" class="easyui-window" title="<spring:message code="UpdateUser"></spring:message>" style="width:300px;padding:10px;"
 	 		data-options="modal:true,closed:true,iconCls:'icon-edit',minimizable:false,maximizable:false,collapsible:false">
-		<form id="uf" class="easyui-form" method="post" data-options="novalidate:true" action="${pageContext.request.contextPath}/ims/update.action">
+		<form id="imsUpdateForm" class="easyui-form" method="post" data-options="novalidate:true" action="${pageContext.request.contextPath}/ims/update.action">
 	    	<label><spring:message code="MDN"></spring:message>:</label>
 	    	<input class="easyui-numberbox" name="ueName" data-options="editable:false,required:true,width:130"/>
 	    	<br/><br/>
@@ -211,7 +237,7 @@ function mingwen(checkbox){
 	    	<input class="easyui-textbox" name="uePassword" data-options="required:true,type:'password',width:130"/>
 	    </form>
 	    <div style="text-align:center;padding:5px">
-	    	<a href="#" class="easyui-linkbutton" onclick="usubmitForm()"><spring:message code="save"></spring:message></a>
+	    	<a href="#" class="easyui-linkbutton" onclick="imsUpdateSubmitForm()"><spring:message code="save"></spring:message></a>
 	    </div>
 	 </div>
 </body>

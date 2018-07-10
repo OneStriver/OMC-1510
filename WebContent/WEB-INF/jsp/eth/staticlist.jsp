@@ -37,8 +37,8 @@ function submitFormwUpdate() {
 	if(boo){
 		$.messager.confirm('提示', '修改网卡可能导致网络中断和系统服务中断,确认修改吗?', function(r) {
 			if (r) {
-				$('#wUpdate').window('close');
-				$('#ffUpdate').form('submit', {
+				$('#staticEthUpdateWindow ').window('close');
+				$('#staticEthUpdateForm').form('submit', {
 					success : function(data) {
 						submitStaticEthSuccess(data);
 					},
@@ -52,23 +52,22 @@ function submitFormwUpdate() {
 }
 
 function clearFormwUpdate() {
-	var name = $("#ffUpdate input[name=name]");
+	var name = $("#staticEthUpdateForm input[name=name]");
 	var val = name.val();
-	$('#ffUpdate').form('clear');
-	$('#ffUpdate').form('load', {
+	$('#staticEthUpdateForm').form('clear');
+	$('#staticEthUpdateForm').form('load', {
 		name : val
 	});
 }
 
 function append() {
-	$('#w').window('open');
+	$('#staticEthAddWindow').window('open');
 }
 
 //添加静态网卡
 function submitForm() {
-	
 	var rows = $('#dg').datagrid('getRows');
-	var addName = $('#addName').textbox('getValue');//ethx:y
+	var addName = $('#addStaticEthName').textbox('getValue');//ethx:y
 	var addName2 = addName.substring(0,4);//ethx
 	var boo1 = false;
 	var boo2 = true;
@@ -83,7 +82,7 @@ function submitForm() {
 		}
 		//IP是否重复
 		var ip = rows[i].ip;
-		var addIp = $('#addIp').textbox('getValue');
+		var addIp = $('#addStaticEthIp').textbox('getValue');
 		if(ip==addIp){
 			boo3 = false;
 		}
@@ -93,8 +92,8 @@ function submitForm() {
 			if(boo3){
 				$.messager.confirm(LOCALE.Confirm, '确认添加网卡？', function(yes) {
 					if (yes) {
-						$('#w').window('close');
-						$('#ff').form('submit', {
+						$('#staticEthAddWindow').window('close');
+						$('#staticEthAddForm').form('submit', {
 							success : function(data) {
 								submitStaticEthSuccess(data);
 							},
@@ -116,13 +115,11 @@ function submitForm() {
 	}
 	
 }
-
 function clearForm() {
-	//$('#ff').form('clear');
-	$("#addName").textbox('clear');
-	$("#addIp").textbox('clear');
-	$("#addMask").textbox('clear');
-	$("#addMtu").textbox('clear');
+	$("#addStaticEthName").textbox('clear');
+	$("#addStaticEthIp").textbox('clear');
+	$("#addStaticEthMask").textbox('clear');
+	$("#addStaticEthMtu").textbox('clear');
 }
 
 function reload() {
@@ -136,18 +133,18 @@ function onLoadSuccess() {
 }
 
 function onClickCell(rowIndex, field, value) {
-	if (field != 'edit'){
+	if (field != '修改'){
 		return;
 	}
 	var row = $('#dg').datagrid('selectRow', rowIndex).datagrid('getSelected');
-	etid(row);
+	updateStaticEth(row);
 }
 
 
 var Alldata; 
 var SelectData = new Array();
-function etid(row) {
-	$('#ffUpdate').form('load', row);
+function updateStaticEth(row) {
+	$('#staticEthUpdateForm').form('load', row);
 	$.ajax({
 		url : '${pageContext.request.contextPath}/hostaddr/listAllAxfr.action?eth='
 				+ row.name + '&cardNum=' + row.cardNum,
@@ -162,7 +159,7 @@ function etid(row) {
 				'key' : 'exit',
 				'host' : '取消'
 			})
-			$('#dns').combobox({
+			$('#updateStaticEthDns').combobox({
 				data : data,
 				valueField : 'host',
 				textField : 'host',
@@ -181,16 +178,16 @@ function etid(row) {
 				onSelect : function(row) {
 					var length = Alldata.length;
 					if ('all' == (row.key)) {
-						$('#dns').combobox('unselect',row.host);
+						$('#updateStaticEthDns').combobox('unselect',row.host);
 						for (var i = 2; i < length; i++) {
-							$('#dns').combobox('select',Alldata[i].host);
+							$('#updateStaticEthDns').combobox('select',Alldata[i].host);
 							SelectData.push(Alldata[i]);
 						}
 					}
 					if ('exit' == (row.key)) {
-						$('#dns').combobox('unselect',row.host);
+						$('#updateStaticEthDns').combobox('unselect',row.host);
 						$.each(SelectData,function(i) {
-							$('#dns').combobox('unselect',SelectData[i].host);
+							$('#updateStaticEthDns').combobox('unselect',SelectData[i].host);
 						});
 
 					}
@@ -198,10 +195,9 @@ function etid(row) {
 			})
 		}
 	});
-	$('#wUpdate').window('open');
+	$('#staticEthUpdateWindow').window('open');
 }
 
-	
 function removeit(url) {
 	var rows = $('#dg').datagrid('getSelections');
 	if (rows.length == 0) {
@@ -223,9 +219,7 @@ function removeit(url) {
 			var cardNums = [];
 			$.each(selected, function(i) {
 				var id = selected[i][columns[1]];
-				console.log(">>><<<<<<<<<<<<<<<<<<<:"+id);
 				var cardNumStr = selected[i].cardNum;
-				console.log(">>><<<<<<<<<<<<<<<<<<<:"+cardNumStr);
 				if (id) {
 					ids.push(id);
 					cardNums.push(cardNumStr);
@@ -263,7 +257,7 @@ function submitStaticEthSuccess(data){
 			title:'操作提示',
 			msg:json.msg,
 			showType:'fade',
-			timeout:1000,
+			timeout:3000,
 			style:{
 				right:'',bottom:''
 			}
@@ -316,33 +310,32 @@ function submitStaticEthSuccess(data){
 				<omc:permit url="eth/staticEthBroadcast">
 					<th data-options="field:'broadcast',editor:'textbox'"><spring:message code="BroadcastAddress" /></th>
 				</omc:permit>
-				<th data-options="field:'destination',editor:'textbox',formatter:function(value,row,index){
-                                 if(value=='yes'){
-                                     return '是';
-                                   }
-                                  return '否';
-                             }">是否开机启动<%-- <spring:message code="RemoteAddress"/> --%></th>
+				<th data-options="field:'destination',editor:'textbox',
+					formatter:function(value,row,index){
+                        if(value=='yes'){
+                            return '是';
+                          }
+                         return '否';
+                    }">是否开机启动</th>
                 <!-- ospf操作 -->
-				<th data-options="field:'ospf',editor:'textbox',formatter:function(value,row,index){
-                                 if(value=='true'){
-                                     return '开启';
-                                   }
-                                  return '关闭';
-                             }">OSPF状态</th>
-				<th data-options="field:'speed',editor:'textbox',hidden:true"><spring:message
-						code="Rate" /></th>
+				<th data-options="field:'ospf',editor:'textbox',
+					formatter:function(value,row,index){
+                        if(value=='true'){
+                            return '开启';
+                          }
+                         return '关闭';
+                    }">OSPF状态</th>
+				<th data-options="field:'speed',editor:'textbox',hidden:true"><spring:message code="Rate" /></th>
 				<!-- 对端地址 -->
-				<th data-options="field:'duplex',editor:'textbox',hidden:true"><spring:message
-						code="Full/Half-duplex" /></th>
+				<th data-options="field:'duplex',editor:'textbox',hidden:true"><spring:message code="Full/Half-duplex" /></th>
 				<th data-options="field:'autoNeg',editor:'textbox',hidden:true">自动协速</th>
 				<!-- 板卡号 -->
 				<th data-options="field:'cardNum'"><spring:message code="CardNumber" /></th>
 				<omc:permit url="eth/staticUpdate">
 					<th data-options="field:'edit',
 						formatter:function(value,row,rowIndex){
-									return '<a href=#><spring:message code="Update"/></a>';
-								}"><spring:message
-							code="Update" /></th>
+							return '<a href=#><spring:message code="Update"/></a>';
+						}"><spring:message code="Update" /></th>
 				</omc:permit>
 			</tr>
 		</thead>
@@ -350,49 +343,43 @@ function submitStaticEthSuccess(data){
 	
 	<div id="tb" style="height: auto">
 	    <omc:permit url="eth/staticAdd">
-		<a href="#" class="easyui-linkbutton"
-			data-options="iconCls:'icon-add',plain:true" onclick="append()"><spring:message
-				code="AddInterface" /></a> 
+			<a href="#" class="easyui-linkbutton"
+				data-options="iconCls:'icon-add',plain:true" onclick="append()"><spring:message code="AddInterface" /></a> 
 		</omc:permit>
 		<omc:permit url="eth/delete">		
-		<a href="#" class="easyui-linkbutton"
-			data-options="iconCls:'icon-remove',plain:true"
-			onclick="removeit('${pageContext.request.contextPath}/eth/delete.action')"><spring:message
-				code="DeleteInterface" /></a>
+			<a href="#" class="easyui-linkbutton"
+				data-options="iconCls:'icon-remove',plain:true"
+				onclick="removeit('${pageContext.request.contextPath}/eth/delete.action')"><spring:message code="DeleteInterface" /></a>
 		</omc:permit>		
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" 
 			onclick="reload()">刷新</a>
 	</div>
 	
 	<!-- 添加窗口 -->
-	<div id="w" class="easyui-window"
-		title="<spring:message code="AddStaticInterface"/>"
-		data-options="minimizable:false,maximizable:false,
-        	collapsible:false,modal:true,closed:true,iconCls:'icon-add'"
+	<div id="staticEthAddWindow" class="easyui-window" title="<spring:message code="AddStaticInterface"/>"
+		data-options="minimizable:false,maximizable:false,collapsible:false,modal:true,closed:true,iconCls:'icon-add'"
 		style="padding: 10px;">
-		<!-- data-options="novalidate:true" -->
-		<form id="ff" class="easyui-form" method="post"
-			action="${pageContext.request.contextPath}/eth/staticAdd.action">
+		<form id="staticEthAddForm" class="easyui-form" method="post" action="${pageContext.request.contextPath}/eth/staticAdd.action">
 			<table>
 				<tr>
 					<td><spring:message code="Name" />:</td>
-					<td><input class="easyui-textbox" name="name" id="addName"
+					<td><input class="easyui-textbox" id="addStaticEthName" name="name"
 						data-options="validType:'eth',required:true" /></td>
 					<td width="56px"><span>IP:</span></td>
-					<td><input class="easyui-textbox" name="ip" id="addIp"
+					<td><input class="easyui-textbox" id="addStaticEthIp" name="ip"
 						data-options="validType:'ipABC',required:true" /></td>
 				</tr>
 				<tr>
 					<td><spring:message code="Mask" />:</td>
-					<td><input class="easyui-textbox" name="mask" id="addMask"
+					<td><input class="easyui-textbox" id="addStaticEthMask" name="mask"
 						data-options="validType:'Mask',required:true" /></td>
 					<td width="56px"><span>MTU:</span></td>
-					<td><input class="easyui-numberbox" name="mtu" id="addMtu"
+					<td><input class="easyui-numberbox" id="addStaticEthMtu" name="mtu"
 						data-options="validType:'MTU',required:true" /></td>
 				</tr>
 				<tr>
 					<td>所在板卡:</td>
-					<td><input class="easyui-combobox" name="cardNum"
+					<td><input class="easyui-combobox" id="addStaticEthCardNum" name="cardNum"
 						data-options="
 								url:'${pageContext.request.contextPath}/card/listjsonarr.action',
 								method:'get',
@@ -405,7 +392,7 @@ function submitStaticEthSuccess(data){
 					</td>
 					<omc:permit url="omc/viewableDns">
 					<td>关联域名:</td>
-					<td><input class="easyui-combobox" name="dns"
+					<td><input class="easyui-combobox" id="addStaticEthDns" name="dns"
 						data-options="
 							url:'${pageContext.request.contextPath}/hostaddr/listAllAxfr.action',
 							method:'get',
@@ -419,43 +406,37 @@ function submitStaticEthSuccess(data){
 					</omc:permit>
 				</tr>
 				<tr style="display:none;">
-					<td style="text-align:right"><input type="checkbox" name="ospf" value="true"/></td>
+					<td style="text-align:right"><input type="checkbox" id="addStaticEthOspf" name="ospf" value="true"/></td>
 					<td><font style="font-size:14px">是否添加OSPF路由</font></td>
 				</tr>
 			</table>
 		</form>
 		<div style="text-align: center; padding: 5px">
-			<a href="#" class="easyui-linkbutton" onclick="submitForm()"><spring:message
-					code="SaveNetworkCard" /></a> 
-			<!-- 
-			<a href="#" class="easyui-linkbutton" onclick="clearForm()"><spring:message 
-					code="ClearRecord" /></a>
-			 -->
+			<a href="#" class="easyui-linkbutton" onclick="staticEthAddSubmitForm()"><spring:message code="SaveNetworkCard" /></a> 
 		</div>
 	</div>
 	
 	<!-- 更新窗口 -->
-	<div id="wUpdate" class="easyui-window"
+	<div id="staticEthUpdateWindow" class="easyui-window"
 		title="<spring:message code="UpdateStaticInterface"/>"
 		data-options="minimizable:false,maximizable:false,
         	collapsible:false,modal:true,closed:true,iconCls:'icon-add',width:435"
 		style="padding: 10px;">
-		<form id="ffUpdate" class="easyui-form" method="post"
-			data-options="novalidate:true"
-			action="${pageContext.request.contextPath}/eth/staticUpdate.action">
+		<form id="staticEthUpdateForm" class="easyui-form" method="post"
+			data-options="novalidate:true" action="${pageContext.request.contextPath}/eth/staticUpdate.action">
 			<table>
 				<tr>
 					<td><spring:message code="Name" />:</td>
-					<td><input class="easyui-textbox" name="name" id="updateStaticEthName" data-options="readonly:true,required:true" /></td>
+					<td><input class="easyui-textbox" id="updateStaticEthName" name="name" data-options="readonly:true,required:true" /></td>
 					<td style="display:inline"><span>IP:</span></td>
-					<td><input class="easyui-textbox" name="ip" id="updateStaticEthIp" data-options="validType:'ipABC',required:true"></input></td>
+					<td><input class="easyui-textbox" id="updateStaticEthIp" name="ip" data-options="validType:'ipABC',required:true"></input></td>
 				</tr>
 				<tr>
 					<td><spring:message code="Mask" />:</td>
-					<td><input class="easyui-textbox" name="mask" id="updateStaticEthMask"
+					<td><input class="easyui-textbox" id="updateStaticEthMask" name="mask"
 						data-options="validType:'Mask',required:true" /></td>
 					<td style="display:inline"><span>MTU:</span></td>
-					<td><input class="easyui-numberbox" name="mtu"
+					<td><input class="easyui-numberbox" id="updateStaticEthMtu" name="mtu"
 						data-options="validType:'MTU',required:true" /></input></td>
 				</tr>
 				<tr>
@@ -473,12 +454,14 @@ function submitStaticEthSuccess(data){
 								value: 'no',
 								text: '不启动'
 							}]" /></td>
-					<td style="display:none;<omc:permit url="omc/viewableDns">display:inline</omc:permit>">关联域名:</td>
-					<td id="glym" style=""><input name="dns" id="dns"></td>
+					<omc:permit url="omc/viewableDns">
+					<td>关联域名:</td>
+					<td><input id="updateStaticEthDns" name="dns"></td>
+					</omc:permit>
 				</tr>
 				<tr>
 					<td>所在板卡:</td>
-					<td><input class="easyui-combobox" name="cardNum" data-options="
+					<td><input class="easyui-combobox" id="updateStaticEthCardNum" name="cardNum" data-options="
 							hidden:true,
 							url:'${pageContext.request.contextPath}/card/listjsonarr.action',
 							method:'get',
@@ -488,22 +471,17 @@ function submitStaticEthSuccess(data){
 							panelHeight:'100',
 							required:true
 						"></td>
-					<td style="text-align:right;display: none;"><input type="checkbox" name="ospf" value="true"/></td>
+					<td style="text-align:right;display: none;"><input type="checkbox" id="updateStaticEthOspf" name="ospf" value="true"/></td>
 					<td style="display: none;"><font style="font-size:14px">是否添加OSPF路由</font></td>
 				</tr>
 				<tr style="display: none">
 					<td>MAC:</td>
-					<td><input class="easyui-textbox" name="mac" /></input></td>
+					<td><input class="easyui-textbox" id="updateStaticEthMac" name="mac" /></input></td>
 				</tr>
 			</table>
 		</form>
 		<div style="text-align: center; padding: 5px">
-			<a href="#" class="easyui-linkbutton" onclick="submitFormwUpdate()"><spring:message
-					code="SaveNetworkCard" /></a> 
-			<!-- 
-			<a href="#" class="easyui-linkbutton" onclick="clearFormwUpdate()"><spring:message 
-					code="ClearRecord" /></a>
-			 -->
+			<a href="#" class="easyui-linkbutton" onclick="staticEthUpdateSubmitForm()"><spring:message code="SaveNetworkCard" /></a> 
 		</div>
 	</div>
 </body>

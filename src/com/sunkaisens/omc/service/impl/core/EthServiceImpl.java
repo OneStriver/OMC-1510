@@ -73,9 +73,11 @@ public class EthServiceImpl implements EthService {
 		return pageBean;
 	}
 	
-	//获取活动网卡的信息
+	/**
+	 * 获取活动网卡的信息
+	 */
 	private List<Eth> getEthActivateByCardNum(Integer cardNum) throws CustomException{
-		List<Eth> list=new LinkedList<>();
+		List<Eth> list=new LinkedList<Eth>();
 		String data="PageHeader:1\n";
 		QueryMsg msg = sendCncpMsgFactory.createSendQueryCncpMsg(
 				CncpProtoType.OMC_HEADER, CncpProtoType.OAM_HEADER, CncpProtoType.CNCP_GET_MSG, 
@@ -274,9 +276,10 @@ public class EthServiceImpl implements EthService {
 		PageBean pageBean=new PageBean(page, rows, newList, list.size());
 		return pageBean;
 	}
-	//
 		
-	//
+	/**
+	 * 获取静态网卡信息
+	 */
 	private List<Eth> getEthStaticByCardNum(Integer cardNum) throws CustomException{
 		List<Eth> list=new LinkedList<>();
 		String data="PageHeader:1\n";

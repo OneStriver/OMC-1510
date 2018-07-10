@@ -45,7 +45,7 @@
 				formatter:function(value,row,rowIndex){
 					return row.module&&row.module.name;
 				}"><spring:message code="NEType"/></th>
-			<th data-options="field:'c.name',width:'10%',sortable:true,order:'asc',
+			<th data-options="field:'c.name',width:'10%',sortable:false,order:'asc',
 				formatter:function(value,row,rowIndex){
 					return row.card&&row.card.name;
 				}">所在板卡</th>

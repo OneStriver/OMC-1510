@@ -1,12 +1,9 @@
 package com.sunkaisens.omc.vo.core;
 
 import com.sunkaisens.omc.po.core.Card;
+
 /**
- * 
- * 
  * Eth实体类
- * 
- *
  */
 public class Eth extends Card{
 	private static final long serialVersionUID = 1L;
@@ -64,29 +61,16 @@ public class Eth extends Card{
 	public void setCardName(String cardName) {
 		this.cardName = cardName;
 	}
+	
 	/**
-     * 
-     * 
      * 无参数构造器
      */
-	public Eth(){}
+	public Eth(){
+		
+	}
+	
 	/**
-	 * 
-	 * 
-	 * 
 	 * 有参数构造器
-	 * @param name
-	 * @param type
-	 * @param ip
-	 * @param mask
-	 * @param mac
-	 * @param mtu
-	 * @param state
-	 * @param broadcast
-	 * @param destination
-	 * @param speed
-	 * @param duplex
-	 * @param autoNeg
 	 */
 	public Eth(String name, String type, String ip, String mask, String mac,
 			String mtu, String state, String broadcast, String destination,
@@ -117,7 +101,7 @@ public class Eth extends Card{
 		this.broadcast=broadcast;
 		this.destination=destination;
 	}
-	////
+	
 	public Eth(String name, String type, String ip, String mask, String mac,String mtu,String state,String broadcast,
 			String destination,String ospf) {
 		this.name = name;
@@ -131,7 +115,7 @@ public class Eth extends Card{
 		this.destination=destination;
 		this.ospf = ospf;
 	}
-	////
+	
 	public String getName() {
 		return name;
 	}

@@ -275,7 +275,6 @@ function importHss(){
 function exportHss(){
 	$.messager.confirm(LOCALE.Confirm,LOCALE.ExportMessage,function(r){    
 	    if(r){    
-	    	
 	    	var url=contextPath+"/hss/export.action";
 	    	var subWin=open(url,null,"height=200,width=600,status=yes,toolbar=no,menubar=no,location=no");  
 	    }

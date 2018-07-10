@@ -11,7 +11,9 @@
 			url:'${pageContext.request.contextPath}/hostaddr/list.action',
 			rownumbers:true,
 			singleSelect:true,
-			fit:true,striped:true,border:false,
+			fit:true,
+			striped:true,
+			border:false,
 			pageList: [10,20,30,40,50,60],
 			loadFilter:loadFilter,
 			pageNumber:${pageBean.page},
@@ -47,7 +49,7 @@
 						required:true
 					}
 				}"><spring:message code="CardNumber"/></th> -->
-			<th data-options="field:'编辑',
+			<th data-options="field:'修改',
 				formatter:function(value,row,rowIndex){
 					return '<a href=# ><spring:message code="Edit"/></a>';
 				}"></th>
@@ -56,24 +58,25 @@
 	</table>
 	<div id="tb" style="height:auto">
 	    <omc:permit url="hostaddr/add">
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()"><spring:message code="AddHostAddress"/></a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()"><spring:message code="AddHostAddress"/></a>
 	    </omc:permit>
 	    <omc:permit url="hostaddr/delete">
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" 
-			onclick="removeit('${pageContext.request.contextPath}/hostaddr/delete.action')"><spring:message code="DeleteHostAddress"/></a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" 
+				onclick="removeit('${pageContext.request.contextPath}/hostaddr/delete.action')"><spring:message code="DeleteHostAddress"/></a>
 	    </omc:permit>
 	</div>
-	<div id="w" class="easyui-window" data-options="width:250,iconCls:'icon-save',modal:true,closed:true">
-        <form id="ff" method="post">
+	
+	<div id="addHostAddrWindow" class="easyui-window" data-options="width:250,iconCls:'icon-save',modal:true,closed:true">
+        <form id="addHostAddrForm" method="post">
       		<br/>
       		<span>
 	      		<label>IP地址：</label>
-	      		<input class="easyui-textbox" id="ip" name="ip" data-options="validType:'ip',required:true">
+	      		<input class="easyui-textbox" id="addHostAddrIp" name="ip" data-options="validType:'ip',required:true">
       		</span>
       		<br/><br/>
       		<span>
 	      		<label> 域 名 ：</label>
-	      		<input class="easyui-textbox" id="host" name="host" data-options="validType:'realmName',required:true">
+	      		<input class="easyui-textbox" id="addHostAddrHost" name="host" data-options="validType:'realmName',required:true">
       		</span>
       		<br/>
       		<div style="text-align:center;padding:5px">

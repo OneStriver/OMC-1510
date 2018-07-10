@@ -57,7 +57,7 @@ public class QueryMsg extends CncpBaseMsg {
 	}
 
 	/**
-	 * 查询消息
+	 * 查询消息(将对象中的值转换成bytes[]数组)
 	 */
 	public byte[] writeToQueryMsg(byte[] bytes, QueryMsg setUpMsg) {
 		// 设置消息的源地址

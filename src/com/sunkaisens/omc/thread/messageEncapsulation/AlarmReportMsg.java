@@ -59,7 +59,7 @@ public class AlarmReportMsg extends CncpBaseMsg {
 	}
 
 	/**
-	 * 告警上报
+	 * 告警上报(将上报的消息转换成对象)
 	 */
 	public AlarmReportMsg readFromAlarmReport(byte[] bytes, AlarmReportMsg alarmReportMsg) {
 		// 上报消息的源地址

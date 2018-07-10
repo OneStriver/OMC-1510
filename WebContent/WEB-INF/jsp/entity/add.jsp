@@ -4,7 +4,26 @@
 <head>
 <%@ include file="/WEB-INF/jsp/public/common.jspf"%>
 <title>下发配置</title>
-<script type="text/javascript">
+<script type="text/javascript" async="async">
+var pc;
+$.parser.onComplete = function(){
+	if(pc) clearTimeout(pc);
+	pc = setTimeout(closes, 1000);
+}
+function closes(){
+	$("#loading").fadeOut("normal",function(){
+		$(this).remove();
+	});
+}
+
+$(function(){
+	var attr={
+		height:$(document.body).height(),
+		top:0
+	};
+	$('#setWindow').window(attr).window('open');
+});
+
 function submitForm(){
 	var forms=[];
 	var soles=[];
@@ -55,12 +74,19 @@ function submitForm(){
 			}
 		}
 	});
-	
+}
+
+function goBackBefore(){
+	window.location=contextPath+"/entity/listUI.action";
+	//window.history.back();
 }
 
 </script>
 </head>
 <body>
+<div id='loading' style="position:absolute;z-index:1000;top:0px;left:0px;width:100%;height:100%;background-color:#DDDDDB;text-align:center;padding-top: 20%;"><h1><font color="#15428B">加载中···</font></h1></div>
+
+<div id="setWindow" class="easyui-window" title="配置信息" data-options="iconCls:'icon-save',modal:true,fit:true,footer:'#setFooter',collapsible:false,minimizable:false,maximizable:false,closable:false">
 <!-- 配置文件循环 开始 -->
 <c:forEach items="${module.configs}" var="config">
 	<div class="easyui-panel" title="${config.name}" data-options="fit:false">
@@ -147,17 +173,20 @@ function submitForm(){
 	</div>
 </c:forEach>
 <!-- 配置文件循环 结束 -->
-<c:if test="${module.configs.size()!=0}">
-	<div style="text-align:center;padding:5px">
-		<a href="#" class="easyui-linkbutton" onclick="submitForm()">提交</a>
-		<!-- <a href="#" class="easyui-linkbutton" onclick="clearForm()">清空配置</a> -->
-	</div>
-</c:if>
 <c:if test="${module.configs.size()==0}">
-	<div style="text-align:center">
-		<h1>对不起，此网元配置项都已被删除，请重新添加！</h1>
-		<a href="#" onclick="window.history.back();">返回</a>
-	</div>
+	<h1 style="text-align:center;">对不起，此网元配置项都已被删除，请重新添加！</h1>
 </c:if>
+</div>
+
+<div id="setFooter" style="text-align:center;">
+	<c:if test="${module.configs.size()!=0}">
+		<a href="#" class="easyui-linkbutton" style="margin-right:10px;" onclick="submitForm()">提交</a>
+		<!-- <a href="#" class="easyui-linkbutton" onclick="clearForm()">清空配置</a> -->
+	</c:if>
+	<c:if test="${module.configs.size()==0}">
+		<a href="#" class="easyui-linkbutton" onclick="goBackBefore()">返回</a>
+		<!-- <a href="#" onclick="window.history.back();">返回</a> -->
+	</c:if>
+</div>
 </body>
 </html>

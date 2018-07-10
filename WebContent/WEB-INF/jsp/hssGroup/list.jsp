@@ -8,19 +8,19 @@
 </head>
 <body>
 	<table id="dg" title="<spring:message code="GroupCallList"/>" class="easyui-datagrid" data-options="
-				url:'${pageContext.request.contextPath}/hssGroup/list.action',
-				width:800,
-				border:false,
-				rownumbers:true,
-				fit:true,
-				striped:true,
-				pageList: [10,20,30,40,50],
-				pageNumber:${pageBean.page},
-				singleSelect:false,
-				pagination:true,
-				toolbar: '#tb',
-				onClickCell:onClickCell,
-				pageSize: ${pageBean.pageSize}">
+		url:'${pageContext.request.contextPath}/hssGroup/list.action',
+		width:800,
+		border:false,
+		rownumbers:true,
+		fit:true,
+		striped:true,
+		pageList: [10,20,30,40,50],
+		pageNumber:${pageBean.page},
+		singleSelect:false,
+		pagination:true,
+		toolbar: '#tb',
+		onClickCell:onClickCell,
+		pageSize: ${pageBean.pageSize}">
 		<!-- 表头字段 -->
 		<thead>
 		<tr>
@@ -113,8 +113,12 @@
 	
 	<!-- 表头的下拉列表信息 -->
 	<div id="tb" style="height:auto">
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()"><spring:message code="Add"/></a>
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()"><spring:message code="Delete"/></a>
+		<omc:permit url="hssGroup/add">
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()"><spring:message code="Add"/></a>
+		</omc:permit>
+		<omc:permit url="hssGroup/delete">
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()"><spring:message code="Delete"/></a>
+		</omc:permit>
 		<select class="easyui-combobox" name="callType"
 			data-options="editable:false,onChange:callChange,width:110,panelHeight:'auto'">
 			<option value="" selected="selected"><spring:message code="GroupCallType"/></option>
