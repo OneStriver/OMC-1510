@@ -58,7 +58,10 @@ function removeit(url){
 					genmasks.push(rows[i]['genmask']);
 				});
 				var param={cardNums:cardNums,gateways:gateways,destinations:destinations,genmasks:genmasks};
-				$.ajax({type:'post',traditional:true,data:param,
+				$.ajax({
+					type:'post',
+					traditional:true,
+					data:param,
 					url:url,
 					success:routeSubmitSuccess
 				});

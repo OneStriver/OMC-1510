@@ -6,7 +6,7 @@
 <%@ include file="/WEB-INF/jsp/public/common.jspf"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/public/grid.js?<%=new Date().getTime()%>"></script>
 <script type="text/javascript">
-function imdAddSubmitForm(){
+function imsAddSubmitForm(){
 	$('#imsAddForm').form('submit',{
 		success:function(data){
 			imsSubmitSuccess(data);
@@ -151,8 +151,8 @@ function mingwen(checkbox){
 			<th data-options="field:'ueName',width:'10%',
 				formatter:function(value,row,rowIndex){
 					return '<b>'+value+'</b>';
-				}"><spring:message code="MDN"></spring:message>:</th>
-			<th data-options="field:'ueUri',width:'20%'"><spring:message code="UserPublicIdentity"></spring:message></th>
+				}"><spring:message code="MDN"/>:</th>
+			<th data-options="field:'ueUri',width:'20%'"><spring:message code="UserPublicIdentity"/></th>
 			<th data-options="field:'ueUpdateType',width:'15%',
 				formatter:function(value,row,rowIndex){
 					switch(value){
@@ -165,7 +165,7 @@ function mingwen(checkbox){
 					default:
 						return '<font color=red><spring:message code="UnknownUserType"></spring:message></font>';
 					}
-				}"><spring:message code="UserType"></spring:message></th>
+				}"><spring:message code="UserType"/></th>
 			<th data-options="field:'ueStatus',
 				formatter:function(value,row,rowIndex){
 					if(value==200) return '<font color=green><spring:message code="AlreadyRegister"></spring:message></font>';
@@ -174,52 +174,52 @@ function mingwen(checkbox){
 			<th data-options="field:'修改',
 				formatter:function(value,row,rowIndex){
 					return '<a href=# ><spring:message code="Update"></spring:message></a>';
-				}"><spring:message code="Update"></spring:message></th>
+				}"><spring:message code="Update"/></th>
 		</tr>
 	</thead>
 	</table>
 	<div id="tb" style="height:auto">
 		<omc:permit url="ims/add">
-			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="$('#aw').window('open')"><spring:message code="Add"></spring:message></a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="$('#imsAddWindow').window('open')"><spring:message code="Add"/></a>
 		</omc:permit>
 		<omc:permit url="ims/delete">
-			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()"><spring:message code="Delete"></spring:message></a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()"><spring:message code="Delete"/></a>
 		</omc:permit>
 		<select class="easyui-combobox" name="ueStatus" 
 			data-options="editable:false,width:110,onChange:sChange,panelHeight:'auto'">
-			<option value="" selected="selected"><spring:message code="RegistrationStatus"></spring:message></option>
-			<option value="200"><spring:message code="AlreadyRegister"></spring:message></option>
-			<option value="0"><spring:message code="NotRegister"></spring:message></option>
+			<option value="" selected="selected"><spring:message code="RegistrationStatus"/></option>
+			<option value="200"><spring:message code="AlreadyRegister"/></option>
+			<option value="0"><spring:message code="NotRegister"/></option>
 		</select>
 		<select class="easyui-combobox" name="ueUpdateType" 
 			data-options="editable:false,width:110,onChange:tChange,panelHeight:'auto'">
-			<option value="" selected="selected"><spring:message code="UserType"></spring:message></option>
-			<option value="0"><spring:message code="LocalDomainUser"></spring:message></option>
-			<option value="1"><spring:message code="CallDomainUser"></spring:message></option>
-			<option value="2"><spring:message code="SynchroDomainUser"></spring:message></option>
+			<option value="" selected="selected"><spring:message code="UserType"/></option>
+			<option value="0"><spring:message code="LocalDomainUser"/></option>
+			<option value="1"><spring:message code="CallDomainUser"/></option>
+			<option value="2"><spring:message code="SynchroDomainUser"/></option>
 		</select>
 		<input id="imsSearch" class="easyui-searchbox" style="width:200px" 
 			data-options="searcher:qq,prompt:'<spring:message code="PleaseEnterTheNumber"></spring:message>',menu:'#imsMenu'"/>
 	</div>
 	<div id="imsMenu" style="width:110px"> 
-		<div data-options="name:'ueName'"><spring:message code="MDN"></spring:message></div> 
+		<div data-options="name:'ueName'"><spring:message code="MDN"/></div> 
 	</div> 
 	
 	<!-- 添加窗口 -->
 	<div id="imsAddWindow" class="easyui-window" title="<spring:message code="CreateUser"></spring:message>" style="width:350px;padding:10px;"
 			data-options="modal:true,closed:true,iconCls:'icon-add',minimizable:false,maximizable:false,collapsible:false">
 		<form id="imsAddForm" class="easyui-form" method="post" data-options="novalidate:false" action="${pageContext.request.contextPath}/ims/save.action">
-	    	<label><spring:message code="MDN"></spring:message>:</label>
+	    	<label><spring:message code="MDN"/>:</label>
 	    	<input class="easyui-numberbox" name="ueName" data-options="validType:'phone',required:true,width:130"/>
 	    	<br/><br/>
-	    	<label><spring:message code="Domain"></spring:message>:</label>
+	    	<label><spring:message code="Domain"/>:</label>
 	    	<input class="easyui-textbox" name="domain" style="margin-bottom:10px;" data-options="value:'test.com',required:true,width:100"/>
 	    	<br/><br/>
-	    	<label><spring:message code="ClearText"></spring:message><input type="checkbox" onchange="mingwen(this)"> <spring:message code="Password"></spring:message></label>
+	    	<label><spring:message code="ClearText"/><input type="checkbox" onchange="mingwen(this)"> <spring:message code="Password"/></label>
 	    	<input class="easyui-textbox" name="uePassword" data-options="required:true,type:'password',width:100"/>
 	    </form>
 	    <div style="text-align:center;padding:5px">
-	    	<a href="#" class="easyui-linkbutton" onclick="imdAddSubmitForm()"><spring:message code="save"></spring:message></a>
+	    	<a href="#" class="easyui-linkbutton" onclick="imsAddSubmitForm()"><spring:message code="save"/></a>
 	    </div>
 	 </div>
 	 
@@ -227,17 +227,17 @@ function mingwen(checkbox){
 	 <div id="imsUpdateWindow" class="easyui-window" title="<spring:message code="UpdateUser"></spring:message>" style="width:300px;padding:10px;"
 	 		data-options="modal:true,closed:true,iconCls:'icon-edit',minimizable:false,maximizable:false,collapsible:false">
 		<form id="imsUpdateForm" class="easyui-form" method="post" data-options="novalidate:true" action="${pageContext.request.contextPath}/ims/update.action">
-	    	<label><spring:message code="MDN"></spring:message>:</label>
+	    	<label><spring:message code="MDN"/>:</label>
 	    	<input class="easyui-numberbox" name="ueName" data-options="editable:false,required:true,width:130"/>
 	    	<br/><br/>
-	    	<label><spring:message code="Domain"></spring:message>:</label>
+	    	<label><spring:message code="Domain"/>:</label>
 	    	<input class="easyui-textbox" id="domain" name="domain" data-options="required:true,width:130"/>
 	    	<br/><br/>
-	    	<label><spring:message code="ClearText"></spring:message><input type="checkbox" onchange="mingwen(this)"> <spring:message code="Password"></spring:message></label>
+	    	<label><spring:message code="ClearText"/><input type="checkbox" onchange="mingwen(this)"> <spring:message code="Password"/></label>
 	    	<input class="easyui-textbox" name="uePassword" data-options="required:true,type:'password',width:130"/>
 	    </form>
 	    <div style="text-align:center;padding:5px">
-	    	<a href="#" class="easyui-linkbutton" onclick="imsUpdateSubmitForm()"><spring:message code="save"></spring:message></a>
+	    	<a href="#" class="easyui-linkbutton" onclick="imsUpdateSubmitForm()"><spring:message code="save"/></a>
 	    </div>
 	 </div>
 </body>

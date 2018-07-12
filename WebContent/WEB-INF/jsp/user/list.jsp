@@ -48,8 +48,11 @@ function onLoadSuccess(){
 
 function clickCell(index, field){
 	var name=$('#dg').datagrid('selectRow', index).datagrid('getSelected').name;
-	if(name=='nouser') return;
-	else onClickCell(index, field);
+	if(name=='nouser'){
+		return;
+	}else{
+		onClickCell(index, field);
+	} 
 	
 }
 </script>

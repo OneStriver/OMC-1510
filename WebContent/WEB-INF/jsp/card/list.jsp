@@ -34,33 +34,33 @@
 			<th data-options="field:'serial',width:'40%',
 				formatter:function(value,row,rowIndex){
 					return value?'['+value+']':'';
-				}">板卡序列号</th>
+				}"><spring:message code="BoardSerialNumber"/></th>
 			<th data-options="field:'oamStatus',width:'10%',
 				formatter:function(value,row,rowIndex){
 					return value?'<font color=green>已启动</font>':'<font color=red>未启动</font>';
-				}">板卡状态</th>
+				}"><spring:message code="CardStatus"/></th>
 		</tr>
 	</thead>
 	</table>
 	
 	<div id="tb" style="height:auto">
 		<omc:permit url="card/addCard">
-			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()" >添加</a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()"><spring:message code="Add"/></a>
 		</omc:permit>
 		<omc:permit url="card/deleteCard">
 			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit(
-					'${pageContext.request.contextPath}/card/delete.action')">删除</a>
+					'${pageContext.request.contextPath}/card/delete.action')"><spring:message code="Delete"/></a>
 		</omc:permit>
 		<omc:permit url="card/reboot">
-			<a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="reboot()">重启全部板卡</a>
+			<a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="reboot()"><spring:message code="RestartAllBoards"/></a>
 		</omc:permit>
 		<omc:permit url="cardResetLf/reset">
-			<a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="reSet()">恢复出厂配置</a>
+			<a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="reSet()"><spring:message code="ResetLfConfig"/></a>
 		</omc:permit>
 	</div>
 	
 	<!-- 添加窗口  -->	
-	<div id="addCardWindow" class="easyui-window" title="添加板卡" data-options="minimizable:false,maximizable:false,
+	<div id="addCardWindow" class="easyui-window" title="<spring:message code="AddCard"/>" data-options="minimizable:false,maximizable:false,
         	collapsible:false,modal:true,closed:true,iconCls:'icon-add',width:430" style="padding:10px;">
 		<form id="addCardForm" class="easyui-form" method="post" action="${pageContext.request.contextPath}/card/save.action">
 	    	<table>
@@ -79,7 +79,7 @@
 	    	</table>
 	    </form>
 	    <div style="text-align:center;padding:5px">
-	    	<a href="#" class="easyui-linkbutton" onclick="submitCardForm()">新增板卡</a>
+	    	<a href="#" class="easyui-linkbutton" onclick="submitCardForm()"><spring:message code="save"/></a>
 	    </div>
 	</div>
 	

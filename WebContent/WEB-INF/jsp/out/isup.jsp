@@ -15,7 +15,7 @@ function submit(){
 		},
 		onSubmit:function(){
 			var isOk=$(this).form('enableValidation').form('validate');
-			if(isOk) $.messager.progress({msg:'正在保存请稍等'});
+			if(isOk) $.messager.progress({msg:'正在保存请稍等...'});
 			return isOk;
 		}
 	});
@@ -134,8 +134,8 @@ $(function(){
 				<tr>
 					<td></td>
 					<td>
-						<a href="#" class="easyui-linkbutton" onclick="location='${pageContext.request.contextPath}/out/isup${index}.action'">刷新</a>
-						<a href="#" class="easyui-linkbutton" onclick="submit()">提交</a>
+						<a href="#" class="easyui-linkbutton" onclick="location='${pageContext.request.contextPath}/out/isup${index}.action'"><spring:message code="Refresh"/></a>
+						<a href="#" class="easyui-linkbutton" onclick="submit()"><spring:message code="Submit"/></a>
 					</td>
 				</tr>
 			</table>

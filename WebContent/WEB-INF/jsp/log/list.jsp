@@ -23,18 +23,18 @@
 		<tr>
 			<th data-options="field:'ck',checkbox:true"></th>
 			<th data-options="field:'id',hidden:true"></th>
-			<th data-options="field:'user'"><spring:message code="User"></spring:message></th>
-			<th data-options="field:'description'"><spring:message code="OperationAction"></spring:message></th>
-			<th data-options="field:'success',sortable:true,
+			<th data-options="field:'user'"><spring:message code="User"/></th>
+			<th data-options="field:'description'"><spring:message code="OperationAction"/></th>
+			<th data-options="field:'success',sortable:false,
 				formatter:function(value,row,rowIndex){
 					return value?'<span style=color:green><spring:message code="Success"></spring:message></span>':
 						'<span style=color:red><spring:message code="Failure"></spring:message></span>';
-				}"><spring:message code="SuccessOrFailure"></spring:message></th>
-			<th data-options="field:'reason'"><spring:message code="ReasonsForTheFailure"></spring:message></th>
+				}"><spring:message code="SuccessOrFailure"/></th>
+			<th data-options="field:'reason'"><spring:message code="ReasonsForTheFailure"/></th>
 			<th data-options="field:'createDate',sortable:true,
 				formatter:function(value,row,rowIndex){
 					return new Date(value).format();
-				}"><spring:message code="OperationDate"></spring:message></th>
+				}"><spring:message code="OperationDate"/></th>
 		</tr>
 	</thead>
 	</tbody>

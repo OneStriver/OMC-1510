@@ -53,7 +53,7 @@
 			-->
 			<th data-options="field:'修改',
 				formatter:function(value,row,rowIndex){
-					return '<a href=# ><spring:message code="Edit"/></a>';
+					return '<a href=# ><spring:message code="Update"/></a>';
 				}"></th>
 		</tr>
 		</thead>
@@ -72,17 +72,17 @@
         <form id="addHostAddrForm" method="post">
       		<br/>
       		<span>
-	      		<label>IP地址：</label>
+	      		<label><spring:message code="IPAddress"/>：</label>
 	      		<input class="easyui-textbox" id="addHostAddrIp" name="ip" data-options="validType:'ip',required:true">
       		</span>
       		<br/><br/>
       		<span>
-	      		<label> 域 名 ：</label>
+	      		<label><spring:message code="Domain"/>：</label>
 	      		<input class="easyui-textbox" id="addHostAddrHost" name="host" data-options="validType:'realmName',required:true">
       		</span>
       		<br/>
       		<div style="text-align:center;padding:5px">
-			   	<a href="#" class="easyui-linkbutton" onclick="submitForm()">保存</a>
+			   	<a href="#" class="easyui-linkbutton" onclick="submitForm()"><spring:message code="save"/></a>
 	    	</div>
       	</form>
 	</div>

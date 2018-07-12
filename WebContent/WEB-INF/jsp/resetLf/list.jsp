@@ -16,13 +16,13 @@ function onClick(){
 </script>
 </head>
 <body>
-	<div class="easyui-panel" data-options="footer:'#footer',fit:true,title:'恢复出厂设置'">
+	<div class="easyui-panel" data-options="footer:'#footer',fit:true,title:'<spring:message code="restoreFactorySetting"></spring:message>'">
 		<div style="text-align:center;font-size:50px;">
 			注意:此操作将会还原系统出厂状态,<br/>
 			           在系统重启后生效。
 		</div>
 		<div id="footer" style="border:0px;text-align:center;">
-			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search',size:'large',onClick:onClick">恢复出厂设置</a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search',size:'large',onClick:onClick"><spring:message code="restoreFactorySetting"></spring:message></a>
 		</div>
 	</div>
 </body>

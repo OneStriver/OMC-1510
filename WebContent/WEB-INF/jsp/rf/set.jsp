@@ -93,7 +93,7 @@ function updateForm(){
 		},
 		onSubmit:function(){
 			var isOk=$(this).form('enableValidation').form('validate');
-			if(isOk) $.messager.progress({msg:'正在提交请稍等'});
+			if(isOk) $.messager.progress({msg:'正在提交请稍等...'});
 			return isOk;
 		}
 	});
@@ -139,8 +139,8 @@ function updateForm(){
 			<th data-options="field:'cdmaChannelList'">cdmaChannelList</th>
 			<th data-options="field:'修改',
 				formatter:function(value,row,rowIndex){
-					return '<a href=#>修改</a>';
-				}">修改</th>
+					return '<a href=#><spring:message code="Update"/></a>';
+				}"><spring:message code="Update"/></th>
 		</tr>
 		</thead>
 	</table>
@@ -204,7 +204,7 @@ function updateForm(){
 	    </form>
 	    
 	    <div style="text-align:center;padding:5px">
-	    	<a href="#" class="easyui-linkbutton" onclick="submitForm()">　提交表单　</a>
+	    	<a href="#" class="easyui-linkbutton" onclick="submitForm()"><spring:message code="Submit"/></a>
 	    </div>
 	 </div>
 	 
@@ -262,7 +262,7 @@ function updateForm(){
 	    </form>
 	    
 	    <div style="text-align:center;padding:5px">
-	    	<a href="#" class="easyui-linkbutton" onclick="updateForm()">　提交表单　</a>
+	    	<a href="#" class="easyui-linkbutton" onclick="updateForm()"><spring:message code="Submit"/></a>
 	    </div>
 	 </div>
 </body>

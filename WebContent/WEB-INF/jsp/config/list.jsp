@@ -51,7 +51,7 @@ function submitForm(){
 		},
 		onSubmit:function(){
 			var isOk=$(this).form('enableValidation').form('validate');
-			if(isOk) $.messager.progress({msg:'正在上传请稍等'});
+			if(isOk) $.messager.progress({msg:'正在上传请稍等...'});
 			return isOk;
 		}
 	});
@@ -63,7 +63,9 @@ function submitForm(){
 		data-options="
 			url:'${pageContext.request.contextPath}/config/list.action',
 			rownumbers:true,
-			fit:true,striped:true,border:false,
+			fit:true,
+			striped:true,
+			border:false,
 			pageList: [10,20,30,40,50,60],
 			pageNumber:${pageBean.page},
 			pagination:true,
@@ -77,8 +79,7 @@ function submitForm(){
 			<th data-options="field:'id',hidden:true"></th>
 			<th data-options="field:'name',width:'25%',editor:'textbox'"><spring:message code="ConfigFileName"></spring:message></th>
 			<th data-options="field:'description',width:'20%',editor:'textbox'"><spring:message code="DescriptionInformation"></spring:message></th>
-			<th data-options="field:'sole',width:'20%',
-				editor:{type:'checkbox',options:{on:true,off:false}}"><spring:message code="IndependentConfigFile"></spring:message></th>
+			<th data-options="field:'sole',width:'20%',editor:{type:'checkbox',options:{on:true,off:false}}"><spring:message code="IndependentConfigFile"></spring:message></th>
 			<th data-options="field:'module.name',width:'25%',
 				formatter:function(value,row,rowIndex){
 					if(row.module==null) return '';
@@ -90,14 +91,14 @@ function submitForm(){
 	</table>
 	<div id="tb" style="height:auto">
 		<!-- 添加(上传网元相关的配置文件) -->
-		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="$(w).window('open');"><spring:message code="Add"></spring:message></a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="$('#w').window('open');"><spring:message code="Add"/></a>
 		<!-- 删除 -->
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit(
-				'${pageContext.request.contextPath}/config/delete.action')"><spring:message code="Delete"></spring:message></a>
+				'${pageContext.request.contextPath}/config/delete.action')"><spring:message code="Delete"/></a>
 		<!-- 保存 -->
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept(
 			'${pageContext.request.contextPath}/config/update.action',
-				'${pageContext.request.contextPath}/config/save.action')"><spring:message code="save"></spring:message></a>
+				'${pageContext.request.contextPath}/config/save.action')"><spring:message code="save"/></a>
 	</div>
 	<!-- 添加(上传网元相关的配置文件) -->
 	<div id="w" class="easyui-window" title="<spring:message code="UploadConfigFile"></spring:message>" data-options="modal:true,closed:true,iconCls:'icon-save'" style="text-align:center;width:300px;height:200px;padding:10px;">
@@ -113,7 +114,9 @@ function submitForm(){
 			<input class="easyui-textbox"><br/><br/>
 			
 			<input class="easyui-filebox" name="file" data-options="onChange:function(){
-				$(this).filebox('setValue',$(this).filebox('getValue').substring(12));
+				var inputFileName = $(this).filebox('getValue');
+				var fileName = inputFileName.substring(inputFileName.lastIndexOf('\\')+1,(inputFileName.length));
+				$(this).filebox('setValue',fileName);
 			},buttonText:'<spring:message code="SelectFile"></spring:message>',required:true,prompt:'<spring:message code="SelectUploadFile"></spring:message>'" style="width:100%"/>
 			<br/><br/>
 			<a href="#" class="easyui-linkbutton" onclick="submitForm()"><spring:message code="UploadConfigFile"></spring:message></a>

@@ -114,7 +114,6 @@ public class EthServiceImpl implements EthService {
 				eth.setSpeed(record[8]);
 				eth.setDuplex(record[9]);
 				eth.setAutoNeg(record[10]);
-				
 				eth.setCardNum(cardNum);
 			}else if(record.length==10){
 				eth=new Eth(record[0], record[1], record[4], record[5], record[3], record[2], record[8],record[6],record[7],record[9]);
@@ -122,10 +121,8 @@ public class EthServiceImpl implements EthService {
 				//e.setOspf(record[9]);
 				//ospfd
 				eth.setOspfd(header[header.length-1]);
-				
 				eth.setCardNum(cardNum);
 			}
-			
 			boolean isShow=true;
 			String[] hideEths=OmcServerContext.getInstance().getHideEth().split(",");
 			for(String name:hideEths){
@@ -146,7 +143,6 @@ public class EthServiceImpl implements EthService {
 					}
 				}
 			}
-			
 			if(isShow){
 				//根据板卡编号查询出板卡名称
 				Card selectCard = cardMapper.selectByNum(eth.getCardNum());

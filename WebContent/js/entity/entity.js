@@ -101,7 +101,7 @@ function batchGo(url,title,txt){
 	onBeforeClose.finished=false;
 	var selected=$('#dg').datagrid('getSelections');
 	if(!selected.length) {
-		$.messager.alert('提示','至少勾选一条记录');
+		$.messager.alert('提示','至少勾选一条记录!');
 		return;
 	}
 	var content="";
@@ -243,7 +243,7 @@ function exportAllLog(){
 function exportSelectedLog(){
 	var selected=$('#dg').datagrid('getSelections');
 	if(!selected.length) {
-		$.messager.alert('提示','至少勾选一条记录');
+		$.messager.alert('提示','至少勾选一条记录!');
 		return;
 	}
 	var param='';

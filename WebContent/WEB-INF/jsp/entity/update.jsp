@@ -144,8 +144,8 @@ function submitForm(){
 </c:forEach>
 <!-- 配置文件循环 结束 -->
 <div style="text-align:center;padding:5px">
-	<a href="#" class="easyui-linkbutton" onclick="submitForm()">提交</a>
-	<a href="${pageContext.request.contextPath}/entity/listUI.action" class="easyui-linkbutton">返回</a>
+	<a href="#" class="easyui-linkbutton" onclick="submitForm()"><spring:message code="Submit"/></a>
+	<a href="${pageContext.request.contextPath}/entity/listUI.action" class="easyui-linkbutton"><spring:message code="Back"/></a>
 </div>
 </body>
 </html>

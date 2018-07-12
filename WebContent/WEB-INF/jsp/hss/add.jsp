@@ -70,7 +70,7 @@
 	
 	<!-- IMS信息 开始 -->
 	<c:if test="${imsFlag==1}">
-	<div id="addImsInfo" class="easyui-panel" data-options="title:'<spring:message code="Domain"/>'">
+	<div id="addImsInfo" class="easyui-panel" data-options="title:'<spring:message code="IMSInformation"/>'">
 		<div style="padding:10px 60px 20px 60px">
 	    	<label><spring:message code="Domain"/>:</label>
 	    	<input class="easyui-textbox" id="addDomain" name="domain" data-options="value:'test.com',required:true,width:130"/>　
@@ -116,9 +116,9 @@
 			<label><spring:message code="IPAddress"/>:&nbsp;</label><input class="easyui-textbox" id="addVoiceMailNum" name="voiceMailNum" data-options="validType:'ipAdd',required:true,disabled:true"/>
 			<br/>
 			<!-- OSPF组播 -->
-			<label><input type="checkbox" id="addOspfzb" name="ospfMulticast" value="1" />OSPF组播</label>&nbsp;
+			<label><input type="checkbox" id="addOspfzb" name="ospfMulticast" value="1" /><spring:message code="OSPFMulticast"/></label>&nbsp;
 			<!-- OSPF广播 -->
-			<label><input type="checkbox" id="addOspfgb" name="ospfBroadcast" value="1" />OSPF广播</label>
+			<label><input type="checkbox" id="addOspfgb" name="ospfBroadcast" value="1" /><spring:message code="OSPFBroadcast"/></label>
 			
 		</div>
 	</div>

@@ -87,7 +87,7 @@
 			</tr>
 			<tr>
 				<td style="padding-left:2px">
-					<spring:message code="affirmPassword"></spring:message>:
+					<spring:message code="affirmPassword"/>:
 				</td>
 				<td style="text-align:right;padding-right:2px">
 					<input class="easyui-textbox" name="newPwd2" validType="equals['#newPwd','新密码']" data-options="type:'password',required:true,prompt:'<spring:message code="pleaseAffirmNewPasswordAgain"/>'"/>

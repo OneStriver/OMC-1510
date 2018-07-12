@@ -128,8 +128,7 @@
 	    	</table>
 	    </form>
 	    <div style="text-align:center;padding:5px">
-	    	<a href="#" class="easyui-linkbutton" onclick="submitForm()">　<spring:message code="save"/>　</a>
-	    	<a href="#" class="easyui-linkbutton" onclick="clearForm()"><spring:message code="ClearRecord"/></a>
+	    	<a href="#" class="easyui-linkbutton" onclick="submitForm()"><spring:message code="save"/></a>
 	    </div>
 	 </div>
 </body>

@@ -33,10 +33,10 @@
 						return '<b>'+value+'</b>';
 					}"><spring:message code="Name"/></th>
 			<th data-options="field:'type',editor:'textbox'"><spring:message code="Type"/></th>
-			<th data-options="field:'ip',editor:'textbox'">IP</th>
+			<th data-options="field:'ip',editor:'textbox'"><spring:message code="IP"/></th>
 			<th data-options="field:'mask',editor:'textbox'"><spring:message code="Mask"/></th>
 			<th data-options="field:'mac',editor:'textbox'"><spring:message code="HardwareAddress"/></th>
-			<th data-options="field:'mtu',editor:'numberbox'">MTU</th>
+			<th data-options="field:'mtu',editor:'numberbox'"><spring:message code="MTU"/></th>
 			<th data-options="field:'state',editor:'textbox',formatter:function(value,row,index){
 			  if(value == 'up'){
 			    return '已激活';
@@ -68,7 +68,7 @@
 			  if(row.name =='bond0'){
 				return '';
 		      }
-			}">自动协速</th>
+			}"><spring:message code="AutoSpeed"/></th>
 			<th data-options="field:'cardNum'"><spring:message code="CardNumber"/></th>
 			<omc:permit url="eth/activateUpdate">
 				<th data-options="field:'修改',
@@ -76,9 +76,9 @@
 						if(row.name =='bond0'||row.type=='Unspec'){
 							return '';
 						}else{
-						    return '<a href=# class=easyui-linkbutton>修改</a>';
+						    return '<a href=# class=easyui-linkbutton><spring:message code="Update"/></a>';
 						}
-	                }"><spring:message code="Edit"/>
+	                }"><spring:message code="Update"/>
 	             </th>
              </omc:permit>
 		</tr>
@@ -99,34 +99,32 @@
 				onclick="deactivate('${pageContext.request.contextPath}/eth/deactivate.action')"><spring:message code="Deactivate"/></a>
 		</omc:permit>
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" 
-			onclick="reload()">刷新</a>
+			onclick="reload()"><spring:message code="Refresh"/></a>
 	</div>
 	
 	<!-- 添加窗口  -->	
 	<div id="activeEthAddWindow" class="easyui-window" title="<spring:message code="AddActiveInterface"/>" data-options="minimizable:false,maximizable:false,
         	collapsible:false,modal:true,closed:true,iconCls:'icon-add',width:415" style="padding:10px;">
-		<!--  data-options="novalidate:true" -->
 		<form id="activeEthAddForm" class="easyui-form" method="post" action="${pageContext.request.contextPath}/eth/activateAdd.action">
 	    	<table>
 	    		<tr>
-	    			<td><spring:message code="Name"></spring:message>:</td>
+	    			<td><spring:message code="Name"/>:</td>
 	    			<td><input class="easyui-textbox" id="addActiveEthName" name="name" data-options="validType:'activeEth',required:true"/></td>
-	    			<td>IP:</td>
+	    			<td><spring:message code="IP"/>:</td>
 	    			<td><input class="easyui-textbox" id="addActiveEthIp" name="ip" data-options="validType:'ipABC',required:true"/></td>
 	    		</tr>
 	    		<tr>
-	    			<td><spring:message code="Mask"></spring:message>:</td>
+	    			<td><spring:message code="Mask"/>:</td>
 	    			<td><input class="easyui-textbox" id="addActiveEthMask" name="mask" data-options="validType:'Mask',required:true"/></td>
-	    			<td>MTU:</td>
+	    			<td><spring:message code="MTU"/>:</td>
 	    			<td><input class="easyui-numberbox" id="addActiveEthMtu" name="mtu" data-options="validType:'MTU',required:true"/></td>
 	    		</tr>
 	    		<tr>
-	    			<td><spring:message code="Card"></spring:message>:</td>
+	    			<td><spring:message code="Card"/>:</td>
 	    			<td><input class="easyui-combobox" name="cardNum"
 						data-options="
 							url:'${pageContext.request.contextPath}/card/listjsonarr.action',
 							method:'get',
-							onLoadSuccess:onLoadSuccess,
 							editable:false,
 							valueField:'cardNum',
 							textField:'name',
@@ -148,25 +146,23 @@
 	    	<table>
 	    		<tr>
 	    			<td><spring:message code="Name"/>:</td>
-
 	    			<td><input class="easyui-textbox" name="name" id="updateActiveEthName"  data-options="readonly:true,required:true"/></td>
-
-	    			<td>IP:</td>
+	    			<td><spring:message code="IP"/>:</td>
 	    			<td><input class="easyui-textbox" name="ip" id="updateActiveEthIp" data-options="validType:'ipABC',required:true"></input></td>
 	    		</tr>
 	    		<tr>
 	    			<td><spring:message code="Mask"/>:</td>
 	    			<td><input class="easyui-textbox" name="mask" id="updateActiveEthMask" data-options="validType:'Mask',required:true"></input></td>
-	    			<td>MTU:</td>
+	    			<td><spring:message code="MTU"/>:</td>
 	    			<td><input class="easyui-numberbox" name="mtu" data-options="validType:'MTU',required:true"></input></td>
 	    		</tr>
-	    		<tr>
-	    			<td>所在板卡:</td>
+	    		<tr hidden="true">
+	    			<td><spring:message code="Card"/>:</td>
 	    			<td><input class="easyui-combobox" name="cardNum"
 						data-options="
-							hidden:true,
 							url:'${pageContext.request.contextPath}/card/listjsonarr.action',
 							method:'get',
+							editable:false,
 							valueField:'cardNum',
 							textField:'name',
 							panelHeight:'auto',

@@ -91,6 +91,7 @@
 						panelHeight:'auto'
 				">
 	</div>
+	
 	<!-- 添加窗口 -->
 	<div id="aw" class="easyui-window" title="<spring:message code="AddConfigurationItem"/>" data-options="modal:true,closed:true,iconCls:'icon-save'" style="padding:10px;">
 		<!-- data-options="novalidate:true" -->
@@ -152,7 +153,7 @@
 								required:true
 						"/>
 					</td>
-	    			<td><spring:message code="AssociatedGroup"/>　:</td>
+	    			<td><spring:message code="AssociatedGroup"/>:</td>
 	    			<td>
 	    				<input class="easyui-combobox" name="relevance.id"
 							data-options="
@@ -175,10 +176,11 @@
 	    	<div style="text-align:center">
 		    	<a href="#" class="easyui-linkbutton" onclick="addOption(this)" style="display:none"><spring:message code="AddOption"/></a>
 		    	<a href="#" class="easyui-linkbutton" onclick="submitForm()"><spring:message code="save"/></a>
-		    	<a href="#" class="easyui-linkbutton" onclick="clearForm()"><spring:message code="Clear"/></a>
+		    	<%-- <a href="#" class="easyui-linkbutton" onclick="clearForm()"><spring:message code="Clear"/></a> --%>
 	  		</div>
 		</form>
 	</div>
+	
 	<!-- 更新窗口 -->
 	<div id="uw" class="easyui-window" title="<spring:message code="UpdateConfigurationItem"/>" data-options="modal:true,closed:true,iconCls:'icon-save'" style="padding:10px;">
 		<form id="uf" class="easyui-form" method="post" data-options="novalidate:true" action="${pageContext.request.contextPath}/item/update.action">

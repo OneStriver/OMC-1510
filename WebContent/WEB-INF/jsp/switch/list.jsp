@@ -158,7 +158,7 @@
 	    	</table>
 	    </form>
 	    <div style="text-align:center;padding:5px">
-	    	<a href="#" class="easyui-linkbutton" onclick="updateSubmitForm()">保存</a>
+	    	<a href="#" class="easyui-linkbutton" onclick="updateSubmitForm()"><spring:message code="save"/></a>
 	    </div>
 	 </div>
 	

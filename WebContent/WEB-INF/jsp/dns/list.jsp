@@ -4,9 +4,6 @@
 <title>主机名称及DNS管理</title>
 <%@ include file="/WEB-INF/jsp/public/common.jspf"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/public/grid.js?<%=new Date().getTime()%>"></script>
-<script type="text/javascript">
-
-</script>
 </head>
 <body>
 	<table id="dg" title="<spring:message code="HostNameAndDNSList"></spring:message>" class="easyui-datagrid" data-options="
@@ -24,7 +21,6 @@
 			pageSize: ${pageBean.pageSize}">
 		<thead>
 		<tr>
-			<!-- <th data-options="field:'ck',checkbox:true"></th> -->
 			<th data-options="field:'host',editor:'textbox',formatter:function(value,row,rowIndex){
 						return '<b>'+value+'</b>';
 					}"><spring:message code="HostName"></spring:message></th>

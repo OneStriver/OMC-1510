@@ -26,15 +26,15 @@
 			<th data-options="field:'destination',width:'20%',
 				formatter:function(value,row,rowIndex){
 						return '<b>'+value+'</b>';
-					}"><spring:message code="DestinationAddress"></spring:message></th>
-			<th data-options="field:'gateway',editor:'textbox',width:'20%'"><spring:message code="Gateway"></spring:message></th>
-			<th data-options="field:'genmask',editor:'textbox',width:'20%'"><spring:message code="Mask"></spring:message></th>
-			<th data-options="field:'flags',editor:'textbox'">Flags</th>
-			<th data-options="field:'metric',editor:'textbox'">Metric</th>
-			<th data-options="field:'ref',editor:'numberbox'">Ref</th>
-			<th data-options="field:'use',editor:'textbox'">Use</th>
-			<th data-options="field:'iface',editor:'textbox'"><spring:message code="Interface"></spring:message></th>
-			<th data-options="field:'cardNum'"><spring:message code="CardNumber"></spring:message></th>
+					}"><spring:message code="DestinationAddress"/></th>
+			<th data-options="field:'gateway',editor:'textbox',width:'20%'"><spring:message code="Gateway"/></th>
+			<th data-options="field:'genmask',editor:'textbox',width:'20%'"><spring:message code="Mask"/></th>
+			<th data-options="field:'flags',editor:'textbox'"><spring:message code="Flags"/></th>
+			<th data-options="field:'metric',editor:'textbox'"><spring:message code="Metric"/></th>
+			<th data-options="field:'ref',editor:'numberbox'"><spring:message code="Ref"/></th>
+			<th data-options="field:'use',editor:'textbox'"><spring:message code="Use"/></th>
+			<th data-options="field:'iface',editor:'textbox'"><spring:message code="Interface"/></th>
+			<th data-options="field:'cardNum'"><spring:message code="CardNumber"/></th>
 			<!--  
 			<th data-options="field:'cardNum',editor:{
 					type:'combobox',
@@ -55,7 +55,7 @@
 		</omc:permit>	
 		<omc:permit url="route/defaultRoute"> 
 			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" 
-				onclick="appendDefaultGateWay()">添加默认网关</a>
+				onclick="appendDefaultGateWay()"><spring:message code="AddDefaultGateway"/></a>
 		</omc:permit>
 		<omc:permit url="route/deleteRoute"> 	
 			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" 
@@ -67,9 +67,9 @@
 	     </omc:permit>
 	</div>
 	
-	<!-- 添加窗口 -->
+	
 	<div id="addRouteWindow" class="easyui-window" title="<spring:message code="AddRoute"/>" 
-		data-options="modal:true,closed:true,iconCls:'icon-add'" style="padding:10px;">
+		data-options="modal:true,closed:true,collapsible:false,minimizable:false,maximizable:false,iconCls:'icon-add'" style="padding:10px;">
 		<form id="addRouteForm" class="easyui-form" method="post" action="${pageContext.request.contextPath}/route/save.action">
 	    	<table>
 	    		<tr>
@@ -85,7 +85,7 @@
 	    			<td><input class="easyui-textbox" name="gateway" data-options="validType:'ip',required:true"/></td>
 	    		</tr>
 	    		<tr>
-	    			<td>所在板卡:</td>
+	    			<td><spring:message code="Card"/>:</td>
 	    			<td><input class="easyui-combobox" name="cardNum"
 						data-options="
 							url:'${pageContext.request.contextPath}/card/listjsonarr.action',
@@ -104,8 +104,9 @@
 	    </div>
 	</div>
 	
-	<div id="addDefaultGateWayWindow" class="easyui-window" title="添加默认网关" 
-		data-options="modal:true,closed:true,iconCls:'icon-add'" style="padding:10px;">
+	
+	<div id="addDefaultGateWayWindow" class="easyui-window" title="<spring:message code="AddDefaultGateway"/>" 
+		data-options="modal:true,closed:true,collapsible:false,minimizable:false,maximizable:false,iconCls:'icon-add'" style="padding:10px;">
 		<form id="addDefaultGateWayForm" class="easyui-form" method="post" data-options="novalidate:false" action="${pageContext.request.contextPath}/route/saveDefault.action">
 	    	<table>
 	    		  <tr style="display: none">
@@ -118,11 +119,11 @@
 	    		</tr>
 	    		  
 	    		<tr>
-	    			<td>默认网关:</td>
+	    			<td><spring:message code="DefaultGateway"/>:</td>
 	    			<td><input class="easyui-textbox" name="gateway" data-options="validType:'ip',required:true"/></td>
 	    		</tr>
 	    		<tr>
-	    			<td>所在板卡:</td>
+	    			<td><spring:message code="Card"/>:</td>
 	    			<td><input class="easyui-combobox" name="cardNum"
 						data-options="
 							url:'${pageContext.request.contextPath}/card/listjsonarr.action',
@@ -142,7 +143,7 @@
 	</div>
 	
 	<div id="ospfWindow" class="easyui-window" title="<spring:message code="OSPFOperation"/>" 
-		data-options="footer:'#footer',modal:true,closed:true,iconCls:'icon-add'" style="width:600px;height:400px;">
+		data-options="footer:'#footer',modal:true,closed:true,collapsible:false,minimizable:false,maximizable:false,iconCls:'icon-add'" style="width:600px;height:400px;">
 		<pre id="content" style="height:339px;"></pre>
 	</div>
 	<div id="footer">

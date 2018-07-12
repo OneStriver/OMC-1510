@@ -49,7 +49,7 @@
 			<th data-options="field:'c.name',width:'10%',sortable:false,order:'asc',
 				formatter:function(value,row,rowIndex){
 					return row.card&&row.card.name;
-				}">所在板卡</th>
+				}"><spring:message code="Card"/></th>
 		</tr>
 	</thead>
 	</tbody>
@@ -63,26 +63,26 @@
 				onclick="removeit('${pageContext.request.contextPath}/entity/delete.action')"><spring:message code="Delete"/></a></omc:permit>
 		<omc:permit url="entity/listLog">
 			<a class="easyui-splitbutton" data-options="menu:'#logdownload',iconCls:'icon-undo',plain:true">
-				<span onclick="exportAllLog()">导出全部日志</span>
+				<span onclick="exportAllLog()"><spring:message code="ExportAllLogs"/></span>
 			</a>
 			<div id="logdownload">   
-			    <div onclick="exportSelectedLog()">导出选中日志</div>
+			    <div onclick="exportSelectedLog()"><spring:message code="ExportSelectedLog"/></div>
 			</div>　
 		</omc:permit>
 		<omc:permit url="entity/start">
-			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="start()">启动</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="start()"><spring:message code="StartUp"/></a>
 		</omc:permit>
 		<omc:permit url="entity/restart">
-			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="restart()">重启</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="restart()"><spring:message code="Restart"/></a>
 		</omc:permit>
 		<omc:permit url="entity/stop">
-			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true" onclick="stop()">停止</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true" onclick="stop()"><spring:message code="Stop"/></a>
 		</omc:permit>
 		<omc:permit url="entity/startup">
-			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-lock',plain:true" onclick="startup()">开机自启</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-lock',plain:true" onclick="startup()"><spring:message code="BootUp"/></a>
 		</omc:permit>
 		<omc:permit url="entity/shutdown">
-			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true" onclick="shutdown()">禁止开机启动</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true" onclick="shutdown()"><spring:message code="ProhibitBooting"/></a>
 		</omc:permit>
 	</div>
 	
@@ -95,7 +95,7 @@
 	    		<tr>
 	    			<td><spring:message code="SoftwareName"/>:</td>
 	    			<td><input class="easyui-textbox" name="name" data-options="required:true"/></td>
-	    			<td>网元实例ID:</td>
+	    			<td><spring:message code="NEInstanceID"/>:</td>
 	    			<td><input class="easyui-numberbox" name="instId" data-options="validType:'instIdValue',precision:0,prompt:'请输入网元实例ID'"/>(选填)</td>
 	    		</tr>
 	    		<tr></tr>
@@ -159,14 +159,14 @@
 	</div>
 	<!-- 右键菜单 -->
 	<div id="entityRightMenu" class="easyui-menu" data-options="onClick:menuHandler" style="width:120px;">
-		<omc:permit url="entity/delete"><div data-options="name:'delete',iconCls:'icon-ok'">删    除</div></omc:permit>
-		<omc:permit url="entity/updateUI"><div data-options="name:'update',iconCls:'icon-ok'">修改配置文件</div></omc:permit>
-		<omc:permit url="entity/start"><div data-options="name:'start',iconCls:'icon-ok'">启    动</div></omc:permit>
-		<omc:permit url="entity/restart"><div data-options="name:'restart',iconCls:'icon-ok'">重    启</div></omc:permit>
-		<omc:permit url="entity/stop"><div data-options="name:'stop',iconCls:'icon-ok'">停    止</div></omc:permit>
-		<omc:permit url="entity/listLog"><div data-options="name:'openLogFile',iconCls:'icon-ok'">查看此网元日志</div></omc:permit>
-		<omc:permit url="entity/startup"><div data-options="name:'startup',iconCls:'icon-ok'">开机自启动</div></omc:permit>
-		<omc:permit url="entity/shutdown"><div data-options="name:'shutdown',iconCls:'icon-ok'">禁止开机自启</div></omc:permit>
+		<omc:permit url="entity/delete"><div data-options="name:'delete',iconCls:'icon-ok'"><spring:message code="Delete"/></div></omc:permit>
+		<omc:permit url="entity/updateUI"><div data-options="name:'update',iconCls:'icon-ok'"><spring:message code="ModifyConfigFile"/></div></omc:permit>
+		<omc:permit url="entity/start"><div data-options="name:'start',iconCls:'icon-ok'"><spring:message code="StartUp"/></div></omc:permit>
+		<omc:permit url="entity/restart"><div data-options="name:'restart',iconCls:'icon-ok'"><spring:message code="Restart"/></div></omc:permit>
+		<omc:permit url="entity/stop"><div data-options="name:'stop',iconCls:'icon-ok'"><spring:message code="Stop"/></div></omc:permit>
+		<omc:permit url="entity/listLog"><div data-options="name:'openLogFile',iconCls:'icon-ok'"><spring:message code="ViewTheNetworkElementLog"/></div></omc:permit>
+		<omc:permit url="entity/startup"><div data-options="name:'startup',iconCls:'icon-ok'"><spring:message code="BootUp"/></div></omc:permit>
+		<omc:permit url="entity/shutdown"><div data-options="name:'shutdown',iconCls:'icon-ok'"><spring:message code="ProhibitBooting"/></div></omc:permit>
 	</div>
 	<div id="dd" class="easyui-dialog" style="padding:10px;"
 			data-options="iconCls:'icon-save',resizable:true,modal:true,closed:true,onBeforeClose:onBeforeClose">   

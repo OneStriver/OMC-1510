@@ -82,12 +82,13 @@ function addHostAddrSubmitForm(){
 </head>
 
 <body>
-	<table id="dg" class="easyui-datagrid" 
-		data-options="
+	<table id="dg" class="easyui-datagrid" data-options="
 			url:'${pageContext.request.contextPath}/dnsServer/listAxfr.action?domain=${domain}',
 			rownumbers:true,
 			singleSelect:false,
-			fit:true,striped:true,border:false,
+			fit:true,
+			striped:true,
+			border:false,
 			loadFilter:loadFilter,
 			toolbar: '#tb',
 			pagination:true,
@@ -105,8 +106,8 @@ function addHostAddrSubmitForm(){
 			<th data-options="field:'data'">Data</th>
 			<th data-options="field:'修改',
 				formatter:function(value,row,rowIndex){
-					if(row.type=='A') return '<a href=#>修改</a>';
-				}"><spring:message code="Edit"/></th>
+					if(row.type=='A') return '<a href=#><spring:message code="Update"/></a>';
+				}"><spring:message code="Update"/></th>
 		</tr>
 		</thead>
 	</table>
@@ -118,20 +119,20 @@ function addHostAddrSubmitForm(){
 			onclick="removeit('${pageContext.request.contextPath}/dnsServer/delete.action')"><spring:message code="Delete"/></a>
 	</div>
 	
-	<div id="addHostAddrWindow" class="easyui-window" title="添加主机地址域名" style="padding:10px;" data-options="modal:true,closed:true">
+	<div id="addHostAddrWindow" class="easyui-window" title="<spring:message code="AddHostAddrDomain"/>" style="padding:10px;" data-options="modal:true,closed:true">
 		<form id="addHostAddrForm" class="easyui-form" method="post" data-options="novalidate:true"
 				action="${pageContext.request.contextPath}/dnsServer/add.action">
 			<input name="zone" type="hidden" value="${domain}">
 			<input name="ttl" type="hidden" value="600">
 			<input name="clazz" type="hidden" value="IN">
 			<input name="type" type="hidden" value="A">
-			域名：<input name="name" class="easyui-textbox"><br/>
-			地址：<input id="data" class="easyui-textbox" name="data" data-options="validType:'ip',required:true"/><br/>
-			<a href="#" class="easyui-linkbutton" onclick="addHostAddrSubmitForm()">提交</a>
+			<spring:message code="Domain"/>：<input name="name" class="easyui-textbox"><br/>
+			<spring:message code="Address"/>：<input id="data" class="easyui-textbox" name="data" data-options="validType:'ip',required:true"/><br/>
+			<a href="#" class="easyui-linkbutton" onclick="addHostAddrSubmitForm()"><spring:message code="Submit"/></a>
 		</form>
 	</div>
 	
-	<div id="updateHostAddrWindow" class="easyui-window" title="修改地址" style="padding:10px;" data-options="modal:true,closed:true">
+	<div id="updateHostAddrWindow" class="easyui-window" title="<spring:message code="UpdateHostAddrDomain"/>" style="padding:10px;" data-options="modal:true,closed:true">
 		<form id="updateHostAddrForm" class="easyui-form" method="post" data-options="novalidate:true" 
 				action="${pageContext.request.contextPath}/dnsServer/update.action">
 			请输入新地址
@@ -143,7 +144,7 @@ function addHostAddrSubmitForm(){
 			<input id="oldData" name="oldData" type="hidden">
 			<input id="data" class="easyui-textbox" name="data" data-options="validType:'ip',required:true"/>
 			<br/>
-			<a href="#" class="easyui-linkbutton" onclick="updateHostAddrSubmitForm()">提交</a>
+			<a href="#" class="easyui-linkbutton" onclick="updateHostAddrSubmitForm()"><spring:message code="Submit"/></a>
 		</form>
 	</div>
 	

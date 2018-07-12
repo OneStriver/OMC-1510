@@ -110,7 +110,7 @@
 			<div style="padding:10px 10px 10px 10px">
 				<table>
 					<tr>
-						<td><input type="checkbox" id="batchAddMonitorSwitch" name="monitorSwitch" value="0"/><spring:message code="OpenListeningService"/></td>
+						<td><input type="checkbox" id="batchAddMonitorSwitch" name="monitorSwitch" value="0"/><spring:message code="OpenBusiness"/></td>
 						<td><spring:message code="ListeningAddr"/>:</td>
 						<td><input class="easyui-textbox" id="batchAddMonitorIP" name="monitorIP" data-options="width:100,validType:'ip',disabled:true,required:true" /></td>
 						<td><spring:message code="ListeningPort"/>:</td>

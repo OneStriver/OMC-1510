@@ -4,7 +4,6 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import com.sunkaisens.omc.context.core.OmcServerContext;
 import com.sunkaisens.omc.mapper.core.ConfigMapper;
 import com.sunkaisens.omc.mapper.core.EntityMapper;
 import com.sunkaisens.omc.mapper.core.HssMetaMapper;
@@ -46,7 +45,7 @@ public class Installer {
 	 */
 	protected void initPrivilege(){
 		Privilege p1=null,p2=null,p3=null,p4=null,p5=null,p6=null,p7=null;
-		Privilege p8=null,p9=null,p10=null,p11=null,p12=null,p13=null,p14=null,p15=null;
+		Privilege p8=null,p9=null,p10=null,p11=null,p12=null,p13=null;
 		
 		/**
 		 * 终端用户管理
@@ -361,9 +360,9 @@ public class Installer {
 		privilegeService.save(p1);
 			p2=new Privilege("ISUP", "out/isup", null, null, true, p1);
 			privilegeService.save(p2);
-			p3=new Privilege("TUP", "out/tup", null, null, true, p1);
+			p3=new Privilege("ISUP2", "out/isup2", null, null, true, p1);
 			privilegeService.save(p3);
-			p4=new Privilege("ISUP2", "out/isup2", null, null, true, p1);
+			p4=new Privilege("TUP", "out/tup", null, null, true, p1);
 			privilegeService.save(p4);
 			p5=new Privilege("TUP2", "out/tup2", null, null, true, p1);
 			privilegeService.save(p5);
@@ -453,7 +452,6 @@ public class Installer {
 	 * 初始化配置信息
 	 */
 	protected void initConfig(){
-		//=============SBC 开始================
 		Config c=null;
 		//----------系统配置-----------
 		c=new Config("net", null, "网络配置", false, null);
@@ -496,7 +494,6 @@ public class Installer {
 		configMapper.insert(c);
 		c=new Config("statistics", null, "统计信息", false, null);
 		configMapper.insert(c);
-		//=============SBC 结束================
 	}
 	
 	/**

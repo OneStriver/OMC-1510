@@ -11,7 +11,11 @@ th,td{
 <body>
 	<table style="text-align:center;border-collapse:collapse;">
 		<thead>
-			<tr><th><spring:message code="Number"></spring:message></th><th><spring:message code="AssociatedConfigurationItemName"></spring:message></th><th><spring:message code="AssociatedConfigurationItemDescription"></spring:message></th></tr>
+			<tr>
+				<th><spring:message code="Number"></spring:message></th>
+				<th><spring:message code="AssociatedConfigurationItemName"></spring:message></th>
+				<th><spring:message code="AssociatedConfigurationItemDescription"></spring:message></th>
+			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${items}" var="item" varStatus="status">

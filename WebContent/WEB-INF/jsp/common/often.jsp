@@ -99,9 +99,9 @@ function submit(){
    	</div>
 </c:forEach>
 <div style="padding:5px;margin-left:150px">
-	<a class="easyui-linkbutton" href="${pageContext.request.contextPath}/common/page.action">返回</a>　
+	<a class="easyui-linkbutton" href="${pageContext.request.contextPath}/common/page.action"><spring:message code="Back"/></a>　
 <c:if test="${!empty items}">
-	<a href="#" class="easyui-linkbutton" onclick="submit()">提交</a>
+	<a href="#" class="easyui-linkbutton" onclick="submit()"><spring:message code="Submit"/></a>
 </c:if>
 </div>
 </form>

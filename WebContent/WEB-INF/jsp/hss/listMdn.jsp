@@ -95,9 +95,8 @@ $(function(){
 	<div id="mm" style="width:120px">
 		<div data-options="name:'mdn'"><spring:message code="MDN"></spring:message></div>
 	</div>
-	<div id="p" class="easyui-panel" title="<spring:message code="PriorityMessage"></spring:message>" data-options="
-		fit:true,footer:'#pp'
-		">
+	<div id="p" class="easyui-panel" title="<spring:message code="PriorityMessage"></spring:message>" 
+		data-options="fit:true,footer:'#pp'">
 		<div id="tt" style="background:#efefef;border:1px solid #ccc;">
 			<label>按优先级过滤：</label>
 			<select class="easyui-combobox" id="priorityFilter" data-options="onSelect:onSelectPriority,editable:false,panelHeight:'100',width:60">
@@ -138,8 +137,8 @@ $(function(){
 				<option value="14">14</option>
 				<option value="15">15</option>
 			</select>
-			<a href="#" class="easyui-linkbutton" data-options="onClick:diffSelect"><spring:message code="InvertSelection"></spring:message></a>
-			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok',onClick:onClick"><spring:message code="Submit"></spring:message></a>
+			<a href="#" class="easyui-linkbutton" data-options="onClick:diffSelect"><spring:message code="InvertSelection"/></a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok',onClick:onClick"><spring:message code="Submit"/></a>
 		</div>
 		<div id="mdns"></div>
 	</div> 

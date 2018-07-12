@@ -12,21 +12,6 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/easyui/jquery.cookie.js"></script>
 <script type="text/javascript">
-/* 	$(function() {
-		$('.loginbox').css({
-			'position' : 'absolute',
-			'left' : ($(window).width()) / 4,
-			'top' : ($(window).height()) / 3
-		});
-		$(window).resize(function() {
-			$('.loginbox').css({
-				'position' : 'absolute',
-				'left' : ($(window).width()) / 4,
-				'top' : ($(window).height()) / 3
-			});
-		});
-       
-	}); */
 	
 	//	清除session，防止登录页面在子页面出现
 	if (window.parent != window) {
@@ -35,12 +20,11 @@
 
 	$(function() {
 		//language change
-		$('#switch_language')
-				.change(
-						function() {
-							window.location = '${pageContext.request.contextPath}/user/switchLanguage.action?locale='
-									+ $(this).val();
-						});
+		$('#switch_language').change(
+			function() {
+				window.location = '${pageContext.request.contextPath}/user/switchLanguage.action?locale='+ $(this).val();
+			}
+		);
 		if (!window.WebSocket) {
 			alert('您的浏览器版本过低,建议使用新版Chrome浏览器！');
 		}

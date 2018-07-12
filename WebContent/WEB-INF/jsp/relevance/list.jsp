@@ -62,14 +62,14 @@
 			<th data-options="field:'show',align:'center',
 					formatter:function(value,row,rowIndex){
 						return '<a href=${pageContext.request.contextPath}/relevance/show.action?id='+row.id+'><spring:message code="View"/></a>';
-					}">包含项</th>
+					}"><spring:message code="IncludedItem"/></th>
 		</tr>
 	</thead>
 	</tbody>
 	</table>
 	<div id="tb" style="height:auto">
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" 
-			onclick="$('#aw').window('open');$('form#af input.easyui-combobox:eq(0)').combobox('reload',contextPath+'/common/listjsonarr.action');"><spring:message code="Add"></spring:message></a>
+			onclick="$('#aw').window('open');$('form#af input.easyui-combobox:eq(0)').combobox('reload',contextPath+'/common/listjsonarr.action');"><spring:message code="Add"/></a>
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit(
 				'${pageContext.request.contextPath}/relevance/delete.action')"><spring:message code="Delete"/></a>
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept(
@@ -90,7 +90,7 @@
 	    		<tr>
 	    			<td><spring:message code="ConfigurationDescription"/>:</td>
 	    			<td><input class="easyui-textbox" name="description"/></td>
-	    			<td><spring:message code="FillControls"></spring:message>:</td>
+	    			<td><spring:message code="FillControls"/>:</td>
 	    			<td>
 	    				<select class="easyui-combobox" name="formtype"
 	    					data-options="required:true,editable:false,width:130,panelHeight:'auto',onSelect:aonSelect">
@@ -123,7 +123,7 @@
 	    			<td><input name="required" type="checkbox" value="true" checked onchange="switchRequired(this)"/></td>
 	    		</tr>
 	    		<tr>
-	    			<td>所在页面:</td>
+	    			<td><spring:message code="WhereThePage"/>:</td>
 	    			<td>
 	    				<input class="easyui-combobox" name="common.id"
 							data-options="
@@ -144,11 +144,12 @@
 	    	<div style="text-align:center">
 		    	<a href="#" class="easyui-linkbutton" onclick="addOption(this)" style="display:none"><spring:message code="AddOption"/></a>
 		    	<a href="#" class="easyui-linkbutton" onclick="submitForm()"><spring:message code="save"/></a>
-		    	<a href="#" class="easyui-linkbutton" onclick="clearForm()"><spring:message code="Clear"/></a>
+		    	<%-- <a href="#" class="easyui-linkbutton" onclick="clearForm()"><spring:message code="Clear"/></a> --%>
 	  		</div>
 		</form>
 	</div>
 	<!-- -----------------添加窗口结束---------------------- -->
+	
 	<!-- -----------------更新窗口开始---------------------- -->
 	<div id="uw" class="easyui-window" title="<spring:message code="UpdateConfigurationItem"/>" data-options="modal:true,closed:true,iconCls:'icon-save'" style="padding:10px;">
 		<form id="uf" class="easyui-form" method="post" data-options="novalidate:false" action="${pageContext.request.contextPath}/relevance/update.action">
@@ -196,7 +197,7 @@
 	    			<td><input name="required" type="checkbox" value="true" onchange="switchRequired(this)"/></td>
 	    		</tr>
 	    		<tr>
-	    			<td>所在页面:</td>
+	    			<td><spring:message code="WhereThePage"/>:</td>
 	    			<td>
 	    				<input class="easyui-combobox" name="common.id"
 							data-options="
@@ -214,7 +215,7 @@
 	    		</tr>
 	    		<tr></tr>
 	    	</table>
-	    	<div style="text-align:center">
+	    	<div style="text-align:center;">
 	    		<a href="#" class="easyui-linkbutton" onclick="addOption(this,5)" style="display:none"><spring:message code="AddOption"/></a>
 		    	<a href="#" class="easyui-linkbutton" onclick="usubmitForm()"><spring:message code="save"/></a>
 	  		</div>

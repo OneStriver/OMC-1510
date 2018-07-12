@@ -33,7 +33,7 @@
 			<th data-options="field:'id',hidden:true"></th>
 			<th data-options="field:'level'"><spring:message code="Level"></spring:message></th>
 			<th data-options="field:'description'"><spring:message code="Description"></spring:message></th>
-			<th data-options="field:'createDate',sortable:true,
+			<th data-options="field:'createDate',sortable:false,
 				formatter:function(value,row,rowIndex){
 					return new Date(value).format();
 				}"><spring:message code="OperationDate"></spring:message></th>
@@ -43,7 +43,7 @@
 	</table>
 	<div id="tb" style="height:auto">
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" 
-			onclick="removeit('${pageContext.request.contextPath}/alarm/delete.action')"><spring:message code="Delete"></spring:message></a>
+			onclick="removeit('${pageContext.request.contextPath}/alarm/delete.action')"><spring:message code="Delete"/></a>
 	</div>
 </body>
 </html>

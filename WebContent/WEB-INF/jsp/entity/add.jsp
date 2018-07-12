@@ -85,7 +85,7 @@ function goBackBefore(){
 <body>
 <div id='loading' style="position:absolute;z-index:1000;top:0px;left:0px;width:100%;height:100%;background-color:#DDDDDB;text-align:center;padding-top: 20%;"><h1><font color="#15428B">加载中···</font></h1></div>
 
-<div id="setWindow" class="easyui-window" title="配置信息" data-options="iconCls:'icon-save',modal:true,fit:true,footer:'#setFooter',collapsible:false,minimizable:false,maximizable:false,closable:false">
+<div id="setWindow" class="easyui-window" title="<spring:message code="ConfigurationInformation"/>" data-options="iconCls:'icon-save',modal:true,fit:true,footer:'#setFooter',collapsible:false,minimizable:false,maximizable:false,closable:false">
 <!-- 配置文件循环 开始 -->
 <c:forEach items="${module.configs}" var="config">
 	<div class="easyui-panel" title="${config.name}" data-options="fit:false">
@@ -179,10 +179,10 @@ function goBackBefore(){
 
 <div id="setFooter" style="text-align:center;">
 	<c:if test="${module.configs.size()!=0}">
-		<a href="#" class="easyui-linkbutton" style="margin-right:10px;" onclick="submitForm()">提交</a>
+		<a href="#" class="easyui-linkbutton" style="margin-right:10px;" onclick="submitForm()"><spring:message code="Submit"/></a>
 	</c:if>
 	<c:if test="${module.configs.size()==0}">
-		<a href="#" class="easyui-linkbutton" onclick="goBackBefore()">返回</a>
+		<a href="#" class="easyui-linkbutton" onclick="goBackBefore()"><spring:message code="Back"/></a>
 	</c:if>
 </div>
 </body>

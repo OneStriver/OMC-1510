@@ -40,7 +40,7 @@
 					default:
 						return value.toString();
 					}
-				}">组类型</th>
+				}"><spring:message code="GroupType"/></th>
 			<th data-options="field:'callType',
 				formatter:function(value,row,rowIndex){
 					switch(value){
@@ -162,7 +162,7 @@
 	    			<!-- 组号 -->
 	    			<td><label><spring:message code="GroupNumber"/>:</label></td>
 	    			<td><input class="easyui-textbox" id="addGroupId" name="id" data-options="validType:'length[0,15]',min:0,required:true,width:130" value=""/></td>
-	    			<td><label>组类型:</label></td>
+	    			<td><label><spring:message code="GroupType"/>:</label></td>
 	    			<td>
 	    			<select class="easyui-combobox" id="addGroupType" name="groupType" data-options="editable:false,required:true,panelHeight:'auto',width:130">
 						<option value="1">动态组</option>
@@ -223,7 +223,7 @@
 	    	</table>
 	    </form>
 	    <div style="text-align:center;padding:5px">
-	    	<a href="#" class="easyui-linkbutton" onclick="addGroupSubmitForm()">　<spring:message code="save"/>　</a>
+	    	<a href="#" class="easyui-linkbutton" onclick="addGroupSubmitForm()"><spring:message code="save"/></a>
 	    </div>
 	 </div>
 	 
@@ -240,7 +240,7 @@
 	    			<!-- 组号 -->
 	    			<td><label><spring:message code="GroupNumber"/>:</label></td>
 	    			<td><input class="easyui-textbox" id="updateGroupId" name="id" data-options="validType:'length[0,15]',min:0,width:130"/></td>
-	    			<td><label>组类型:</label></td>
+	    			<td><label><spring:message code="GroupType"/>:</label></td>
 	    			<td>
 	    			<select class="easyui-combobox" id="updateGroupType" name="groupType" data-options="readonly:true,editable:false,required:true,panelHeight:'auto',width:130">
 						<option value="1">动态组</option>
@@ -295,7 +295,7 @@
 	    	</table>
 	    </form>
 	    <div style="text-align:center;padding:5px">
-	    	<a href="#" class="easyui-linkbutton" onclick="updateGroupSubmitForm()">　<spring:message code="save"/>　</a>
+	    	<a href="#" class="easyui-linkbutton" onclick="updateGroupSubmitForm()"><spring:message code="save"/></a>
 	    </div>
 	 </div>
 </body>

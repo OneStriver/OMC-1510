@@ -141,14 +141,10 @@ function editActiveEth(row){
 	$('#activeEthUpdateWindow').window('open');
 }
 
-function onLoadSuccess(){
-	var data=$(this).combobox('getData');
-	$(this).combobox('select',data[0].cardNum);
-	console.log(data);
-}
 function reload(){
 	$('#dg').datagrid('reload'); 
 }
+
 $(function(){
 	$('#activeEthAddForm').form({
 		success:submitActiveEthSuccess

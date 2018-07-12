@@ -22,9 +22,9 @@
 		<thead>
 		<tr>
 			<th data-options="field:'ck',checkbox:true"></th>
-			<th data-options="field:'mdn',width:'10%'"><spring:message code="MDN"></spring:message></th>
-			<th data-options="field:'groupId'"><spring:message code="GroupNumber"></spring:message></th>
-			<th data-options="field:'priority'" hidden="true"><spring:message code="GroupMemberPriority"></spring:message></th>
+			<th data-options="field:'mdn',width:'10%'"><spring:message code="MDN"/></th>
+			<th data-options="field:'groupId'"><spring:message code="GroupNumber"/></th>
+			<th data-options="field:'priority'" hidden="true"><spring:message code="GroupMemberPriority"/></th>
 			<th data-options="field:'role',
 				formatter:function(value,row,rowIndex){
 					switch(value){
@@ -37,39 +37,39 @@
 					default:
 						return value;
 					}
-				}"><spring:message code="GroupMemberRole"></spring:message></th>
+				}"><spring:message code="GroupMemberRole"/></th>
 			
-			<th data-options="field:'service'" hidden="true"><spring:message code="GroupMemberService"></spring:message></th>
-			<th data-options="field:'addtion'" hidden="true"><spring:message code="GroupMemberAdditionalService"></spring:message></th>
+			<th data-options="field:'service'" hidden="true"><spring:message code="GroupMemberService"/></th>
+			<th data-options="field:'addtion'" hidden="true"><spring:message code="GroupMemberAdditionalService"/></th>
 			<th data-options="field:'createTime',width:150,
 				formatter:function(value,row,rowIndex){
 					if(typeof value==='number'){
 						return new Date(value).format();
 					}
 					return value;
-				}" hidden="true"><spring:message code="GroupMemberAddTime"></spring:message></th>
+				}" hidden="true"><spring:message code="GroupMemberAddTime"/></th>
 			<th data-options="field:'updateTime',width:150,
 				formatter:function(value,row,rowIndex){
 					if(typeof value==='number'){
 						return new Date(value).format();
 					}
 					return value;
-				}," hidden="true"><spring:message code="LastUpdateTime"></spring:message></th>
+				}," hidden="true"><spring:message code="LastUpdateTime"/></th>
 			<th data-options="field:'修改',hidden:true,
 				formatter:function(value,row,rowIndex){
 					return '<a href=#><spring:message code="Update"></spring:message></a>'
-				}"><spring:message code="Update"></spring:message></th> 
+				}"><spring:message code="Update"/></th> 
 		</tr>
 	</thead>
 	</table>
 	
 	<div id="tb" style="height:auto">
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()"><spring:message code="Add"></spring:message></a>
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()"><spring:message code="Delete"></spring:message></a>
+		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()"><spring:message code="Add"/></a>
+		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()"><spring:message code="Delete"/></a>
 		<span hidden="true">
 		<select class="easyui-combobox" name="priority"
 			data-options="editable:false,onChange:pChange,width:110,panelHeight:'auto'">
-			<option value="" selected="selected"><spring:message code="AllPriority"></spring:message></option>
+			<option value="" selected="selected"><spring:message code="AllPriority"/></option>
 			<c:forEach items="${groupPriority}" var="item">
 				<option value="${item.priority}">${item.level}</option>
 			</c:forEach>
@@ -79,7 +79,7 @@
 		<span hidden="true">
 			<select class="easyui-combobox" name="role" 
 				data-options="editable:false,width:120,onChange:rChange,panelHeight:'auto'">
-				<option value="" selected="selected"><spring:message code="AllGroupMemberRole"></spring:message></option>
+				<option value="" selected="selected"><spring:message code="AllGroupMemberRole"/></option>
 				<option value="1">调度员</option>
 				<option value="2">超级终端</option>
 				<option value="3">普通用户</option>
@@ -87,7 +87,7 @@
 		</span>
 		<!-- 返回操作 -->
 		<a href="${pageContext.request.contextPath}/hssGroup/listUI.action" class="easyui-linkbutton" 
-			data-options="iconCls:'icon-back',plain:true">返回</a>
+			data-options="iconCls:'icon-back',plain:true"><spring:message code="Back"/></a>
 	</div>
 	
 	<div id="groupMemberWindow" class="easyui-window" data-options="
@@ -102,14 +102,14 @@
 	    	<table>
 	    		<tr>
 	    			<!-- 组号、电话号码  -->
-	    			<td><label><spring:message code="MDN"></spring:message>:</label></td>
+	    			<td><label><spring:message code="MDN"/>:</label></td>
 	    			<td><input class="easyui-numberbox" id="groupMemberMdn" name="mdn" data-options="min:0,required:true,width:130"/></td>
-	    			<td><label><spring:message code="GroupNumber"></spring:message>:</label></td>
+	    			<td><label><spring:message code="GroupNumber"/>:</label></td>
 	    			<td><input class="easyui-textbox" name="groupMemberGroupId" data-options="min:0,required:true,value:'${groupId}',width:130"/></td>
 	    		</tr>
 	    		<tr>
 	    			<!-- 组成员优先级 -->
-	    			<td hidden="true"><label><spring:message code="GroupMemberPriority"></spring:message>:</label></td>
+	    			<td hidden="true"><label><spring:message code="GroupMemberPriority"/>:</label></td>
 	    			<td hidden="true">
 	    				<select class="easyui-combobox" id="groupMemberPriority" name="priority"
 							data-options="editable:false,width:130,panelHeight:'auto'">
@@ -119,7 +119,7 @@
 						</select>
 					</td>
 					<!-- 组成员角色 -->
-	    			<td id="roleTitle"><label><spring:message code="GroupMemberRole"></spring:message>:</label></td>
+	    			<td id="roleTitle"><label><spring:message code="GroupMemberRole"/>:</label></td>
 	    			<td id="roleContent">
 	    				<select class="easyui-combobox" id="groupMemberRole" name="role" data-options="editable:false,panelHeight:'auto',width:130">
 							<!-- <option value="1">调度员</option>
@@ -139,7 +139,7 @@
 	    	</table>
 	    </form>
 	    <div style="text-align:center;padding:5px">
-	    	<a href="#" class="easyui-linkbutton" onclick="groupMemberSubmitForm()">　<spring:message code="save"></spring:message>　</a>
+	    	<a href="#" class="easyui-linkbutton" onclick="groupMemberSubmitForm()"><spring:message code="save"></spring:message></a>
 	    </div>
 	 </div>
 </body>

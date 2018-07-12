@@ -8,26 +8,11 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/hss/add.css"/>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/easyui/datagrid-detailview.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/hss/list.js"></script>
-<script type="text/javascript">
-$(function(){
-	if('${isSave}'){
-		$.messager.show({
-			title:'<spring:message code="OperationTips"/>',msg:'<spring:message code="SaveCompleted"/>',
-			showType:'fade',timeout:1000,
-			style:{
-				right:'',bottom:''
-			}
-		});
-	}
-});
-
-</script>
 <style type="text/css">
 .pagination .pagination-num{
 	width:3em;
 }
 </style>
-
 </head>
 <body>
 	<table id="dg" title='<spring:message code="TerminalUserList"/>' class="easyui-datagrid" data-options="
@@ -206,12 +191,12 @@ $(function(){
 	
 	<div id="footer" style="border:0px;text-align:center;">
 	   	<a href="javascript:void()" class="easyui-linkbutton" onclick="submitForm()"><spring:message code="AddTerminalUser"/></a>
-	   	<a href="javascript:void()" class="easyui-linkbutton" onclick="clearForm()"><spring:message code="ClearRecord"/></a>
+	   	<%-- <a href="javascript:void()" class="easyui-linkbutton" onclick="clearForm()"><spring:message code="ClearRecord"/></a> --%>
 	</div>
 	
 	<!-- 批量窗口 -->
 	<div id="batchW" class="easyui-window"
-        	data-options="title:'<spring:message code="InsertBatch"/>',iconCls:'icon-save',modal:true,closed:true,width:400,resizable:false,minimizable:false,maximizable:false">
+        	data-options="title:'<spring:message code="BatchAdd"/>',iconCls:'icon-save',modal:true,closed:true,width:400,resizable:false,minimizable:false,maximizable:false">
         
         <%-- <form id="batchForm" method="post" enctype="multipart/form-data">
         <input type="hidden" name="payType" value="1">

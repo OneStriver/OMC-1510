@@ -99,4 +99,3 @@ function loadFilter(data){
 	}
 	return data;
 }
-

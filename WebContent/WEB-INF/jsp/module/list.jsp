@@ -5,24 +5,27 @@
 <title>资源包管理</title>
 <%@ include file="/WEB-INF/jsp/public/common.jspf"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/module/list.js?<%=new Date().getTime()%>"></script>
+<%-- 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/public/grid.js?<%=new Date().getTime()%>"></script>
+ --%>
 </head>
 <body>
 	<table id="dg" title="<spring:message code="NEBasicInformationList"/>" class="easyui-datagrid" data-options="
 				url:'${pageContext.request.contextPath}/module/list.action',
 				onRowContextMenu:onRowContextMenu,
 				rownumbers:true,
-				fit:true,striped:true,border:false,
+				fit:true,
+				striped:true,
+				border:false,
+				pagination:true,
 				pageList: [10,20,30,40,50,60],
 				pageNumber:${pageBean.page},
-				pagination:true,
 				toolbar: '#tb',
-				loadFilter:loadFilter,
 				pageSize: ${pageBean.pageSize}">
 		<thead>
 		<tr>
 			<th data-options="field:'ck',checkbox:true"><spring:message code="AllSelect"/></th>
-			<th data-options="field:'id'">网元ID</th>
+			<th data-options="field:'id'"><spring:message code="NEID"/></th>
 			<th data-options="field:'name',width:150,
 				formatter:function(value,row,rowIndex){
 						return '<b>'+value+'</b>';
@@ -36,7 +39,6 @@
 		</thead>
 	</table>
 	
-	<!-- 表头 -->
 	<div id="tb" style="height:auto">
 		<!-- 通过单个ZIP包 -->
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" 
@@ -51,7 +53,7 @@
 	<!-- 单个ZIP包 -->
 	<div id="singleWindow" class="easyui-window" title="<spring:message code="UploadNE"/>" data-options="modal:true,closed:true,collapsible:false,minimizable:false,maximizable:false,iconCls:'icon-save'" style="text-align:center;width:300px;height:200px;padding:10px;">
 		<form id="singleForm" method="post" enctype="multipart/form-data" action="${pageContext.request.contextPath}/module/upload.action">
-			<label>网元ID</label>
+			<label><spring:message code="NEID"/></label>
 			<input class="easyui-numberbox" name="moduleId" data-options="validType:['minValue[1]','maxValue[255]'],prompt:'请输入1到255'"/>(选填)
 			<br/><br/>
 			<input class="easyui-filebox" name="file" multiple="multiple" style="width:100%"

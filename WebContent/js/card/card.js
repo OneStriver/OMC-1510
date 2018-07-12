@@ -51,7 +51,7 @@ function seriNum(){
 function reSet(){
 	$.messager.confirm('恢复出厂设置','<div style="font-size:12px"><span style="color:#f23737">注意:</span>此操作将会还原系统出厂状态,<br/>并且<span style="color:#f23737">重启系统</span>，确认执行？</div>',function(r){    
 	    if (r){    
-	    	$.messager.progress({msg:'正在进行设置请稍等'});
+	    	$.messager.progress({msg:'正在进行设置请稍等...'});
 			$.ajax({
 				type:'post',
 				url:contextPath+"/resetLf/reset.action",

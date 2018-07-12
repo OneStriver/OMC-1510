@@ -47,7 +47,9 @@ function accept(updateUrl,insertUrl){
 		data-options="
 			url:'${pageContext.request.contextPath}/common/list.action',
 			rownumbers:true,
-			fit:true,striped:true,border:false,
+			fit:true,
+			striped:true,
+			border:false,
 			pageList: [10,20,30,40,50,60],
 			pageNumber:${pageBean.page},
 			pagination:true,

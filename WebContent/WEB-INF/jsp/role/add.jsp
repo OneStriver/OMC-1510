@@ -46,12 +46,12 @@ function submit(){
 <div style="float:left">
 	<div class="easyui-panel" title="" style="padding:10px;float:left">
 	<form class="easyui-form" data-options="novalidate:true" method="post">
-		<label><spring:message code="RoleName"></spring:message>:</label>
+		<label><spring:message code="RoleName"/>:</label>
 		<input class="easyui-textbox" name="name" data-options="required:true"><br/><br/>
-		<label><spring:message code="Description"></spring:message>:</label>
+		<label><spring:message code="Description"/>:</label>
 		<input class="easyui-textbox" name="description" data-options="multiline:true,required:true,height:200"><br/><br/>
 		<div style="text-align:center">
-			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="submit()"><spring:message code="Submit"></spring:message></a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="submit()"><spring:message code="Submit"/></a>
 		</div>
 	</form>
 	</div>

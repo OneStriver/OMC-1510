@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
-<title>sip</title>
+<title>fxo</title>
 <%@ include file="/WEB-INF/jsp/public/common.jspf"%>
 <script type="text/javascript">
 function submit(){
@@ -15,7 +15,7 @@ function submit(){
 		},
 		onSubmit:function(){
 			var isOk=$(this).form('enableValidation').form('validate');
-			if(isOk) $.messager.progress({msg:'正在保存请稍等'});
+			if(isOk) $.messager.progress({msg:'正在保存请稍等...'});
 			return isOk;
 		}
 	});

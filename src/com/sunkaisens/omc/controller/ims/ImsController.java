@@ -15,31 +15,19 @@ import com.sunkaisens.omc.exception.CustomException;
 import com.sunkaisens.omc.po.cscf.Ue;
 import com.sunkaisens.omc.service.ims.ImsService;
 import com.sunkaisens.omc.vo.core.PageBean;
+
 /**
- * 
- * 
- * 
- * 
- * 
- *Ims Controller
+ * Ims Controller
  */
 @Controller
 @RequestMapping("/ims")
 public class ImsController {
-    //注入ImsService
+	
 	@Resource
 	private ImsService service;
+	
 	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 从数据库查询ims数据列表
-	 * @param page
-	 * @param pageSize
-	 * @param ue
-	 * @return
 	 */
 	@RequestMapping("list")
 	public @ResponseBody PageBean list(@RequestParam(defaultValue="1") Integer page,
@@ -47,14 +35,9 @@ public class ImsController {
 		PageBean pageBean=service.getPageBean(page,pageSize,ue);
 		return pageBean;
 	}
+	
 	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 返回前台list视图
-	 * @return
 	 */
 	@RequestMapping("listUI")
 	public ModelAndView listUI(){
@@ -62,17 +45,9 @@ public class ImsController {
 		mav.addObject("pageBean", new PageBean());
 		return mav;
 	}
+	
 	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 保存ims信息操作
-	 * @param ue
-	 * @param domain
-	 * @return
-	 * @throws CustomException
 	 */
 	@RequestMapping(value="save",produces="text/html;charset=UTF-8")
 	public @ResponseBody String save(Ue ue,String domain) throws CustomException{
@@ -81,17 +56,9 @@ public class ImsController {
 		json.element("msg", "添加完毕");
 		return json.toString();
 	}
+	
 	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 修改ims操作
-	 * @param ue
-	 * @param domain
-	 * @return
-	 * @throws CustomException
 	 */
 	@RequestMapping(value="update",produces="text/html;charset=UTF-8")
 	public @ResponseBody String update(Ue ue,String domain) throws CustomException{
@@ -100,16 +67,9 @@ public class ImsController {
 		json.element("msg", "修改完毕");
 		return json.toString();
 	}
+	
 	/**
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 * 删除ims操作
-	 * @param ids
-	 * @return
-	 * @throws CustomException
 	 */
 	@RequestMapping("delete")
 	public @ResponseBody String delete(String[] ids) throws CustomException{

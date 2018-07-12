@@ -152,13 +152,13 @@
 		</select>
 		<select class="easyui-combobox" name="destroy" 
 			data-options="editable:false,width:85,onChange:destroyChange,panelHeight:'auto'">
-			<option value="0" selected="selected">遥毙状态</option>
+			<option value="0" selected="selected"><spring:message code="RemoteState"/></option>
 			<option value="1">否</option>
 			<option value="2">已遥毙</option>
 		</select>
 		<select class="easyui-combobox" name="airMonitor" 
 			data-options="editable:false,width:110,onChange:airMonitorChange,panelHeight:'auto'">
-			<option value="0" selected="selected">对空监听状态</option>
+			<option value="0" selected="selected"><spring:message code="AirborneListeningState"/></option>
 			<option value="1">关闭</option>
 			<option value="2">开启</option>
 		</select>
@@ -174,15 +174,15 @@
 			<a href="#" class="easyui-linkbutton" data-options="onClick:exportHss"><spring:message code="ExportSql"/></a>
 		</omc:permit>
 		<omc:permit url="hss/importExcel">
-			<a href="#" class="easyui-linkbutton" data-options="onClick:function(){$('#importExcel').window('open');}">导入Excel</a>
+			<a href="#" class="easyui-linkbutton" data-options="onClick:function(){$('#importExcel').window('open');}"><spring:message code="ImportExcel"/></a>
 		</omc:permit>
 		<span hidden="true">
 		<omc:permit url="hss/importXml">
-			<a href="#" class="easyui-linkbutton" data-options="onClick:function(){$('#importXml').window('open');}">导入AUC-XML</a>
+			<a href="#" class="easyui-linkbutton" data-options="onClick:function(){$('#importXml').window('open');}"><spring:message code="ImportAUC-XML"/></a>
 		</omc:permit> 
 		</span>
 		<omc:permit url="hss/batchUpdate">
-		<a id="batchHssUpdateButton" href="#" class="easyui-linkbutton">批量修改</a>
+			<a id="batchHssUpdateButton" href="#" class="easyui-linkbutton"><spring:message code="BatchEdit"/></a>
 		</omc:permit>
 	</div>
 	
@@ -304,14 +304,14 @@
        ">
 	</div>
 	<div id="updatefooter" style="border:0px;text-align:center;">
-	   	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitUpdateForm()"><spring:message code="AddTerminalUser"/></a>
+	   	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitUpdateForm()"><spring:message code="UpdateTerminalUser"/></a>
 	</div>
 	
 	<!-- 批量添加窗口 -->
 	<div id="batchAddWindow" class="easyui-window" style="text-align:center" 
         	data-options="
         	onLoad:loadBatchScript,
-        	title:'<spring:message code="InsertBatch"/>',
+        	title:'<spring:message code="BatchAdd"/>',
         	height:500,
         	width:560,
         	top:50,
@@ -328,7 +328,7 @@
         ">
 	</div>		
 	<div id="batchAddHssFooter" style="text-align:center;padding:5px">
-	   	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="batchAddHssSubmitForm()"><spring:message code="InsertBatchTerminalUser"/></a> 
+	   	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="batchAddHssSubmitForm()"><spring:message code="BatchAddTerminalUser"/></a> 
    	</div>
 	
 	<!-- ==============批量修改开始=============== -->
@@ -419,8 +419,8 @@
 		<label><spring:message code="StaticGrouping"/></label>
 		<label><spring:message code="IPAddress"/></label><input class="easyui-textbox" id="batchHssUpdateVoiceMailNum" name="voiceMailNum" data-options="validType:'ip',required:true,disabled:true"/>
 		<br/>
-		<label><input type="checkbox" id="batchHssUpdateOspfMulticast" name="ospfMulticast" value="1" checked="checked"/>OSPF组播</label>&nbsp;
-		<label><input type="checkbox" id="batchHssUpdateOspfBroadcast" name="ospfBroadcast" value="1" checked="checked"/>OSPF广播</label>
+		<label><input type="checkbox" id="batchHssUpdateOspfMulticast" name="ospfMulticast" value="1" checked="checked"/><spring:message code="OSPFMulticast"/></label>&nbsp;
+		<label><input type="checkbox" id="batchHssUpdateOspfBroadcast" name="ospfBroadcast" value="1" checked="checked"/><spring:message code="OSPFBroadcast"/></label>
 		</div>
 	</div>
 	</c:if>
@@ -510,7 +510,7 @@
 		<input type="hidden" id="hssflag" name="imsis"/>
 	</div>
 	<div id="batchUpdateFooter" style="text-align:center;padding:5px">
-		<a href="#" class="easyui-linkbutton" onclick="batchHssUpdateSubmit()"><spring:message code="UpdateBatchTerminalUser"/></a>
+		<a href="#" class="easyui-linkbutton" onclick="batchHssUpdateSubmit()"><spring:message code="BatchUpdateTerminalUser"/></a>
     </div>
 	</form>
 	</div>
@@ -577,9 +577,6 @@
 		<div>IMSI:<label title="UE-IMSI"></label>                                                   </div>
 		<div><spring:message code="MDN"/>:<label title="UE-MDN"></label>                            </div>
 		<br/>
-		<!-- <div><spring:message code="bmNum"/>:<label title="UE-BM"></label>                      </div> -->    
-		<!--  <div>LAC:<label title="CS-RncLoc"></label>                                            </div>-->   
-		<!-- <div><spring:message code="GeographicalLocation"/>:<label title="CS-GeoLo"></label>    </div> -->
 		<div style="clear:left;color:red">CS域:</div>
 		<div><spring:message code="CSDomainTMSI"/>:<label title="CS-TMSI"></label>                  </div>
 		<div><spring:message code="CSDomainStatus"/>:<label title="CS-Status"></label>              </div>
@@ -590,7 +587,6 @@
 		<div><spring:message code="CallForwardingNumber"/>:<label title="FwdOnBusyNum"></label>     </div>
 		<div><spring:message code="NoResponseForwardingNumber"/>:<label title="FwdNoAnswer"></label></div>
 		<div><spring:message code="NoReachableForwardingNumber"/>:<label title="FwdNANum"></label>  </div>
-
 		<br/>
 		<div style="clear:left;color:red" >PS域:<label title="psDomain"></label></div>
 		<div><spring:message code="PSDomainStatus"/>:<label title="PS-Status"></label>              </div>
